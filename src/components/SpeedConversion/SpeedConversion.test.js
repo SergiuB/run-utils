@@ -6,6 +6,7 @@ import sinon from 'sinon';
 it('renders with default value 10 kph', () => {
   const wrapper = shallow(<SpeedConversion />);
   expect(wrapper.find('input[value=10]')).toHaveLength(1);
+  expect(wrapper.find('input[value="06:00"]')).toHaveLength(1);
 });
 
 it('fires onChange in response to input change', () => {
