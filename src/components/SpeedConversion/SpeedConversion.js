@@ -2,6 +2,8 @@ import React from 'react';
 import {
   kphToMinKm,
   minToTime,
+  timeToMin,
+  minKmToKph,
 } from '../../services/conversion';
 
 export default function SpeedConversion({ kph, onChange}) {
@@ -15,7 +17,7 @@ export default function SpeedConversion({ kph, onChange}) {
       <input
         type="text"
         value={minToTime(kphToMinKm(kph))}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => onChange(minKmToKph(timeToMin(event.target.value)))}
       />
     </div>
   );
