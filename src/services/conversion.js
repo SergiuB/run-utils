@@ -1,3 +1,5 @@
+const MILE = 1.609344;
+
 function kphToMinKm(kph) {
   return 60 / kph;
 }
@@ -54,10 +56,20 @@ function minToTime(min) {
   );
 }
 
+function minKmToMinMile(minKm) {
+  return minKm * MILE;
+}
+
+function minMileToMinKm(minMile) {
+  return minMile / MILE;
+}
+
 export {
   kphToMinKm,
   minKmToKph,
   timeToSec,
   timeToMin,
   minToTime,
+  minKmToMinMile,
+  minMileToMinKm,
 }

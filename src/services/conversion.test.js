@@ -4,6 +4,8 @@ import {
   timeToSec,
   timeToMin,
   minToTime,
+  minKmToMinMile,
+  minMileToMinKm,
 } from './conversion';
 
 it('converts from kph to min/km', () => {
@@ -18,6 +20,20 @@ it('converts from min/km to kph', () => {
   expect(minKmToKph(5)).toEqual(12);
   expect(minKmToKph(4)).toEqual(15);
   expect(minKmToKph(3)).toEqual(20);
+});
+
+it('converts from min/km to min/mile', () => {
+  expect(minKmToMinMile(6)).toEqual(9.656064);
+  expect(minKmToMinMile(5)).toEqual(8.04672);
+  expect(minKmToMinMile(4)).toEqual(6.437376);
+  expect(minKmToMinMile(3)).toEqual(4.828032);
+});
+
+it('converts from min/km to min/mile', () => {
+  expect(minMileToMinKm(9.656064)).toEqual(6);
+  expect(minMileToMinKm(8.04672)).toEqual(5);
+  expect(minMileToMinKm(6.437376)).toEqual(4);
+  expect(minMileToMinKm(4.828032)).toEqual(3);
 });
 
 it('converts from hh:mm:ss to seconds', () => {
