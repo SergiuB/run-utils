@@ -22,17 +22,36 @@ function timeToParts(time) {
     default:
       throw new Error('invalid time format');
   }
-  return [h, m, s];
+  return { h, m, s };
 }
 
 function timeToSec(time) {
-  const [h, m, s] = timeToParts(time);
+  const { h, m, s } = timeToParts(time);
   return h * 3600 + m * 60 + s;
 }
 
 function timeToMin(time) {
-  const [h, m, s] = timeToParts(time);
+  const { h, m, s } = timeToParts(time);
   return h * 60 + m + s / 60;
+}
+
+function minToTime(min) {
+  let [h, m, s] = [Math.floor(min / 60), 0, 0];
+  const rest = min % 60;
+  if (rest) {
+    m = Math.floor(rest);
+    s = Math.ceil((rest - m) * 60);
+  }
+
+  const pad0 = n => n < 10 ? '0' + n : n;
+
+  return (
+    h
+      ? `${pad0(h)}:${pad0(m)}:${pad0(s)}`
+      : m
+          ? `${pad0(m)}:${pad0(s)}`
+          : `${pad0(s)}`
+  );
 }
 
 export {
@@ -40,4 +59,5 @@ export {
   minKmToKph,
   timeToSec,
   timeToMin,
+  minToTime,
 }

@@ -3,6 +3,7 @@ import {
   minKmToKph,
   timeToSec,
   timeToMin,
+  minToTime,
 } from './conversion';
 
 it('converts from kph to min/km', () => {
@@ -29,4 +30,12 @@ it('converts from hh:mm:ss to minutes', () => {
   expect(timeToMin("0:10:59")).toEqual(10 + 59 / 60);
   expect(timeToMin("02:03")).toEqual(2 + 3 / 60);
   expect(timeToMin("90")).toEqual(1.5);
+});
+
+it('converts from minutes to hh:mm:ss', () => {
+  expect(minToTime(10 + 59 / 60)).toEqual("10:59");
+  expect(minToTime(2 + 3 / 60)).toEqual("02:03");
+  expect(minToTime(1.5)).toEqual("01:30");
+  expect(minToTime(60)).toEqual("01:00:00");
+  expect(minToTime(1)).toEqual("01:00");
 });
