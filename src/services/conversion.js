@@ -45,6 +45,7 @@ function minToTime(min) {
     s = Math.ceil((rest - m) * 60);
   }
 
+  // Adjust for 60 seconds case
   if (s === 60) {
     s = 0;
     m++;

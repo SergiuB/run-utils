@@ -15,7 +15,6 @@ import 'rc-time-picker/assets/index.css';
 export default class SpeedConversion extends React.Component {
   render() {
     const { kph, onChange} = this.props;
-    console.log(`${kph} ${minKmToMinMile(kphToMinKm(kph))} ${minToTime(minKmToMinMile(kphToMinKm(kph)))}`);
     return (
       <div>
         <input
