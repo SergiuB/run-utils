@@ -45,15 +45,18 @@ function minToTime(min) {
     s = Math.ceil((rest - m) * 60);
   }
 
+  if (s === 60) {
+    s = 0;
+    m++;
+    if (m === 60) {
+      m = 0;
+      h++;
+    }
+  }
+
   const pad0 = n => n < 10 ? '0' + n : n;
 
-  return (
-    h
-      ? `${pad0(h)}:${pad0(m)}:${pad0(s)}`
-      : m
-          ? `${pad0(m)}:${pad0(s)}`
-          : `${pad0(s)}`
-  );
+  return `${pad0(h)}:${pad0(m)}:${pad0(s)}`;
 }
 
 function minKmToMinMile(minKm) {

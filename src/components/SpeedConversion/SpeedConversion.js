@@ -1,4 +1,6 @@
 import React from 'react';
+import TimePicker from 'rc-time-picker';
+import moment from 'moment';
 import {
   kphToMinKm,
   minToTime,
@@ -8,9 +10,12 @@ import {
   minMileToMinKm,
 } from '../../services/conversion';
 
+import 'rc-time-picker/assets/index.css';
+
 export default class SpeedConversion extends React.Component {
   render() {
     const { kph, onChange} = this.props;
+    console.log(`${kph} ${minKmToMinMile(kphToMinKm(kph))} ${minToTime(minKmToMinMile(kphToMinKm(kph)))}`);
     return (
       <div>
         <input
@@ -19,17 +24,17 @@ export default class SpeedConversion extends React.Component {
           value={kph}
           onChange={(event) => onChange(event.target.value)}
         />
-        <input
+        <TimePicker
           className="minKm"
-          type="text"
-          value={minToTime(kphToMinKm(kph))}
-          onChange={(event) => onChange(minKmToKph(timeToMin(event.target.value)))}
-        />
-        <input
+          showHour={false}
+          value={moment(minToTime(kphToMinKm(kph)), 'HH:mm:ss')}
+          onChange={(val) => onChange(minKmToKph(timeToMin(val.format('mm:ss'))))}
+        />,
+        <TimePicker
           className="minMile"
-          type="text"
-          value={minToTime(minKmToMinMile(kphToMinKm(kph)))}
-          onChange={(event) => onChange(minKmToKph(minMileToMinKm(timeToMin(event.target.value))))}
+          showHour={false}
+          value={moment(minToTime(minKmToMinMile(kphToMinKm(kph))), 'HH:mm:ss')}
+          onChange={(val) => onChange(minKmToKph(minMileToMinKm(timeToMin(val.format('mm:ss')))))}
         />
       </div>
     );
