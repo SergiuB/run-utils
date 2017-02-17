@@ -28,7 +28,7 @@ export default class SpeedConversion extends React.Component {
           showHour={false}
           value={moment(minToTime(kphToMinKm(kph)), 'HH:mm:ss')}
           onChange={(val) => onChange(minKmToKph(timeToMin(val.format('mm:ss'))))}
-        />,
+        />
         <TimePicker
           className="minMile"
           showHour={false}
