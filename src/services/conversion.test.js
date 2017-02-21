@@ -4,6 +4,7 @@ import {
   timeToSec,
   timeToMin,
   minToTime,
+  secToTime,
   minKmToMinMile,
   minMileToMinKm,
 } from './conversion';
@@ -56,4 +57,8 @@ it('converts from minutes to hh:mm:ss', () => {
   expect(minToTime(1)).toEqual("00:01:00");
 
   expect(minToTime(4.988966400000001)).toEqual("00:05:00");
+});
+
+it('converts from seconds to hh:mm:ss', () => {
+  expect(secToTime(10 * 60 + 59)).toEqual("00:10:59");
 });

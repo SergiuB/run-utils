@@ -60,6 +60,10 @@ function minToTime(min) {
   return `${pad0(h)}:${pad0(m)}:${pad0(s)}`;
 }
 
+function secToTime(sec) {
+  return minToTime(sec / 60);
+}
+
 function minKmToMinMile(minKm) {
   return minKm * MILE;
 }
@@ -74,6 +78,7 @@ export {
   timeToSec,
   timeToMin,
   minToTime,
+  secToTime,
   minKmToMinMile,
   minMileToMinKm,
 }
