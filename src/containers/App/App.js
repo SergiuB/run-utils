@@ -3,6 +3,11 @@ import logo from '../../assets/logo.svg';
 import './App.css';
 
 import SpeedConversion from '../../components/SpeedConversion';
+import RaceTime from '../../components/RaceTime';
+import {
+  allRaces,
+  FIVEK_DIST,
+} from '../../services/raceCalculator';
 
 class App extends Component {
   constructor(props) {
@@ -23,6 +28,19 @@ class App extends Component {
           kph={this.state.kph}
           onChange={kph => this.setState({ kph })}
         />
+        <div>
+          {allRaces.map(({ label, distance }) => (
+            <div key={label}>
+              <label>{label}</label>
+              <RaceTime
+                showHour={distance > FIVEK_DIST}
+                km={distance}
+                kph={this.state.kph}
+                onChange={kph => this.setState({ kph })}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

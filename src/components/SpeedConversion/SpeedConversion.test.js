@@ -13,7 +13,7 @@ it('renders with default value 10 kph', () => {
   expect(wrapper.find(TimePicker).at(1).props().value.format('mm:ss')).toEqual('09:40');
 });
 
-it('renders with default value 10 kph', () => {
+it('renders with specified kph value', () => {
   const wrapper = shallow(<SpeedConversion kph={19.35483870967742}/>);
   expect(wrapper.find(TimePicker).at(0).props().value.format('mm:ss')).toEqual('03:07');
   expect(wrapper.find(TimePicker).at(1).props().value.format('mm:ss')).toEqual('05:00');

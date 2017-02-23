@@ -13,8 +13,8 @@ it('renders', () => {
 
 it('fires onChange in response to input change', () => {
   const onChange = sinon.spy();
-  const wrapper = shallow(<RaceTime km={1} kph={10} onChange={onChange}/>);
+  const wrapper = shallow(<RaceTime km={10} kph={10} onChange={onChange}/>);
   const input = wrapper.find(TimePicker);
-  input.simulate('change', moment('00:10:00', 'HH:mm:ss') );
-  expect(onChange.calledWith(6)).toBe(true);
+  input.simulate('change', moment('00:50:00', 'HH:mm:ss') );
+  expect(onChange.calledWith(12)).toBe(true);
 });

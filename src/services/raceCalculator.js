@@ -11,8 +11,49 @@ function raceTime(kph, km) {
   return km / kph * 3600;
 }
 
+function raceSpeed(sec, km) {
+  return km / (sec / 3600);
+}
+
+const allRaces = [
+  {
+    label: 'Marathon',
+    distance: MARATHON_DIST,
+  },
+  {
+    label: 'Halfmarathon',
+    distance: HALF_DIST,
+  },
+  {
+    label: '10K',
+    distance: TENK_DIST,
+  },
+  {
+    label: '5K',
+    distance: FIVEK_DIST,
+  },
+  {
+    label: 'Mile',
+    distance: MILE_DIST,
+  },
+  {
+    label: 'Kilometer',
+    distance: ONEK_DIST,
+  },
+  {
+    label: '800m',
+    distance: EIGHTH_DIST,
+  },
+  {
+    label: '400m',
+    distance: FOURH_DIST,
+  },
+]
+
 export {
   raceTime,
+  raceSpeed,
+  allRaces,
   MARATHON_DIST,
   HALF_DIST,
   TENK_DIST,

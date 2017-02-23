@@ -1,6 +1,7 @@
 import React from 'react';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
+import _ from 'lodash'
 import {
   kphToMinKm,
   minToTime,
@@ -20,7 +21,7 @@ export default class SpeedConversion extends React.Component {
         <input
           className="kph"
           type="number"
-          value={kph}
+          value={_.round(kph)}
           onChange={(event) => onChange(event.target.value)}
         />
         <TimePicker
