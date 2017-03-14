@@ -7,6 +7,39 @@ const ONEK_DIST = 1;
 const EIGHTH_DIST = .8;
 const FOURH_DIST = .4;
 
+const MARATHON_RACE = {
+  label: 'Marathon',
+  distance: MARATHON_DIST,
+};
+const HALF_RACE = {
+  label: 'Half',
+  distance: HALF_DIST,
+};
+const TENK_RACE = {
+  label: '10K',
+  distance: TENK_DIST,
+};
+const FIVEK_RACE = {
+  label: '5K',
+  distance: FIVEK_DIST,
+};
+const MILE_RACE = {
+  label: 'Mile',
+  distance: MILE_DIST,
+};
+const ONEK_RACE = {
+  label: 'Kilometer',
+  distance: ONEK_DIST,
+};
+const EIGHTH_RACE = {
+  label: '800m',
+  distance: EIGHTH_DIST,
+};
+const FOURH_RACE = {
+  label: '400m',
+  distance: FOURH_DIST,
+};
+
 function raceTime(kph, km) {
   return km / kph * 3600;
 }
@@ -16,38 +49,14 @@ function raceSpeed(sec, km) {
 }
 
 const allRaces = [
-  {
-    label: 'Marathon',
-    distance: MARATHON_DIST,
-  },
-  {
-    label: 'Halfmarathon',
-    distance: HALF_DIST,
-  },
-  {
-    label: '10K',
-    distance: TENK_DIST,
-  },
-  {
-    label: '5K',
-    distance: FIVEK_DIST,
-  },
-  {
-    label: 'Mile',
-    distance: MILE_DIST,
-  },
-  {
-    label: 'Kilometer',
-    distance: ONEK_DIST,
-  },
-  {
-    label: '800m',
-    distance: EIGHTH_DIST,
-  },
-  {
-    label: '400m',
-    distance: FOURH_DIST,
-  },
+  MARATHON_RACE,
+  HALF_RACE,
+  TENK_RACE,
+  FIVEK_RACE,
+  MILE_RACE,
+  ONEK_RACE,
+  EIGHTH_RACE,
+  FOURH_RACE,
 ]
 
 export {
@@ -61,5 +70,13 @@ export {
   MILE_DIST,
   ONEK_DIST,
   EIGHTH_DIST,
-  FOURH_DIST
+  FOURH_DIST,
+  MARATHON_RACE,
+  HALF_RACE,
+  TENK_RACE,
+  FIVEK_RACE,
+  MILE_RACE,
+  ONEK_RACE,
+  EIGHTH_RACE,
+  FOURH_RACE,
 }

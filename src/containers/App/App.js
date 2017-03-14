@@ -4,9 +4,18 @@ import './App.css';
 
 import SpeedConversion from '../../components/SpeedConversion';
 import RaceTime from '../../components/RaceTime';
+import RaceTimeSlider from '../../components/RaceTimeSlider';
 import {
   allRaces,
   FIVEK_DIST,
+  MARATHON_RACE,
+  HALF_RACE,
+  TENK_RACE,
+  FIVEK_RACE,
+  MILE_RACE,
+  ONEK_RACE,
+  EIGHTH_RACE,
+  FOURH_RACE,
 } from '../../services/raceCalculator';
 
 class App extends Component {
@@ -41,6 +50,20 @@ class App extends Component {
             </div>
           ))}
         </div>
+        <div className="App-sliders">
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[FOURH_RACE, EIGHTH_RACE, ONEK_RACE, MILE_RACE]}
+            max={Math.floor(60 * 300 / 26.21875)}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[FIVEK_RACE, TENK_RACE, HALF_RACE, MARATHON_RACE]}
+            max={60 * 300}
+          />
+      </div>
       </div>
     );
   }
