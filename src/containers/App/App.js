@@ -18,6 +18,9 @@ import {
   FOURH_RACE,
 } from '../../services/raceCalculator';
 
+const MIN_KPH = 7;
+const MAX_KPH = 36;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -54,14 +57,58 @@ class App extends Component {
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[FOURH_RACE, EIGHTH_RACE, ONEK_RACE, MILE_RACE]}
-            max={Math.floor(60 * 300 / 26.21875)}
+            races={[FOURH_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[FIVEK_RACE, TENK_RACE, HALF_RACE, MARATHON_RACE]}
-            max={60 * 300}
+            races={[EIGHTH_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[ONEK_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[MILE_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[FIVEK_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[TENK_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[HALF_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
+          />
+          <RaceTimeSlider
+            kph={this.state.kph}
+            onChange={kph => this.setState({ kph })}
+            races={[MARATHON_RACE]}
+            minKph={MIN_KPH}
+            maxKph={MAX_KPH}
           />
       </div>
       </div>
