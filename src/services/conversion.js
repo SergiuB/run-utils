@@ -16,7 +16,7 @@ function timeToParts(time) {
       [h, m, s] = parts;
       break;
     case 2:
-      [m, s] = parts;
+      [m, s] = parts; 
       break;
     case 1:
       [s] = parts;
