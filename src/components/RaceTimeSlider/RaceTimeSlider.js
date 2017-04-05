@@ -9,19 +9,26 @@ import {
 import { raceTime, raceSpeed } from '../../services/raceCalculator';
 
 import 'rc-slider/assets/index.css';
+import './style.css';
 
 const Range = Slider.Range;
 
 class Handle extends React.Component {
   render() {
     const {
-      className, vertical, offset, minimumTrackTintColor, disabled, label, ...restProps,
+      className, vertical, offset, minimumTrackTintColor, disabled, labelUp, labelDown, ...restProps,
     } = this.props;
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
     if (minimumTrackTintColor && !disabled) {
       style.borderColor = minimumTrackTintColor;
     }
-    return <div {...restProps} className={className} style={style} >{label}</div>;
+    return (
+      <div {...restProps} className='slider-handle' style={style}>
+        <div className='slider-handle-label-up'>{labelUp}</div>
+        <div className='slider-handle-mark'></div>
+        <div className='slider-handle-label-down'>{labelDown}</div>
+      </div>
+    );
   }
 }
 
@@ -43,28 +50,26 @@ export default class RaceTimeSlider extends React.Component {
   }
   render() {
     const { kph, races, minKph } = this.props;
-    const markData = _(races)
-      .map(race => ({
-        label: `${race.label}\n${secToTime(raceTime(kph, race.distance))}`,
-      }))
-      .value();
-
     const values = races.map(race => Math.floor(raceTime(kph, race.distance)));
 
-    const marks = _.zipObject(values, markData);
-
     const getMaxDistance = R.compose(R.prop('distance'), R.reduce(R.maxBy(R.prop('distance')), { distance: 0 }));
-    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600 * 1.01);
+    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600);
 
     return (
-     <Range
-       className={'slider'}
-       value={values}
-       onChange={value => this.handleChange(value)}
-       marks={marks}
-       max={maxSec}Ò
-       handle={props => <Handle label={races[props.index].label} {...props} />}
-     />
+      <div className={'slider'}>
+        <Range
+          value={values}
+          onChange={value => this.handleChange(value)}
+          max={maxSec}
+          handle={props => (
+            <Handle
+              labelUp={races[props.index].label}
+              labelDown={secToTime(raceTime(kph, races[props.index].distance))}
+              {...props}
+              />
+          )}
+          />
+      </div>
     );
   }
 }
@@ -76,5 +81,5 @@ RaceTimeSlider.propTypes = {
 
 RaceTimeSlider.defaultProps = {
   kph: 10,
-  onChange: () => {},
+  onChange: () => { },
 }

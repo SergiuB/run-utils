@@ -1,0 +1,36 @@
+.slider {
+  height: 40px;
+  padding-top: 15px;
+}
+
+.slider-handle {
+  position: absolute;
+  margin-left: -29px;
+  margin-top: -24px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 50px;
+}
+
+.slider-handle-mark {
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  border: solid 2px #96dbfa;
+  background-color: #fff;
+}
+
+.slider .rc-slider-mark {
+  top: 14px;
+  left: -10px;
+}
+
+.slider-handle-distance {
+  /*position: relative;
+  top: -18px;
+  left: -12px;*/
+}

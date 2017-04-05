@@ -37,7 +37,7 @@ class StatefulRaceTimeSlider extends React.Component {
 storiesOf('RaceTimeSlider', module)
     .add('basic', () => (
         <StatefulRaceTimeSlider
-            races={[FOURH_RACE]}
+            races={[FOURH_RACE, MILE_RACE]}
             minKph={7}
             maxKph={36}
             />
