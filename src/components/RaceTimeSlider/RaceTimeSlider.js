@@ -12,6 +12,19 @@ import 'rc-slider/assets/index.css';
 
 const Range = Slider.Range;
 
+class Handle extends React.Component {
+  render() {
+    const {
+      className, vertical, offset, minimumTrackTintColor, disabled, label, ...restProps,
+    } = this.props;
+    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    if (minimumTrackTintColor && !disabled) {
+      style.borderColor = minimumTrackTintColor;
+    }
+    return <div {...restProps} className={className} style={style} >{label}</div>;
+  }
+}
+
 export default class RaceTimeSlider extends React.Component {
   handleChange(value) {
     const { kph, races, onChange, minKph, maxKph } = this.props;
@@ -49,7 +62,8 @@ export default class RaceTimeSlider extends React.Component {
        value={values}
        onChange={value => this.handleChange(value)}
        marks={marks}
-       max={maxSec}
+       max={maxSec}Ò
+       handle={props => <Handle label={races[props.index].label} {...props} />}
      />
     );
   }
