@@ -15,10 +15,6 @@ import {
     FOURH_RACE,
 } from '../src/services/raceCalculator';
 
-let state = {
-    kph: 8,
-};
-
 class StatefulRaceTimeSlider extends React.Component {
     state = {
         kph: 15,
@@ -36,9 +32,17 @@ class StatefulRaceTimeSlider extends React.Component {
 
 storiesOf('RaceTimeSlider', module)
     .add('basic', () => (
-        <StatefulRaceTimeSlider
-            races={[FOURH_RACE, MILE_RACE]}
-            minKph={7}
-            maxKph={36}
-            />
+        <div>
+            <StatefulRaceTimeSlider
+                races={[FOURH_RACE, MILE_RACE]}
+                minKph={7}
+                maxKph={36}
+                />
+            <StatefulRaceTimeSlider
+                races={[HALF_RACE]}
+                minKph={7}
+                maxKph={36}
+                showPace
+                />
+        </div>
     ));

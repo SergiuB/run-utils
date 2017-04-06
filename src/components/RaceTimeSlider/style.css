@@ -1,19 +1,39 @@
 .slider {
+  display: flex;
+  align-items: center;
+  /*justify-content: center;*/
+}
+
+.slider:not(.inline) {
   height: 40px;
   padding-top: 15px;
 }
 
+
 .slider-handle {
   position: absolute;
-  margin-left: -29px;
-  margin-top: -24px;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.slider-handle:not(.inline) {
+  margin-left: -29px;
+  margin-top: -24px;
+  flex-direction: column;
   width: 58px;
   height: 50px;
+}
+
+.slider-handle.inline {
+  margin-top: -8px;
+  margin-left: -65px;
+  width: 130px;
+}
+
+.slider .right-label {
+  margin-left: 10px;
 }
 
 .slider-handle-mark {
@@ -29,8 +49,10 @@
   left: -10px;
 }
 
-.slider-handle-distance {
-  /*position: relative;
-  top: -18px;
-  left: -12px;*/
+.inline .slider-handle-label-up {
+  width: 50px;
+  text-align: right;
+}
+.inline .slider-handle-label-down {
+  width: 50px;
 }

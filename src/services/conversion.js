@@ -37,7 +37,7 @@ function timeToMin(time) {
   return h * 60 + m + s / 60;
 }
 
-function minToTime(min) {
+function minToTime(min, showHour = true) {
   let [h, m, s] = [Math.floor(min / 60), 0, 0];
   const rest = min % 60;
   if (rest) {
@@ -57,7 +57,9 @@ function minToTime(min) {
 
   const pad0 = n => n < 10 ? '0' + n : n;
 
-  return `${pad0(h)}:${pad0(m)}:${pad0(s)}`;
+  return showHour
+    ? `${pad0(h)}:${pad0(m)}:${pad0(s)}`
+    : `${pad0(m)}:${pad0(s)}`;
 }
 
 function secToTime(sec) {
