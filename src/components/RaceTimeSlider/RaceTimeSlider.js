@@ -41,9 +41,11 @@ class Handle extends React.Component {
 
     return (
       <div {...restProps} className={handleClass} style={style}>
-        <div className='slider-handle-label-up'>{labelUp}</div>
+        <div className='labels'>
+          <div className='slider-handle-label-up'>{labelUp}</div>
+          <div className='slider-handle-label-down'>{labelDown}</div>
+        </div>
         <div className='slider-handle-mark'></div>
-        <div className='slider-handle-label-down'>{labelDown}</div>
       </div>
     );
   }
@@ -69,7 +71,7 @@ export default class RaceTimeSlider extends React.Component {
     const values = races.map(race => Math.floor(raceTime(kph, race.distance)));
 
     const getMaxDistance = R.compose(R.prop('distance'), R.reduce(R.maxBy(R.prop('distance')), { distance: 0 }));
-    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600);
+    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600 * 1.01);
 
     const sliderClass = classNames('slider', { inline });
     return (
@@ -91,7 +93,7 @@ export default class RaceTimeSlider extends React.Component {
             );
           }}
           />
-        {showPace && <div className={'right-label'}>{minToTime(kphToMinKm(kph), false)}</div>}
+        {showPace && <div className={'right-label'}>{minToTime(kphToMinKm(kph), false)}/km</div>}
       </div>
     );
   }
