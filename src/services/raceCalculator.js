@@ -1,43 +1,58 @@
-const MARATHON_DIST = 42.195;
-const HALF_DIST = MARATHON_DIST / 2;
-const TENK_DIST = 10;
-const FIVEK_DIST = 5;
-const MILE_DIST = 1.609344;
-const ONEK_DIST = 1;
-const EIGHTH_DIST = .8;
-const FOURH_DIST = .4;
-
-const MARATHON_RACE = {
+const kMarathon = {
   label: 'Marathon',
-  distance: MARATHON_DIST,
+  distance: 42.195,
 };
-const HALF_RACE = {
+const k30 = {
+  label: '30K',
+  distance: 30,
+};
+const k25 = {
+  label: '25K',
+  distance: 25,
+};
+const kHalf = {
   label: 'Half',
-  distance: HALF_DIST,
+  distance: 42.195 / 2,
 };
-const TENK_RACE = {
+const k10M = {
+  label: '10M',
+  distance: 16.09344,
+};
+const k15 = {
+  label: '15K',
+  distance: 15,
+};
+const k10 = {
   label: '10K',
-  distance: TENK_DIST,
+  distance: 10,
 };
-const FIVEK_RACE = {
+const k5M = {
+  label: '5M',
+  distance: 5 * 1.609344,
+};
+const k8= {
+  label: '8K',
+  distance: 8,
+};
+const k5 = {
   label: '5K',
-  distance: FIVEK_DIST,
+  distance: 5,
 };
-const MILE_RACE = {
+const k2M = {
+  label: '2M',
+  distance: 2*1.609344,
+};
+const k3 = {
+  label: '3K',
+  distance: 3,
+};
+const kMile = {
   label: 'Mile',
-  distance: MILE_DIST,
+  distance: 1.609344,
 };
-const ONEK_RACE = {
-  label: 'Kilometer',
-  distance: ONEK_DIST,
-};
-const EIGHTH_RACE = {
-  label: '800m',
-  distance: EIGHTH_DIST,
-};
-const FOURH_RACE = {
-  label: '400m',
-  distance: FOURH_DIST,
+const k1500 = {
+  label: '1500',
+  distance: 1.5,
 };
 
 function raceTime(kph, km) {
@@ -49,34 +64,38 @@ function raceSpeed(sec, km) {
 }
 
 const allRaces = [
-  MARATHON_RACE,
-  HALF_RACE,
-  TENK_RACE,
-  FIVEK_RACE,
-  MILE_RACE,
-  ONEK_RACE,
-  EIGHTH_RACE,
-  FOURH_RACE,
+  kMarathon,
+  k30,
+  k25,
+  kHalf,
+  k10M,
+  k15,
+  k10,
+  k5M,
+  k8,
+  k5,
+  k2M,
+  k3,
+  kMile,
+  k1500,
 ]
 
 export {
   raceTime,
   raceSpeed,
   allRaces,
-  MARATHON_DIST,
-  HALF_DIST,
-  TENK_DIST,
-  FIVEK_DIST,
-  MILE_DIST,
-  ONEK_DIST,
-  EIGHTH_DIST,
-  FOURH_DIST,
-  MARATHON_RACE,
-  HALF_RACE,
-  TENK_RACE,
-  FIVEK_RACE,
-  MILE_RACE,
-  ONEK_RACE,
-  EIGHTH_RACE,
-  FOURH_RACE,
+  kMarathon,
+  k30,
+  k25,
+  kHalf,
+  k10M,
+  k15,
+  k10,
+  k5M,
+  k8,
+  k5,
+  k2M,
+  k3,
+  kMile,
+  k1500,
 }

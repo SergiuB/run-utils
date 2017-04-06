@@ -1,18 +1,16 @@
 import {
   raceTime,
-  MARATHON_DIST,
-  HALF_DIST,
-  TENK_DIST,
-  FIVEK_DIST,
-  MILE_DIST,
-  ONEK_DIST,
+  kMarathon,
+  kHalf,
+  k10,
+  k5,
+  kMile,
 } from './raceCalculator';
 
 it('computes time in seconds to run various distances based on speed and distance', () => {
-  expect(raceTime(10, MARATHON_DIST)).toEqual(15190.2);
-  expect(raceTime(10, HALF_DIST)).toEqual(7595.1);
-  expect(raceTime(10, TENK_DIST)).toEqual(3600);
-  expect(raceTime(10, FIVEK_DIST)).toEqual(1800);
-  expect(raceTime(10, MILE_DIST)).toEqual(579.36384);
-  expect(raceTime(10, ONEK_DIST)).toEqual(360);
+  expect(raceTime(10, kMarathon.distance)).toEqual(15190.2);
+  expect(raceTime(10, kHalf.distance)).toEqual(7595.1);
+  expect(raceTime(10, k10.distance)).toEqual(3600);
+  expect(raceTime(10, k5.distance)).toEqual(1800);
+  expect(raceTime(10, kMile.distance)).toEqual(579.36384);
 });

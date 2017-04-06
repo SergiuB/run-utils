@@ -4,15 +4,20 @@ import { storiesOf, action } from '@kadira/storybook';
 import RaceTimeSlider from '../src/components/RaceTimeSlider';
 import {
     allRaces,
-    FIVEK_DIST,
-    MARATHON_RACE,
-    HALF_RACE,
-    TENK_RACE,
-    FIVEK_RACE,
-    MILE_RACE,
-    ONEK_RACE,
-    EIGHTH_RACE,
-    FOURH_RACE,
+    kMarathon,
+    k30,
+    k25,
+    kHalf,
+    k10M,
+    k15,
+    k10,
+    k5M,
+    k8,
+    k5,
+    k2M,
+    k3,
+    kMile,
+    k1500,
 } from '../src/services/raceCalculator';
 
 class StatefulRaceTimeSlider extends React.Component {
@@ -34,12 +39,12 @@ storiesOf('RaceTimeSlider', module)
     .add('basic', () => (
         <div>
             <StatefulRaceTimeSlider
-                races={[FOURH_RACE, MILE_RACE]}
+                races={[kMile, k10]}
                 minKph={7}
                 maxKph={36}
                 />
             <StatefulRaceTimeSlider
-                races={[HALF_RACE]}
+                races={[kHalf]}
                 minKph={7}
                 maxKph={36}
                 showPace

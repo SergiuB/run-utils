@@ -3,7 +3,6 @@ import Slider from 'rc-slider';
 
 import _ from 'lodash';
 import R from 'ramda';
-import moment from 'moment';
 import classNames from 'classnames';
 import {
   secToTime,
