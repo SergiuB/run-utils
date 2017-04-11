@@ -1,11 +1,14 @@
 import {
   raceTime,
+} from './raceCalculator';
+
+import {
   kMarathon,
   kHalf,
   k10,
   k5,
   kMile,
-} from './raceCalculator';
+} from './constants';
 
 it('computes time in seconds to run various distances based on speed and distance', () => {
   expect(raceTime(10, kMarathon.distance)).toEqual(15190.2);

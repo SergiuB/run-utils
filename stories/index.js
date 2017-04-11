@@ -18,7 +18,7 @@ import {
     k3,
     kMile,
     k1500,
-} from '../src/services/raceCalculator';
+} from '../src/services/constants';
 
 class StatefulRaceTimeSlider extends React.Component {
     state = {

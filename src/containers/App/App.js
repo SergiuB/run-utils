@@ -13,7 +13,7 @@ import {
   k5,
   kMile,
   k1500,
-} from '../../services/raceCalculator';
+} from '../../services/constants';
 
 const MIN_KPH = 7;
 const MAX_KPH = 36;
