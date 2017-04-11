@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { allRaces } from './constants';
-import { timeToSec } from './conversion';
+import { timeToSec, secToTime } from './conversion';
 
 
 // c=0; item[c]=new Array("VDOT", "1500", "Mile", "3k", "2-mile", "5k", "8k", "5-mile", "10k", "15k", "10-mile", "20k", "1/2 Marathon", "25k", "30k", "Marathon"];
@@ -143,8 +143,18 @@ function getPerformance(race, time) {
   if (!R.is(Object, race) || !R.is(String, race.label)) {
     throw new Error('Race object not valid. Valid ones are in constants, import from there.');
   }
-  if (!R.is(String, time)) {
-    throw new Error('Time must be in hh:mm:ss or mm:ss format.');
+  const timeSec = timeToSec(time);
+  const equivLens = R.lensProp('equivalents');
+  const perfSec = getPerformanceSec(race, timeSec);
+  return R.over(equivLens, R.map(secToTime), perfSec);
+}
+
+function getPerformanceSec(race, timeSec) {
+  if (!R.is(Object, race) || !R.is(String, race.label)) {
+    throw new Error('Race object not valid. Valid ones are in constants, import from there.');
+  }
+  if (!R.is(Number, timeSec)) {
+    throw new Error('Time must be in seconds.');
   }
   const specificRaceTimes = R.compose(
     R.sortBy(R.prop(0)),
@@ -152,16 +162,20 @@ function getPerformance(race, time) {
     R.map(times => times[indices[race.label]])
   )(raceTimesSec);
 
-  const timeSec = timeToSec(time);
   const skillAboveIdx = R.findIndex(R.compose(R.gt(timeSec), R.prop(1)), specificRaceTimes);
   const skillBelowIdx = skillAboveIdx - 1;
-  const timeAbove = specificRaceTimes[skillAboveIdx][1];
-  const timeBelow = specificRaceTimes[skillBelowIdx][1];
+  const [vdotAbove, timeAbove] = specificRaceTimes[skillAboveIdx];
+  const [vdotBelow, timeBelow] = specificRaceTimes[skillBelowIdx];
   const percentage = +((timeSec - timeBelow) / (timeAbove - timeBelow)).toFixed(2);
+
+  const [below, above] = [raceTimesSec[vdotBelow], raceTimesSec[vdotAbove]];
+  const addPercentage = (p, [t1, t2]) => (t1 + p * (t2 - t1));
+  const equivalents = R.map(addPercentage.bind(null, percentage), R.zip(below, above));
   
   return {
     vdot: parseInt(specificRaceTimes[skillBelowIdx][0], 10),
-    percentage
+    percentage,
+    equivalents,
   }
 }
 

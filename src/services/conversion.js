@@ -1,3 +1,4 @@
+import R from 'ramda';
 const MILE = 1.609344;
 
 function kphToMinKm(kph) {
@@ -9,6 +10,9 @@ function minKmToKph(minKm) {
 }
 
 function timeToParts(time) {
+  if (!R.is(String, time)) {
+    throw new Error('invalid time');
+  }
   const parts = time.split(':').map(s => parseInt(s, 10));//.map(parseInt);
   let h = 0, m = 0, s = 0;
   switch (parts.length) {
@@ -16,13 +20,16 @@ function timeToParts(time) {
       [h, m, s] = parts;
       break;
     case 2:
-      [m, s] = parts; 
+      [m, s] = parts;
       break;
     case 1:
       [s] = parts;
       break;
     default:
       throw new Error('invalid time format');
+  }
+  if (!R.all(Number.isInteger, [h, m, s])) {
+    throw new Error('invalid time format');
   }
   return { h, m, s };
 }
