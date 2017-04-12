@@ -167,6 +167,21 @@ function getPerformanceSec(race, timeSec) {
   )(raceTimesSec);
 
   const skillAboveIdx = R.findIndex(R.compose(R.gt(timeSec), R.prop(1)), specificRaceTimes);
+  if (skillAboveIdx == 0) {
+    return {
+      vdot: VDOT_MIN,
+      percentage: 0,
+      equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]),
+    };
+  }
+
+  if (skillAboveIdx < 0) {
+    return {
+      vdot: VDOT_MAX,
+      percentage: 0,
+      equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]),
+    };
+  }
   const skillBelowIdx = skillAboveIdx - 1;
   const [vdotAbove, timeAbove] = specificRaceTimes[skillAboveIdx];
   const [vdotBelow, timeBelow] = specificRaceTimes[skillBelowIdx];
@@ -188,4 +203,5 @@ function getPerformanceSec(race, timeSec) {
 
 export {
   getPerformance,
+  getPerformanceSec,
 }

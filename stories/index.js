@@ -20,6 +20,10 @@ import {
     k1500,
 } from '../src/services/constants';
 
+import { timeToSec } from '../src/services/conversion';
+import { getPerformanceSec } from '../src/services/vdotTable';
+import { raceSpeed, raceTime } from '../src/services/raceCalculator';
+
 class StatefulRaceTimeSlider extends React.Component {
     state = {
         kph: 15,
@@ -50,4 +54,47 @@ storiesOf('RaceTimeSlider', module)
                 showPace
                 />
         </div>
+    ));
+
+class VdotPerformance extends React.Component {
+    state = {
+        performance: getPerformanceSec(kHalf, timeToSec('1:36:33'))
+    }
+    render() {
+        const { performance } = this.state;
+        const races = [
+            kMarathon,
+            kHalf,
+            k10,
+            k5,
+            k3,
+            kMile,
+        ];
+        return (
+            <div>
+                {races.map(race => (
+                    <RaceTimeSlider
+                        key={race.label}
+                        races={[race]}
+                        kph={raceSpeed(performance.equivalents[race.label], race.distance)}
+                        onChange={kph => {
+                            const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));
+                            this.setState({
+                                performance: newPerformance
+                            })
+                        }}
+                        minKph={8}
+                        maxKph={27}
+                        showPace
+                        />
+                ))}
+
+            </div>
+        );
+    }
+}
+
+storiesOf('VdotPerformance', module)
+    .add('basic', () => (
+        <VdotPerformance />
     ));
