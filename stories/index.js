@@ -21,7 +21,7 @@ import {
 } from '../src/services/constants';
 
 import { timeToSec } from '../src/services/conversion';
-import { getPerformanceSec } from '../src/services/vdotTable';
+import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../src/services/vdotTable';
 import { raceSpeed, raceTime } from '../src/services/raceCalculator';
 
 class StatefulRaceTimeSlider extends React.Component {
@@ -83,8 +83,8 @@ class VdotPerformance extends React.Component {
                                 performance: newPerformance
                             })
                         }}
-                        minKph={8}
-                        maxKph={27}
+                        minKph={raceSpeed(minPerformanceSec.equivalents[race.label], race.distance)}
+                        maxKph={raceSpeed(maxPerformanceSec.equivalents[race.label], race.distance)}
                         showPace
                         />
                 ))}

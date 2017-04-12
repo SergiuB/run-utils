@@ -66,11 +66,14 @@ export default class RaceTimeSlider extends React.Component {
     }
   }
   render() {
-    const { kph, races, minKph, inline, showPace } = this.props;
+    const { kph, races, minKph, maxKph, inline, showPace } = this.props;
     const values = races.map(race => Math.floor(raceTime(kph, race.distance)));
 
     const getMaxDistance = R.compose(R.prop('distance'), R.reduce(R.maxBy(R.prop('distance')), { distance: 0 }));
-    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600 * 1.01);
+    const maxSec = Math.floor((getMaxDistance(races) / minKph) * 3600);
+
+    const getMinDistance = R.compose(R.prop('distance'), R.reduce(R.minBy(R.prop('distance')), { distance: Number.POSITIVE_INFINITY }));
+    const minSec = Math.floor((getMinDistance(races) / maxKph) * 3600);
 
     const sliderClass = classNames('slider', { inline });
     return (
@@ -78,6 +81,7 @@ export default class RaceTimeSlider extends React.Component {
         <Range
           value={values}
           onChange={value => this.handleChange(value)}
+          min={minSec}
           max={maxSec}
           handle={props => {
             const race = races[props.index];

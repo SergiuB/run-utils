@@ -143,6 +143,18 @@ const raceTimesSec = R.zipObj(
     R.slice(VDOT_MIN, VDOT_MAX + 1)
   )(raceTimes));
 
+const minPerformanceSec = {
+  vdot: VDOT_MIN,
+  percentage: 0,
+  equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]),
+}
+
+const maxPerformanceSec = {
+  vdot: VDOT_MIN,
+  percentage: 0,
+  equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]),
+}
+
 function getPerformance(race, time) {
   if (!R.is(Object, race) || !R.is(String, race.label)) {
     throw new Error('Race object not valid. Valid ones are in constants, import from there.');
@@ -168,20 +180,13 @@ function getPerformanceSec(race, timeSec) {
 
   const skillAboveIdx = R.findIndex(R.compose(R.gt(timeSec), R.prop(1)), specificRaceTimes);
   if (skillAboveIdx == 0) {
-    return {
-      vdot: VDOT_MIN,
-      percentage: 0,
-      equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]),
-    };
+    return minPerformanceSec;
   }
 
   if (skillAboveIdx < 0) {
-    return {
-      vdot: VDOT_MAX,
-      percentage: 0,
-      equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]),
-    };
+    return maxPerformanceSec;
   }
+
   const skillBelowIdx = skillAboveIdx - 1;
   const [vdotAbove, timeAbove] = specificRaceTimes[skillAboveIdx];
   const [vdotBelow, timeBelow] = specificRaceTimes[skillBelowIdx];
@@ -193,7 +198,7 @@ function getPerformanceSec(race, timeSec) {
     R.zipObj(sortedLabels),
     R.map(addPercentage.bind(null, percentage))
   )(R.zip(below, above));
-  
+
   return {
     vdot: parseInt(specificRaceTimes[skillBelowIdx][0], 10),
     percentage,
@@ -204,4 +209,6 @@ function getPerformanceSec(race, timeSec) {
 export {
   getPerformance,
   getPerformanceSec,
+  minPerformanceSec,
+  maxPerformanceSec,
 }
