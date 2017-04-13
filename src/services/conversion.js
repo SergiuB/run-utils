@@ -44,7 +44,7 @@ function timeToMin(time) {
   return h * 60 + m + s / 60;
 }
 
-function minToTime(min, showHour = true) {
+function minToTime(min, showHour = false) {
   let [h, m, s] = [Math.floor(min / 60), 0, 0];
   const rest = min % 60;
   if (rest) {
@@ -64,13 +64,13 @@ function minToTime(min, showHour = true) {
 
   const pad0 = n => n < 10 ? '0' + n : n;
 
-  return showHour
+  return showHour || h > 0
     ? `${pad0(h)}:${pad0(m)}:${pad0(s)}`
     : `${pad0(m)}:${pad0(s)}`;
 }
 
-function secToTime(sec) {
-  return minToTime(sec / 60);
+function secToTime(sec, showHour = false) {
+  return minToTime(sec / 60, showHour);
 }
 
 function minKmToMinMile(minKm) {

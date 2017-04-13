@@ -16,7 +16,7 @@ export default class RaceTime extends React.Component {
     return (
       <TimePicker
         showHour={showHour}
-        value={moment(secToTime(raceTime(kph, km)), 'HH:mm:ss')}
+        value={moment(secToTime(raceTime(kph, km), showHour), 'HH:mm:ss')}
         onChange={(val) => onChange(raceSpeed(timeToSec(val.format('HH:mm:ss')), km))}
       />
     );
