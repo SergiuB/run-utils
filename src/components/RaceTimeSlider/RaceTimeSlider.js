@@ -11,44 +11,12 @@ import {
 } from '../../services/conversion';
 import { raceTime, raceSpeed } from '../../services/raceCalculator';
 
+import RaceTimeHandle from './RaceTimeHandle';
+
 import 'rc-slider/assets/index.css';
 import './style.css';
 
 const Range = Slider.Range;
-
-class Handle extends React.Component {
-  render() {
-    const {
-      className,
-      vertical,
-      offset,
-      minimumTrackTintColor,
-      disabled,
-      labelUp,
-      labelDown,
-      dragging,
-      index,
-      inline,
-      ...restProps,
-    } = this.props;
-    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
-    if (minimumTrackTintColor && !disabled) {
-      style.borderColor = minimumTrackTintColor;
-    }
-
-    const handleClass = classNames('slider-handle', { inline });
-
-    return (
-      <div {...restProps} className={handleClass} style={style}>
-        <div className='labels'>
-          <div className='slider-handle-label-up'>{labelUp}</div>
-          <div className='slider-handle-label-down'>{labelDown}</div>
-        </div>
-        <div className='slider-handle-mark'></div>
-      </div>
-    );
-  }
-}
 
 export default class RaceTimeSlider extends React.Component {
   handleChange(value) {
@@ -98,7 +66,7 @@ export default class RaceTimeSlider extends React.Component {
           handle={props => {
             const race = races[props.index];
             return (
-              <Handle
+              <RaceTimeHandle
                 key={props.index}
                 labelUp={race.label}
                 labelDown={secToTime(raceTime(kph, race.distance))}
