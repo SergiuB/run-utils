@@ -43,12 +43,12 @@ storiesOf('RaceTimeSlider', module)
     .add('basic', () => (
         <div>
             <StatefulRaceTimeSlider
-                races={[kMile, k10]}
+                race={kMile}
                 minKph={7}
                 maxKph={36}
                 />
             <StatefulRaceTimeSlider
-                races={[kHalf]}
+                race={kHalf}
                 minKph={7}
                 maxKph={36}
                 showPace
@@ -77,7 +77,7 @@ class VdotPerformance extends React.Component {
                     <RaceTimeSlider
                         selected={race.label === selectedRace.label}
                         key={race.label}
-                        races={[race]}
+                        race={race}
                         kph={raceSpeed(performance.equivalents[race.label], race.distance)}
                         onChange={kph => {
                             const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));

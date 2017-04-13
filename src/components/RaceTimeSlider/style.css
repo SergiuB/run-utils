@@ -10,7 +10,7 @@
   margin-right: 5px;
 }
 
-.slider.selected .rc-slider-rail {
+.slider.selected .rc-slider-track {
   background-color: red;
 }
 

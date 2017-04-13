@@ -54,42 +54,42 @@ class App extends Component {
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[k1500]}
+            race={k1500}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[kMile]}
+            race={kMile}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[k5]}
+            race={k5}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[k10]}
+            race={k10}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[kHalf]}
+            race={kHalf}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
           <RaceTimeSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
-            races={[kMarathon]}
+            race={kMarathon}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
