@@ -26,12 +26,21 @@
   height: 50px;
 }
 
+.slider-handle.right-side {
+  margin-left: -5px;
+}
+
 .slider-handle .labels {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
   width: 85px;
+}
+
+.slider-handle.right-side .labels {
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .slider .right-label {

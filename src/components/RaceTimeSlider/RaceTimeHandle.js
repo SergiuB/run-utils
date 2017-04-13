@@ -22,16 +22,25 @@ export default class RaceTimeHandle extends React.Component {
     if (minimumTrackTintColor && !disabled) {
       style.borderColor = minimumTrackTintColor;
     }
+    const rightSide = offset < 50;
+    const handleClass = classNames('slider-handle', { inline, 'right-side': rightSide });
 
-    const handleClass = classNames('slider-handle', { inline });
+    const labels = (
+      <div className='labels' key='labels'>
+        <div className='slider-handle-label-up'>{labelUp}</div>
+        <div className='slider-handle-label-down'>{labelDown}</div>
+      </div>
+    );
+    const mark = <div className='slider-handle-mark' key='mark'></div>;
+
+    const handleElements = [labels, mark];
 
     return (
       <div {...restProps} className={handleClass} style={style}>
-        <div className='labels'>
-          <div className='slider-handle-label-up'>{labelUp}</div>
-          <div className='slider-handle-label-down'>{labelDown}</div>
-        </div>
-        <div className='slider-handle-mark'></div>
+        {rightSide
+          ? handleElements.reverse()
+          : handleElements
+        }
       </div>
     );
   }
