@@ -8,6 +8,7 @@ import {
   secToTime,
   minToTime,
   kphToMinKm,
+  timeToSec,
 } from '../../services/conversion';
 import { raceTime, raceSpeed } from '../../services/raceCalculator';
 
@@ -37,7 +38,7 @@ export default class RaceTimeSlider extends React.Component {
     this.handleChange(this.getValue() - 1);
   }
   render() {
-    const { kph, race, minKph, maxKph, inline, showPace, selected } = this.props;
+    const { kph, paceDelta, race, minKph, maxKph, inline, showPace, selected } = this.props;
     const value = Math.floor(raceTime(kph, race.distance));
 
     const maxSec = Math.floor((race.distance / minKph) * 3600);
@@ -63,7 +64,12 @@ export default class RaceTimeSlider extends React.Component {
           )}
           />
         <button type='button' className='change-btn' onClick={() => this.incValue()}>&gt;</button>
-        {showPace && <div className={'right-label'}>{minToTime(kphToMinKm(kph), false)}/km</div>}
+        {showPace && (
+          <div className={'right-label'}>
+            <div className='pace'>{minToTime(kphToMinKm(kph))}/km</div>
+            {!selected && <div className='pace-delta'>{paceDelta > 0 ? '+': '-'}{timeToSec(minToTime(Math.abs(paceDelta)))}s</div>}
+          </div>
+        )}
       </div>
     );
   }
