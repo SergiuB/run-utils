@@ -5,6 +5,10 @@
   padding-top: 15px;
 }
 
+.slider .change-btn {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
 .slider-handle {
   position: absolute;

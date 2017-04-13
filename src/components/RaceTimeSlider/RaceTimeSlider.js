@@ -52,8 +52,8 @@ class Handle extends React.Component {
 
 export default class RaceTimeSlider extends React.Component {
   handleChange(value) {
-    const { kph, races, onChange, minKph, maxKph } = this.props;
-    const oldValues = races.map(race => Math.floor(raceTime(kph, race.distance)));
+    const { races, onChange, minKph, maxKph } = this.props;
+    const oldValues = this.getValues();
 
     const [, val, race] = _.find(_.zip(oldValues, value, races),
       ([oldVal, val]) => oldVal !== val);
@@ -64,6 +64,17 @@ export default class RaceTimeSlider extends React.Component {
     if (newSpeed > minKph && newSpeed < maxKph) {
       onChange.call(null, newSpeed);
     }
+  }
+  getValues() {
+    return this.props.races.map(race => raceTime(this.props.kph, race.distance));
+  }
+  incFirstValue() {
+    const [first, ...rest] = this.getValues();
+    this.handleChange([first + 1, ...rest]);
+  }
+  decFirstValue() {
+    const [first, ...rest] = this.getValues();
+    this.handleChange([first - 1, ...rest]);
   }
   render() {
     const { kph, races, minKph, maxKph, inline, showPace } = this.props;
@@ -78,6 +89,7 @@ export default class RaceTimeSlider extends React.Component {
     const sliderClass = classNames('slider', { inline });
     return (
       <div className={sliderClass}>
+        <button type='button' className='change-btn' onClick={() => this.decFirstValue()}>&lt;</button>
         <Range
           value={values}
           onChange={value => this.handleChange(value)}
@@ -96,6 +108,7 @@ export default class RaceTimeSlider extends React.Component {
             );
           }}
           />
+        <button type='button' className='change-btn' onClick={() => this.incFirstValue()}>&gt;</button>
         {showPace && <div className={'right-label'}>{minToTime(kphToMinKm(kph), false)}/km</div>}
       </div>
     );

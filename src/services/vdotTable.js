@@ -190,7 +190,7 @@ function getPerformanceSec(race, timeSec) {
   const skillBelowIdx = skillAboveIdx - 1;
   const [vdotAbove, timeAbove] = specificRaceTimes[skillAboveIdx];
   const [vdotBelow, timeBelow] = specificRaceTimes[skillBelowIdx];
-  const percentage = +((timeSec - timeBelow) / (timeAbove - timeBelow)).toFixed(2);
+  const percentage = ((timeSec - timeBelow) / (timeAbove - timeBelow));
 
   const [below, above] = [raceTimesSec[vdotBelow], raceTimesSec[vdotAbove]];
   const addPercentage = (p, [t1, t2]) => (t1 + p * (t2 - t1));

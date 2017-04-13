@@ -4,7 +4,7 @@ import { k3, k5, k10, kHalf } from './constants';
 it('psses basic tests', () => {
   expect(getPerformance(k10, '50:00')).toEqual({
     vdot: 40,
-    percentage: 0.05,
+    percentage: 0.04838709677419355,
     equivalents: {
       '1500': '06:35',
       Mile: '07:07',
@@ -18,14 +18,14 @@ it('psses basic tests', () => {
       '10M': '01:23:06',
       '20K': '01:44:47',
       Half: '01:50:53',
-      '25K': '02:12:49',
+      '25K': '02:12:50',
       '30K': '02:40:57',
       Marathon: '03:49:32'
     }
   });
   expect(getPerformance(k10, '47:11')).toEqual({
     vdot: 42,
-    percentage: 0.88,
+    percentage: 0.8771929824561403,
     equivalents: {
       '1500': '06:12',
       Mile: '06:42',
@@ -40,13 +40,13 @@ it('psses basic tests', () => {
       '20K': '01:38:51',
       Half: '01:44:36',
       '25K': '02:05:24',
-      '30K': '02:32:01',
-      Marathon: '03:36:59'
+      '30K': '02:32:02',
+      Marathon: '03:37:00'
     }
   });
   expect(getPerformance(kHalf, '1:40:25')).toEqual({
     vdot: 44,
-    percentage: 0.96,
+    percentage: 0.9572649572649573,
     equivalents: {
       '1500': '05:57',
       Mile: '06:26',
@@ -59,31 +59,31 @@ it('psses basic tests', () => {
       '15K': '01:09:44',
       '10M': '01:15:14',
       '20K': '01:34:54',
-      Half: '01:40:25',
+      Half: '01:40:26',
       '25K': '02:00:26',
-      '30K': '02:26:04',
-      Marathon: '03:28:36'
+      '30K': '02:26:05',
+      Marathon: '03:28:37'
     }
   });
   expect(getPerformance(k3, '12:38')).toEqual({
     vdot: 45,
-    percentage: 0.14,
+    percentage: 0.14285714285714285,
     equivalents: {
       '1500': '05:56',
       Mile: '06:24',
-      '3K': '12:39',
+      '3K': '12:38',
       '2M': '13:38',
       '5K': '21:47',
       '8K': '35:49',
       '5M': '36:02',
       '10K': '45:09',
-      '15K': '01:09:30',
+      '15K': '01:09:29',
       '10M': '01:14:59',
-      '20K': '01:34:35',
-      Half: '01:40:05',
-      '25K': '02:00:02',
-      '30K': '02:25:35',
-      Marathon: '03:27:55'
+      '20K': '01:34:34',
+      Half: '01:40:04',
+      '25K': '02:00:01',
+      '30K': '02:25:34',
+      Marathon: '03:27:54'
     }
   });
   expect(getPerformance(k5, '21:56')).toEqual({
@@ -109,7 +109,7 @@ it('psses basic tests', () => {
   });
   expect(getPerformance(kHalf, '1:36:33')).toEqual({
     vdot: 47,
-    percentage: 0.05,
+    percentage: 0.047619047619047616,
     equivalents: {
       '1500': '05:42',
       Mile: '06:10',
@@ -123,7 +123,7 @@ it('psses basic tests', () => {
       '10M': '01:12:21',
       '20K': '01:31:15',
       Half: '01:36:33',
-      '25K': '01:55:50',
+      '25K': '01:55:51',
       '30K': '02:20:33',
       Marathon: '03:20:50'
     }
