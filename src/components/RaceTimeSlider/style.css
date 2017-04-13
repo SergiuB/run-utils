@@ -10,6 +10,10 @@
   margin-right: 5px;
 }
 
+.slider.selected .rc-slider-rail {
+  background-color: red;
+}
+
 .slider-handle {
   position: absolute;
   cursor: pointer;

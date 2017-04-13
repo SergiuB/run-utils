@@ -58,10 +58,11 @@ storiesOf('RaceTimeSlider', module)
 
 class VdotPerformance extends React.Component {
     state = {
-        performance: getPerformanceSec(kHalf, timeToSec('1:36:33'))
+        performance: getPerformanceSec(kHalf, timeToSec('1:36:33')),
+        selectedRace: kHalf,
     }
     render() {
-        const { performance } = this.state;
+        const { performance, selectedRace } = this.state;
         const races = [
             kMarathon,
             kHalf,
@@ -74,13 +75,15 @@ class VdotPerformance extends React.Component {
             <div>
                 {races.map(race => (
                     <RaceTimeSlider
+                        selected={race.label === selectedRace.label}
                         key={race.label}
                         races={[race]}
                         kph={raceSpeed(performance.equivalents[race.label], race.distance)}
                         onChange={kph => {
                             const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));
                             this.setState({
-                                performance: newPerformance
+                                performance: newPerformance,
+                                selectedRace: race,
                             })
                         }}
                         minKph={raceSpeed(minPerformanceSec.equivalents[race.label], race.distance)}

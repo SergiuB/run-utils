@@ -77,7 +77,7 @@ export default class RaceTimeSlider extends React.Component {
     this.handleChange([first - 1, ...rest]);
   }
   render() {
-    const { kph, races, minKph, maxKph, inline, showPace } = this.props;
+    const { kph, races, minKph, maxKph, inline, showPace, selected } = this.props;
     const values = races.map(race => Math.floor(raceTime(kph, race.distance)));
 
     const getMaxDistance = R.compose(R.prop('distance'), R.reduce(R.maxBy(R.prop('distance')), { distance: 0 }));
@@ -86,7 +86,7 @@ export default class RaceTimeSlider extends React.Component {
     const getMinDistance = R.compose(R.prop('distance'), R.reduce(R.minBy(R.prop('distance')), { distance: Number.POSITIVE_INFINITY }));
     const minSec = Math.floor((getMinDistance(races) / maxKph) * 3600);
 
-    const sliderClass = classNames('slider', { inline });
+    const sliderClass = classNames('slider', { inline, selected });
     return (
       <div className={sliderClass}>
         <button type='button' className='change-btn' onClick={() => this.decFirstValue()}>&lt;</button>
