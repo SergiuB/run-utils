@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import './RaceSliderHandle.css';
 
-export default class RaceTimeHandle extends React.Component {
+export default class RaceSliderHandle extends React.Component {
   render() {
     const {
       className,

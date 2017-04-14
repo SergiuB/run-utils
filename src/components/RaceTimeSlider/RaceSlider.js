@@ -12,12 +12,12 @@ import {
 } from '../../services/conversion';
 import { raceTime, raceSpeed } from '../../services/raceCalculator';
 
-import RaceTimeHandle from './RaceTimeHandle';
+import RaceSliderHandle from './RaceSliderHandle';
 
 import 'rc-slider/assets/index.css';
 import './RaceSlider.css';
 
-export default class RaceTimeSlider extends React.Component {
+export default class RaceSlider extends React.Component {
   handleChange(value) {
     const { race, onChange, minKph, maxKph } = this.props;
 
@@ -54,7 +54,7 @@ export default class RaceTimeSlider extends React.Component {
           min={minSec}
           max={maxSec}
           handle={props => (
-            <RaceTimeHandle
+            <RaceSliderHandle
               key={props.index}
               labelUp={race.label}
               labelDown={secToTime(raceTime(kph, race.distance))}
@@ -75,12 +75,12 @@ export default class RaceTimeSlider extends React.Component {
   }
 }
 
-RaceTimeSlider.propTypes = {
+RaceSlider.propTypes = {
   kph: React.PropTypes.number.isRequired,
   onChange: React.PropTypes.func.isRequired,
 };
 
-RaceTimeSlider.defaultProps = {
+RaceSlider.defaultProps = {
   kph: 10,
   onChange: () => { },
 }

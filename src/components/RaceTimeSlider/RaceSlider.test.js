@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import moment from 'moment';
 
-import RaceTimeSlider from './RaceTimeSlider';
+import RaceSlider from './RaceSlider';
 
 it('renders with default value 10 kph', () => {
   // const wrapper = shallow(<SpeedConversion />);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 
-import RaceTimeSlider from '../src/components/RaceTimeSlider';
+import RaceSlider from '../src/components/RaceTimeSlider';
 import {
     allRaces,
     kMarathon,
@@ -24,13 +24,13 @@ import { timeToSec } from '../src/services/conversion';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../src/services/vdotTable';
 import { raceSpeed, raceTime, racePace } from '../src/services/raceCalculator';
 
-class StatefulRaceTimeSlider extends React.Component {
+class StatefulRaceSlider extends React.Component {
     state = {
         kph: 15,
     }
     render() {
         return (
-            <RaceTimeSlider
+            <RaceSlider
                 kph={this.state.kph}
                 onChange={kph => this.setState({ kph })}
                 {...this.props}
@@ -39,15 +39,15 @@ class StatefulRaceTimeSlider extends React.Component {
     }
 }
 
-storiesOf('RaceTimeSlider', module)
+storiesOf('RaceSlider', module)
     .add('basic', () => (
         <div>
-            <StatefulRaceTimeSlider
+            <StatefulRaceSlider
                 race={kMile}
                 minKph={7}
                 maxKph={36}
                 />
-            <StatefulRaceTimeSlider
+            <StatefulRaceSlider
                 race={kHalf}
                 minKph={7}
                 maxKph={36}
@@ -74,7 +74,7 @@ class VdotPerformance extends React.Component {
         return (
             <div>
                 {races.map(race => (
-                    <RaceTimeSlider
+                    <RaceSlider
                         selected={race.label === selectedRace.label}
                         key={race.label}
                         race={race}

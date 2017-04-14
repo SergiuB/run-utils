@@ -4,7 +4,7 @@ import './App.css';
 
 import SpeedConversion from '../../components/SpeedConversion';
 import RaceTime from '../../components/RaceTime';
-import RaceTimeSlider from '../../components/RaceTimeSlider';
+import RaceSlider from '../../components/RaceSlider';
 import {
   allRaces,
   kMarathon,
@@ -51,42 +51,42 @@ class App extends Component {
           ))}
         </div>
         <div className="App-sliders">
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={k1500}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={kMile}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={k5}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={k10}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={kHalf}
             minKph={MIN_KPH}
             maxKph={MAX_KPH}
           />
-          <RaceTimeSlider
+          <RaceSlider
             kph={this.state.kph}
             onChange={kph => this.setState({ kph })}
             race={kMarathon}

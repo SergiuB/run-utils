@@ -1,3 +1,3 @@
-import RaceTimeSlider from './RaceTimeSlider';
+import RaceSlider from './RaceSlider';
 
-export default RaceTimeSlider;
+export default RaceSlider;
