@@ -3,6 +3,8 @@ import _ from 'lodash';
 import R from 'ramda';
 import classNames from 'classnames';
 
+import './RaceSliderHandle.css';
+
 export default class RaceTimeHandle extends React.Component {
   render() {
     const {

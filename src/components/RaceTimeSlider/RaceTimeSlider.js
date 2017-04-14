@@ -15,7 +15,7 @@ import { raceTime, raceSpeed } from '../../services/raceCalculator';
 import RaceTimeHandle from './RaceTimeHandle';
 
 import 'rc-slider/assets/index.css';
-import './style.css';
+import './RaceSlider.css';
 
 export default class RaceTimeSlider extends React.Component {
   handleChange(value) {
