@@ -17,9 +17,13 @@
     top: 14px;
   }
 
+  .rc-slider-track {
+    background-color: #00BCD4
+  }
+
   &.selected {
     .rc-slider-track {
-      background-color: pink;
-    }
+      background-color: #FF4081;
+    } 
   }
 }
