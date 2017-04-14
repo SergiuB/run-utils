@@ -1,8 +1,6 @@
 import React from 'react';
 import Slider from 'rc-slider';
 
-import _ from 'lodash';
-import R from 'ramda';
 import classNames from 'classnames';
 import {
   secToTime,

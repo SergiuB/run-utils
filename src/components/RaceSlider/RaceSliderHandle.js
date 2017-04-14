@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import R from 'ramda';
 import classNames from 'classnames';
 
 import './RaceSliderHandle.css';
@@ -8,15 +7,12 @@ import './RaceSliderHandle.css';
 export default class RaceSliderHandle extends React.Component {
   render() {
     const {
-      className,
       vertical,
       offset,
       minimumTrackTintColor,
       disabled,
       labelUp,
       labelDown,
-      dragging,
-      index,
       inline,
       ...restProps,
     } = this.props;
