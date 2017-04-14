@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 
-import RaceSlider from '../src/components/RaceTimeSlider';
+import RaceSlider from '../src/components/RaceSlider';
 import {
     allRaces,
     kMarathon,
