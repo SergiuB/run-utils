@@ -29,11 +29,11 @@ export default class RaceSliderHandle extends React.Component {
 
     const labels = (
       <div className='labels' key='labels'>
-        <div className='slider-handle-label-up'>{labelUp}</div>
-        <div className='slider-handle-label-down'>{labelDown}</div>
+        <div className='label-up'>{labelUp}</div>
+        <div className='label-down'>{labelDown}</div>
       </div>
     );
-    const mark = <div className='slider-handle-mark' key='mark'></div>;
+    const mark = <div className='mark' key='mark'></div>;
 
     const handleElements = [labels, mark];
 

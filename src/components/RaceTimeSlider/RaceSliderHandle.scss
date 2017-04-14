@@ -25,12 +25,12 @@
     justify-content: flex-end;
     width: 85px;
   }
-}
 
-.slider-handle-mark {
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-  border: solid 2px #96dbfa;
-  background-color: #fff;
+  .mark {
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    border: solid 2px #96dbfa;
+    background-color: #fff;
+  }
 }
