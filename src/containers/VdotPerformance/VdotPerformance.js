@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import RaceSlider from '../../components/RaceSlider';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
-import { raceSpeed, raceTime, racePace } from '../../services/raceCalculator';
+import { raceSpeed, raceTime, racePace, racePaceMile } from '../../services/raceCalculator';
 import { timeToSec } from '../../services/conversion';
 
 
@@ -16,20 +16,24 @@ export default class VdotPerformance extends React.Component {
       races: PropTypes.arrayOf(raceType).isRequired,
       baseRace: raceType.isRequired,
       baseRaceTime: PropTypes.string.isRequired,
+      metric: PropTypes.bool,
     }
     render() {
         const { performance, selectedRace } = this.state;
-        const races = this.props.races;
+        const { races, metric } = this.props;
+
+        const paceFn = metric ? racePace : racePaceMile;
 
         return (
             <div>
                 {races.map(race => (
                     <RaceSlider
+                        metric={metric}
                         selected={race.label === selectedRace.label}
                         key={race.label}
                         race={race}
                         kph={raceSpeed(performance.equivalents[race.label], race.distance)}
-                        paceDelta={racePace(performance.equivalents[race.label], race.distance) - racePace(performance.equivalents[selectedRace.label], selectedRace.distance)}
+                        paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
                         onChange={kph => {
                             const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));
                             this.setState({

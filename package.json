@@ -16,11 +16,13 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "lodash": "^4.17.4",
+    "material-ui": "^0.17.3",
     "ramda": "^0.23.0",
     "rc-slider": "^6.1.2",
     "rc-time-picker": "^2.2.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-tap-event-plugin": "^2.0.1"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
@@ -28,7 +30,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
-    "deploy" : "npm run build && gh-pages -d build",
+    "deploy": "npm run build && gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook-js": "start-storybook -p 9001 -c .storybook",

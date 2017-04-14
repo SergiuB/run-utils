@@ -1,3 +1,7 @@
+/* eslint
+  no-unused-vars: 0
+*/
+
 import React from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -14,6 +18,7 @@ export default class RaceSliderHandle extends React.Component {
       labelUp,
       labelDown,
       inline,
+      dragging,
       ...restProps,
     } = this.props;
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
