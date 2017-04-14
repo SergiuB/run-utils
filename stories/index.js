@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
 
 import RaceSlider from '../src/components/RaceSlider';
+import VdotPerformance from '../src/containers/VdotPerformance';
 import {
     allRaces,
     kMarathon,
@@ -19,10 +20,6 @@ import {
     kMile,
     k1500,
 } from '../src/services/constants';
-
-import { timeToSec } from '../src/services/conversion';
-import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../src/services/vdotTable';
-import { raceSpeed, raceTime, racePace } from '../src/services/raceCalculator';
 
 class StatefulRaceSlider extends React.Component {
     state = {
@@ -56,49 +53,11 @@ storiesOf('RaceSlider', module)
         </div>
     ));
 
-class VdotPerformance extends React.Component {
-    state = {
-        performance: getPerformanceSec(kHalf, timeToSec('1:36:33')),
-        selectedRace: kHalf,
-    }
-    render() {
-        const { performance, selectedRace } = this.state;
-        const races = [
-            kMarathon,
-            kHalf,
-            k10,
-            k5,
-            k3,
-            kMile,
-        ];
-        return (
-            <div>
-                {races.map(race => (
-                    <RaceSlider
-                        selected={race.label === selectedRace.label}
-                        key={race.label}
-                        race={race}
-                        kph={raceSpeed(performance.equivalents[race.label], race.distance)}
-                        paceDelta={racePace(performance.equivalents[race.label], race.distance) - racePace(performance.equivalents[selectedRace.label], selectedRace.distance)}
-                        onChange={kph => {
-                            const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));
-                            this.setState({
-                                performance: newPerformance,
-                                selectedRace: race,
-                            })
-                        }}
-                        minKph={raceSpeed(minPerformanceSec.equivalents[race.label], race.distance)}
-                        maxKph={raceSpeed(maxPerformanceSec.equivalents[race.label], race.distance)}
-                        showPace
-                        />
-                ))}
-
-            </div>
-        );
-    }
-}
-
 storiesOf('VdotPerformance', module)
     .add('basic', () => (
-        <VdotPerformance />
+        <VdotPerformance
+            baseRaceTime={'1:36:33'}
+            baseRace={kHalf}
+            races={[kMarathon, kHalf, k10, k5, k3, kMile]}
+        />
     ));
