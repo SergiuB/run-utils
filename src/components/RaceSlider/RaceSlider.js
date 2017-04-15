@@ -46,11 +46,6 @@ export default class RaceSlider extends React.Component {
     const minSec = Math.floor((race.distance / maxKph) * 3600);
 
     const sliderClass = classNames('slider', { inline, selected });
-
-    const iconStyle = {
-      width: 36,
-      height: 36,
-    };
               
     return (
       <div className={sliderClass}>
@@ -58,7 +53,7 @@ export default class RaceSlider extends React.Component {
           <div className='race-name'>{race.label}</div>
           <div className='race-time'>{secToTime(raceTime(kph, race.distance))}</div>
         </div>
-        <IconButton onClick={() => this.decValue()} style={{ padding: 0 }}>
+        <IconButton className='change-btn' onClick={() => this.decValue()} style={{ padding: 0 }}>
           <NavigationChevronLeft />
         </IconButton>
         <Slider
@@ -68,7 +63,7 @@ export default class RaceSlider extends React.Component {
           min={minSec-1}
           max={maxSec+1}
           />
-        <IconButton onClick={() => this.incValue()}>
+        <IconButton className='change-btn right' onClick={() => this.incValue()}>
           <NavigationChevronRight />
         </IconButton>
         {showPace && (
