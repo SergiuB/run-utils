@@ -1,8 +1,17 @@
 .slider {
+  position: relative;
   display: flex;
   align-items: center;
   height: 40px;
   padding-top: 15px;
+
+  .material-slider {
+    flex-grow: 1;
+    & > div {
+      margin-top: 0px !important;
+      margin-bottom: 0px !important;
+    }
+  }
 
   .change-btn {
     margin-left: 5px;
@@ -10,7 +19,19 @@
   }
 
   .right-label {
-    margin-left: 5px;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    align-items: flex-end;
+    right: 35px;
+  }
+
+  .left-label {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    align-items: flex-start;
+    left: 35px;
   }
 
   .rc-slider-mark {
@@ -22,8 +43,9 @@
   }
 
   &.selected {
-    .rc-slider-track {
-      background-color: #FF4081;
-    } 
+    color: #FF4081;
+    .pace-delta {
+      visibility: hidden;
+    }
   }
 }

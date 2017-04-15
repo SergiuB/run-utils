@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from 'material-ui/Slider';
 
 import classNames from 'classnames';
 import {
@@ -10,8 +10,6 @@ import {
   minKmToMinMile,
 } from '../../services/conversion';
 import { raceTime, raceSpeed } from '../../services/raceCalculator';
-
-import RaceSliderHandle from './RaceSliderHandle';
 
 import 'rc-slider/assets/index.css';
 import './RaceSlider.css';
@@ -44,29 +42,26 @@ export default class RaceSlider extends React.Component {
     const minSec = Math.floor((race.distance / maxKph) * 3600);
 
     const sliderClass = classNames('slider', { inline, selected });
+              
     return (
       <div className={sliderClass}>
+        <div className={'left-label'}>
+          <div className='race-name'>{race.label}</div>
+          <div className='race-time'>{secToTime(raceTime(kph, race.distance))}</div>
+        </div>
         <button type='button' className='change-btn' onClick={() => this.decValue()}>&lt;</button>
         <Slider
+          className='material-slider'
           value={value}
-          onChange={value => this.handleChange(value)}
-          min={minSec}
-          max={maxSec}
-          handle={props => (
-            <RaceSliderHandle
-              key={props.index}
-              labelUp={race.label}
-              labelDown={secToTime(raceTime(kph, race.distance))}
-              inline={inline}
-              {...props}
-              />
-          )}
+          onChange={(_,value) => this.handleChange(value)}
+          min={minSec-1}
+          max={maxSec+1}
           />
         <button type='button' className='change-btn' onClick={() => this.incValue()}>&gt;</button>
         {showPace && (
           <div className={'right-label'}>
             <div className='pace'>{metric ? minToTime(kphToMinKm(kph)) : minToTime(minKmToMinMile(kphToMinKm(kph)))}/{metric ? 'km' : 'mile'}</div>
-            {!selected && <div className='pace-delta'>{paceDelta > 0 ? '+': '-'}{timeToSec(minToTime(Math.abs(paceDelta)))}s</div>}
+            <div className='pace-delta'>{paceDelta > 0 ? '+': '-'}{timeToSec(minToTime(Math.abs(paceDelta)))}s</div>
           </div>
         )}
       </div>
