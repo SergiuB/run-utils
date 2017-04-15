@@ -1,6 +1,10 @@
 import React from 'react';
 import Slider from 'material-ui/Slider';
 
+import IconButton from 'material-ui/IconButton';
+import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+
 import classNames from 'classnames';
 import {
   secToTime,
@@ -42,6 +46,11 @@ export default class RaceSlider extends React.Component {
     const minSec = Math.floor((race.distance / maxKph) * 3600);
 
     const sliderClass = classNames('slider', { inline, selected });
+
+    const iconStyle = {
+      width: 36,
+      height: 36,
+    };
               
     return (
       <div className={sliderClass}>
@@ -49,7 +58,9 @@ export default class RaceSlider extends React.Component {
           <div className='race-name'>{race.label}</div>
           <div className='race-time'>{secToTime(raceTime(kph, race.distance))}</div>
         </div>
-        <button type='button' className='change-btn' onClick={() => this.decValue()}>&lt;</button>
+        <IconButton onClick={() => this.decValue()} style={{ padding: 0 }}>
+          <NavigationChevronLeft />
+        </IconButton>
         <Slider
           className='material-slider'
           value={value}
@@ -57,7 +68,9 @@ export default class RaceSlider extends React.Component {
           min={minSec-1}
           max={maxSec+1}
           />
-        <button type='button' className='change-btn' onClick={() => this.incValue()}>&gt;</button>
+        <IconButton onClick={() => this.incValue()}>
+          <NavigationChevronRight />
+        </IconButton>
         {showPace && (
           <div className={'right-label'}>
             <div className='pace'>{metric ? minToTime(kphToMinKm(kph)) : minToTime(minKmToMinMile(kphToMinKm(kph)))}/{metric ? 'km' : 'mile'}</div>

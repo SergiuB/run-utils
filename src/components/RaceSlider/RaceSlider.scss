@@ -13,17 +13,12 @@
     }
   }
 
-  .change-btn {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-
   .right-label {
     display: flex;
     position: absolute;
     flex-direction: column;
     align-items: flex-end;
-    right: 35px;
+    right: 47px;
   }
 
   .left-label {
@@ -31,7 +26,7 @@
     position: absolute;
     flex-direction: column;
     align-items: flex-start;
-    left: 35px;
+    left: 47px;
   }
 
   .rc-slider-mark {
