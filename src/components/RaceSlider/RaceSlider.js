@@ -4,6 +4,7 @@ import Slider from 'material-ui/Slider';
 import IconButton from 'material-ui/IconButton';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import { pinkA200 } from 'material-ui/styles/colors'
 
 import classNames from 'classnames';
 import {
@@ -46,6 +47,10 @@ export default class RaceSlider extends React.Component {
     const minSec = Math.floor((race.distance / maxKph) * 3600);
 
     const sliderClass = classNames('slider', { inline, selected });
+
+    const iconStyle = {
+      color: pinkA200
+    };
               
     return (
       <div className={sliderClass}>
@@ -53,7 +58,7 @@ export default class RaceSlider extends React.Component {
           <div className='race-name'>{race.label}</div>
           <div className='race-time'>{secToTime(raceTime(kph, race.distance))}</div>
         </div>
-        <IconButton className='change-btn' onClick={() => this.decValue()} style={{ padding: 0 }}>
+        <IconButton iconStyle={selected ? iconStyle : {}} className='change-btn' onClick={() => this.decValue()} style={{ padding: 0 }}>
           <NavigationChevronLeft />
         </IconButton>
         <Slider
@@ -63,7 +68,7 @@ export default class RaceSlider extends React.Component {
           min={minSec-1}
           max={maxSec+1}
           />
-        <IconButton className='change-btn right' onClick={() => this.incValue()}>
+        <IconButton iconStyle={selected ? iconStyle : {}} className='change-btn right' onClick={() => this.incValue()}>
           <NavigationChevronRight />
         </IconButton>
         {showPace && (
