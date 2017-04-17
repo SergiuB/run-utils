@@ -7,16 +7,16 @@ import { timeToSec } from '../../services/conversion';
 
 
 const raceType = PropTypes.shape({
-  label: PropTypes.string,
-  distance: PropTypes.number
+    label: PropTypes.string,
+    distance: PropTypes.number
 });
 
 export default class VdotPerformance extends React.Component {
     static propTypes = {
-      races: PropTypes.arrayOf(raceType).isRequired,
-      baseRace: raceType.isRequired,
-      baseRaceTime: PropTypes.string.isRequired,
-      metric: PropTypes.bool,
+        races: PropTypes.arrayOf(raceType).isRequired,
+        baseRace: raceType.isRequired,
+        baseRaceTime: PropTypes.string.isRequired,
+        metric: PropTypes.bool,
     }
     render() {
         const { performance, selectedRace } = this.state;
@@ -40,22 +40,21 @@ export default class VdotPerformance extends React.Component {
                                 performance: newPerformance,
                                 selectedRace: race,
                             })
-                        }}
+                        } }
                         minSec={maxPerformanceSec.equivalents[race.label]}
                         maxSec={minPerformanceSec.equivalents[race.label]}
                         showPace
                         />
                 ))}
-
             </div>
         );
     }
 
     componentWillMount() {
-      const { baseRace, baseRaceTime} = this.props;
-      this.setState({
-        selectedRace: baseRace,
-        performance: getPerformanceSec(baseRace, timeToSec(baseRaceTime)),
-      })
+        const { baseRace, baseRaceTime} = this.props;
+        this.setState({
+            selectedRace: baseRace,
+            performance: getPerformanceSec(baseRace, timeToSec(baseRaceTime)),
+        })
     }
 }
