@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 
 import RaceSlider from '../../components/RaceSlider';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
-import { raceSpeed, raceTime, racePace, racePaceMile } from '../../services/raceCalculator';
-import { timeToSec, secToTime } from '../../services/conversion';
+import { racePace, racePaceMile } from '../../services/raceCalculator';
+import { timeToSec } from '../../services/conversion';
 
 
 const raceType = PropTypes.shape({
