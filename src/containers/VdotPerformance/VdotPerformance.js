@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import RaceSlider from '../../components/RaceSlider';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
 import { raceSpeed, raceTime, racePace, racePaceMile } from '../../services/raceCalculator';
-import { timeToSec } from '../../services/conversion';
+import { timeToSec, secToTime } from '../../services/conversion';
 
 
 const raceType = PropTypes.shape({
@@ -32,17 +32,17 @@ export default class VdotPerformance extends React.Component {
                         selected={race.label === selectedRace.label}
                         key={race.label}
                         race={race}
-                        kph={raceSpeed(performance.equivalents[race.label], race.distance)}
+                        seconds={performance.equivalents[race.label]}
                         paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
-                        onChange={kph => {
-                            const newPerformance = getPerformanceSec(race, raceTime(kph, race.distance));
+                        onChange={seconds => {
+                            const newPerformance = getPerformanceSec(race, seconds);
                             this.setState({
                                 performance: newPerformance,
                                 selectedRace: race,
                             })
                         }}
-                        minKph={raceSpeed(minPerformanceSec.equivalents[race.label], race.distance)}
-                        maxKph={raceSpeed(maxPerformanceSec.equivalents[race.label], race.distance)}
+                        minSec={maxPerformanceSec.equivalents[race.label]}
+                        maxSec={minPerformanceSec.equivalents[race.label]}
                         showPace
                         />
                 ))}
