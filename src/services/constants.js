@@ -59,6 +59,42 @@ const k1500 = {
   distance: 1.5,
 };
 
+const kEasyPace = 'Easy/Long Pace';
+const kEasyPaceMile = 'Easy/Long Pace (Mile)';
+const kMarathonPace = 'Maraton Pace';
+const kT400 = 'Threshold 400m';
+const kT800 = 'Threshold 800m';
+const kT1000 = 'Threshold 1000m';
+const kTPoint68Mile = 'Threshold .68mile';
+const kTMile = 'Threshold mile';
+const kI400 = 'Interval 400m';
+const kI800 = 'Interval 800m';
+const kIPoint68Mile = 'Interval .68mile';
+const kI1200 = 'Interval 1200m';
+const kIMile = 'Interval mile';
+const kR200 = 'Repetition 200m';
+const kR400 = 'Repetition 400m';
+const kR800 = 'Repetition 800m';
+
+const allIntensities = [
+  kEasyPace,
+  kEasyPaceMile,
+  kMarathonPace,
+  kT400,
+  kT800,
+  kT1000,
+  kTPoint68Mile,
+  kTMile,
+  kI400, 
+  kI800,
+  kIPoint68Mile,
+  kI1200,
+  kIMile,
+  kR200,
+  kR400,
+  kR800,
+];
+
 const allRaces = [
   kMarathon,
   k30,
@@ -94,4 +130,21 @@ export {
   k3,
   kMile,
   k1500,
+
+  allIntensities,
+  kEasyPace,
+  kMarathonPace,
+  kT400,
+  kT800,
+  kT1000,
+  kTPoint68Mile,
+  kTMile,
+  kI400, 
+  kI800,
+  kIPoint68Mile,
+  kI1200,
+  kIMile,
+  kR200,
+  kR400,
+  kR800,
 }
