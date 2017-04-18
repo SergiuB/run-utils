@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 
 import './App.css';
+import 'muicss/dist/css/mui-noglobals.min.css';
 
 import VdotPerformance from '../../containers/VdotPerformance';
 import {
@@ -23,7 +24,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider>  
-        <div className="App">
+        <div className="App mui--text-body1">
           <Toolbar className="toolbar">
             <ToolbarGroup className="unit-system">
               <RaisedButton

@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "jss-theme-reactor": "^0.10.0",
     "lodash": "^4.17.4",
     "material-ui": "^0.17.3",
+    "muicss": "^0.9.15",
     "ramda": "^0.23.0",
     "rc-slider": "^6.1.2",
     "rc-time-picker": "^2.2.1",

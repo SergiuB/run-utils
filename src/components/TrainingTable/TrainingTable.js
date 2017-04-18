@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import R from 'ramda';
+
+import Paper from 'material-ui/Paper';
 
 import { secToTime } from '../../services/conversion';
 import { kEasyPace, kMarathonPace, kMile } from '../../services/constants';
 
+import './TrainingTable.css';
 
 function formatIntensity(label, intensity, metric) {
   switch (label) {
@@ -16,23 +19,25 @@ function formatIntensity(label, intensity, metric) {
   }
 }
 
-class TrainingTable extends Component {
+class TrainingTable extends React.Component {
   render() {
     return (
-      <div>
-        {R.compose(
-          R.map(([label, intensity]) => (
-            <div key={label}>
-              <div>{label}</div>
-              <div>{formatIntensity(label, intensity, this.props.metric)}</div>
-            </div>
-          )),
-          R.filter(([_, intensity]) => intensity !== 0),
-          R.toPairs
-        )(this.props.trainingIntensity)}
-      </div>
+      <Paper className='training-table'>
+          <div>
+            {R.compose(
+              R.map(([label, intensity]) => (
+                <div className='row' key={label}>
+                  <div className='mui--text-body2'>{label}</div>
+                  <div>{formatIntensity(label, intensity, this.props.metric)}</div>
+                </div>
+              )),
+              R.filter(([_, intensity]) => intensity !== 0),
+              R.toPairs
+            )(this.props.trainingIntensity)}
+          </div>
+      </Paper>
     );
   }
-}
+};
 
 export default TrainingTable;

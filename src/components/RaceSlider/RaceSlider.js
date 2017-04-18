@@ -47,7 +47,7 @@ export default class RaceSlider extends React.Component {
     return (
       <div className={sliderClass}>
         <div className={'left-label'}>
-          <div className='race-name'>{race.label}</div>
+          <div className='race-name mui--text-body2'>{race.label}</div>
           <div className='race-time'>{secToTime(seconds)}</div>
         </div>
         <IconButton iconStyle={selected ? iconStyle : {}} className='change-btn' onClick={() => this.decValue()} style={{ padding: 0 }}>
@@ -66,7 +66,7 @@ export default class RaceSlider extends React.Component {
         {showPace && (
           <div className={'right-label'}>
             <div className='pace'>{metric ? minToTime(racePace(seconds, race.distance)) : minToTime(racePaceMile(seconds, race.distance))}/{metric ? 'km' : 'mile'}</div>
-            <div className='pace-delta'>{paceDelta > 0 ? '+': '-'}{timeToSec(minToTime(Math.abs(paceDelta)))}s</div>
+            <div className='pace-delta mui--text-dark-secondary'>{paceDelta > 0 ? '+': '-'}{timeToSec(minToTime(Math.abs(paceDelta)))}s</div>
           </div>
         )}
       </div>
