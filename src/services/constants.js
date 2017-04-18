@@ -60,7 +60,6 @@ const k1500 = {
 };
 
 const kEasyPace = 'Easy/Long Pace';
-const kEasyPaceMile = 'Easy/Long Pace (Mile)';
 const kMarathonPace = 'Maraton Pace';
 const kT400 = 'Threshold 400m';
 const kT800 = 'Threshold 800m';
@@ -78,7 +77,6 @@ const kR800 = 'Repetition 800m';
 
 const allIntensities = [
   kEasyPace,
-  kEasyPaceMile,
   kMarathonPace,
   kT400,
   kT800,

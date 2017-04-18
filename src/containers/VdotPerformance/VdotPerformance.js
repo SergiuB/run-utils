@@ -1,15 +1,28 @@
 import React, { PropTypes } from 'react';
+import R from 'ramda';
 
 import RaceSlider from '../../components/RaceSlider';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
 import { racePace, racePaceMile } from '../../services/raceCalculator';
-import { timeToSec } from '../../services/conversion';
+import { timeToSec, secToTime } from '../../services/conversion';
+import { kEasyPace, kMarathonPace, kMile } from '../../services/constants';
 
 
 const raceType = PropTypes.shape({
     label: PropTypes.string,
     distance: PropTypes.number
 });
+
+function formatIntensity(label, intensity, metric) {
+    switch (label) {
+        case kEasyPace:
+            return metric ? secToTime(intensity) : secToTime(intensity * kMile.distance);
+        case kMarathonPace:
+            return metric ? secToTime(intensity / kMile.distance) : secToTime(intensity);
+        default:
+            return secToTime(intensity);
+    }
+}
 
 export default class VdotPerformance extends React.Component {
     static propTypes = {
@@ -46,6 +59,16 @@ export default class VdotPerformance extends React.Component {
                         showPace
                         />
                 ))}
+                {R.compose(
+                    R.map(([label, intensity]) => (
+                        <div key={label}>
+                            <div>{label}</div>
+                            <div>{formatIntensity(label, intensity, metric)}</div>
+                        </div>
+                    )),
+                    R.filter(([_, intensity]) => intensity !== 0),
+                    R.toPairs
+                )(performance.trainingIntensity)}
             </div>
         );
     }
