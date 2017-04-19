@@ -6,6 +6,8 @@ import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../s
 import { racePace, racePaceMile } from '../../services/raceCalculator';
 import { timeToSec } from '../../services/conversion';
 
+import './VdotPerformance.css';
+
 const raceType = PropTypes.shape({
     label: PropTypes.string,
     distance: PropTypes.number
@@ -25,7 +27,7 @@ export default class VdotPerformance extends React.Component {
         const paceFn = metric ? racePace : racePaceMile;
 
         return (
-            <div>
+            <div className='vdot-performance'>
                 {races.map(race => (
                     <RaceSlider
                         metric={metric}

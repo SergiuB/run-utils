@@ -1,0 +1,13 @@
+.vdot-performance {
+  .slider {
+    padding-bottom: 10px;
+  }
+
+  .adjustments {
+    display: flex;
+    justify-content: center;
+    button span{
+      text-transform: lowercase !important;
+    }
+  }
+}
