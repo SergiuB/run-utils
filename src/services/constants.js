@@ -68,67 +68,67 @@ const kEasyPace = {
 };
 const kT400 = {
   label: '400m',
-  type: 'Threshold',
+  type: 'LT',
   distance: 0.4,
   id: 'kT400',
 };
 const kT800 = {
   label: '800m',
-  type: 'Threshold',
+  type: 'LT',
   distance: 0.8,
   id: 'kT800',
 };
 const kT1000 = {
   label: '1000m',
-  type: 'Threshold',
+  type: 'LT',
   distance: 1,
   id: 'kT1000',
 };
 const kTMile = {
   label: 'Mile',
-  type: 'Threshold',
+  type: 'LT',
   distance: kMile.distance,
   id: 'kTMile',
 };
 const kI400 = {
   label: '400m',
-  type: 'VO2Max',
+  type: 'VO2',
   distance: 0.4,
   id: 'kI400',
 };
 const kI1000 = {
   label: '1000m',
-  type: 'VO2Max',
+  type: 'VO2',
   distance: 1,
   id: 'kI1000',
 };
 const kI1200 = {
   label: '1200m',
-  type: 'VO2Max',
+  type: 'VO2',
   distance: 1.2,
   id: 'kI1200',
 };
 const kIMile = {
   label: 'Mile',
-  type: 'VO2Max',
+  type: 'VO2',
   distance: kMile.distance,
   id: 'kIMile',
 };
 const kR200 = {
   label: '200m',
-  type: 'Repetition',
+  type: 'Speed',
   distance: 0.2,
   id: 'kR200',
 };
 const kR400 = {
   label: '400m',
-  type: 'Repetition',
+  type: 'Speed',
   distance: 0.4,
   id: 'kR400',
 };
 const kR800 = {
   label: '800m',
-  type: 'Repetition',
+  type: 'Speed',
   distance: 0.8,
   id: 'kR800',
 };
