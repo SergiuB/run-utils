@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 const kMarathon = {
   label: 'Marathon',
   distance: 42.195,
@@ -59,39 +61,99 @@ const k1500 = {
   distance: 1.5,
 };
 
-const kEasyPace = 'Easy/Long Pace';
-const kMarathonPace = 'Maraton Pace';
-const kT400 = 'Threshold 400m';
-const kT800 = 'Threshold 800m';
-const kT1000 = 'Threshold 1000m';
-const kTPoint68Mile = 'Threshold .68mile';
-const kTMile = 'Threshold mile';
-const kI400 = 'Interval 400m';
-const kI800 = 'Interval 800m';
-const kIPoint68Mile = 'Interval .68mile';
-const kI1200 = 'Interval 1200m';
-const kIMile = 'Interval mile';
-const kR200 = 'Repetition 200m';
-const kR400 = 'Repetition 400m';
-const kR800 = 'Repetition 800m';
+const kEasyPace = { 
+  label: 'Easy/Long',
+  type: 'Easy',
+  id: 'kEasyPace',
+};
+const kT400 = {
+  label: '400m',
+  type: 'Threshold',
+  distance: 0.4,
+  id: 'kT400',
+};
+const kT800 = {
+  label: '800m',
+  type: 'Threshold',
+  distance: 0.8,
+  id: 'kT800',
+};
+const kT1000 = {
+  label: '1000m',
+  type: 'Threshold',
+  distance: 1,
+  id: 'kT1000',
+};
+const kTMile = {
+  label: 'Mile',
+  type: 'Threshold',
+  distance: kMile.distance,
+  id: 'kTMile',
+};
+const kI400 = {
+  label: '400m',
+  type: 'Interval',
+  distance: 0.4,
+  id: 'kI400',
+};
+const kI800 = {
+  label: '800m',
+  type: 'Interval',
+  distance: 0.8,
+  id: 'kI800',
+};
+const kI1200 = {
+  label: '1200m',
+  type: 'Interval',
+  distance: 1.2,
+  id: 'kI1200',
+};
+const kIMile = {
+  label: 'Mile',
+  type: 'Interval',
+  distance: kMile.distance,
+  id: 'kIMile',
+};
+const kR200 = {
+  label: '200m',
+  type: 'Repetition',
+  distance: 0.2,
+  id: 'kR200',
+};
+const kR400 = {
+  label: '400m',
+  type: 'Repetition',
+  distance: 0.4,
+  id: 'kR400',
+};
+const kR800 = {
+  label: '800m',
+  type: 'Repetition',
+  distance: 0.8,
+  id: 'kR800',
+};
 
 const allIntensities = [
   kEasyPace,
-  kMarathonPace,
   kT400,
   kT800,
   kT1000,
-  kTPoint68Mile,
   kTMile,
   kI400, 
   kI800,
-  kIPoint68Mile,
   kI1200,
   kIMile,
   kR200,
   kR400,
   kR800,
 ];
+
+const allIntensitiesObj = R.compose(
+  R.map(R.head),
+  R.groupBy(R.prop('id')),
+)(allIntensities);
+
+console.log(allIntensitiesObj);
 
 const allRaces = [
   kMarathon,
@@ -130,16 +192,14 @@ export {
   k1500,
 
   allIntensities,
+  allIntensitiesObj,
   kEasyPace,
-  kMarathonPace,
   kT400,
   kT800,
   kT1000,
-  kTPoint68Mile,
   kTMile,
   kI400, 
   kI800,
-  kIPoint68Mile,
   kI1200,
   kIMile,
   kR200,
