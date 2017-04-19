@@ -92,25 +92,25 @@ const kTMile = {
 };
 const kI400 = {
   label: '400m',
-  type: 'Interval',
+  type: 'VO2Max',
   distance: 0.4,
   id: 'kI400',
 };
-const kI800 = {
-  label: '800m',
-  type: 'Interval',
-  distance: 0.8,
-  id: 'kI800',
+const kI1000 = {
+  label: '1000m',
+  type: 'VO2Max',
+  distance: 1,
+  id: 'kI1000',
 };
 const kI1200 = {
   label: '1200m',
-  type: 'Interval',
+  type: 'VO2Max',
   distance: 1.2,
   id: 'kI1200',
 };
 const kIMile = {
   label: 'Mile',
-  type: 'Interval',
+  type: 'VO2Max',
   distance: kMile.distance,
   id: 'kIMile',
 };
@@ -140,7 +140,7 @@ const allIntensities = [
   kT1000,
   kTMile,
   kI400, 
-  kI800,
+  kI1000,
   kI1200,
   kIMile,
   kR200,
@@ -152,8 +152,6 @@ const allIntensitiesObj = R.compose(
   R.map(R.head),
   R.groupBy(R.prop('id')),
 )(allIntensities);
-
-console.log(allIntensitiesObj);
 
 const allRaces = [
   kMarathon,
@@ -199,7 +197,7 @@ export {
   kT1000,
   kTMile,
   kI400, 
-  kI800,
+  kI1000,
   kI1200,
   kIMile,
   kR200,

@@ -1,56 +1,72 @@
 import React from 'react';
 import R from 'ramda';
 
-import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
 
-import { secToTime } from '../../services/conversion';
+import { secToTime, minToTime } from '../../services/conversion';
 import { kEasyPace, kMile, allIntensitiesObj } from '../../services/constants';
+import { racePace, racePaceMile } from '../../services/raceCalculator';
 
 import './TrainingTable.css';
 
-function formatIntensity(id, intensity, metric) {
-  switch (id) {
-    case kEasyPace.id:
-      return metric ? secToTime(intensity) : secToTime(intensity * kMile.distance);
-    default:
-      return secToTime(intensity);
-  }
+function formatEasyPace(sec, metric) {
+  const formatPace = sec => metric ? secToTime(sec) : secToTime(sec * kMile.distance);
+  return `${formatPace(sec)}/${metric ? 'km': 'mile'}`;
 }
 
 class TrainingTable extends React.Component {
-  buildIntensityCol(a) {
-    console.log(a);
-    const {label, id, val} = a;
+  buildIntensityRow(type, intensityCols) {
+    const { metric } = this.props;
+    const maxPace = R.compose(
+      minToTime,
+      R.reduce(R.max, 0),
+      R.map(({ val, distance }) => metric ? racePace(val, distance) : racePaceMile(val, distance))
+    )(intensityCols);
     return (
-      <div key={id}>{label}- {formatIntensity(id, val, this.props.metric)}</div>
+      <div className='row' key={type}>
+        <div><p className='type mui--text-body2'>{type}</p></div>
+        <div className='intensity-data'>
+          {R.map(({id, label, val, distance}) => (
+            <div key={id} className='intensity-data-col'>
+              <span>{label}</span>
+              <span className='mui--text-dark-secondary'>{secToTime(val)}</span>
+            </div>
+          ), intensityCols)}
+          <div key={'pace'} className='intensity-data-col'>
+              <span>{`${maxPace}/${metric ? 'km': 'mile'}`}</span>
+          </div>
+        </div>
+      </div>
     )
   }
 
-  buildIntensityRow([type, intensityCols]) {
+  buildEasyRow({ id, type, label, val } ) {
+    const { metric } = this.props;
     return (
       <div className='row' key={type}>
-        <div className='mui--text-body2'>{type}</div>
-        <div className='row'>
-          {R.map(colData => this.buildIntensityCol(colData), intensityCols)}
-      </div>
+        <div><p className='type mui--text-body2'>{type}</p></div>
+        <div className='intensity-data'>
+          <div key={id} className='intensity-data-col'>
+            <span>{formatEasyPace(val, metric)}</span>
+          </div>
+        </div>
       </div>
     )
   }
 
   render() {
     return (
-      <Paper className='training-table'>
-        <div>
-          {R.compose(
-            R.map(rowData => this.buildIntensityRow(rowData)),
-            R.toPairs,
-            R.groupBy(({ type }) => type),
-            R.map(([id, intensityVal]) => R.merge(allIntensitiesObj[id], { val: intensityVal })),
-            R.filter(([_, intensityVal]) => intensityVal !== 0),
-            R.toPairs
-          )(this.props.trainingIntensity)}
-        </div>
-      </Paper>
+      <div className='training-table'>
+        {R.compose(
+          R.intersperse(<Divider />),
+          R.map(([type, cols]) => type === kEasyPace.type ? this.buildEasyRow(cols[0]) : this.buildIntensityRow(type, cols)),
+          R.toPairs,
+          R.groupBy(({ type }) => type),
+          R.map(([id, intensityVal]) => R.merge(allIntensitiesObj[id], { val: intensityVal })),
+          R.filter(([_, intensityVal]) => intensityVal !== 0),
+          R.toPairs,
+        )(this.props.trainingIntensity)}
+      </div>
     );
   }
 };
