@@ -26,12 +26,12 @@ class TrainingTable extends React.Component {
       <div className='row' key={type}>
         <div><p className='type mui--text-body2'>{type}</p></div>
         <div className='intensity-data'>
-          {R.map(({id, label, val, distance}) => (
-            <div key={id} className='intensity-data-col'>
-              <span>{label}</span>
-              <span className='mui--text-dark-secondary'>{secToTime(val)}</span>
-            </div>
-          ), intensityCols)}
+            {R.map(({id, label, val, distance}) => (
+              <div key={id} className='intensity-data-col mui--text-caption'>
+                <span>{label}</span>
+                <span className='mui--text-dark-secondary'>{secToTime(val)}</span>
+              </div>
+            ), intensityCols)}
           <div key={'pace'} className='intensity-data-col'>
               <span>{`${maxPace}/${metric ? 'km': 'mile'}`}</span>
           </div>
@@ -57,6 +57,7 @@ class TrainingTable extends React.Component {
   render() {
     return (
       <div className='training-table'>
+        <div className="mui--text-subhead mui--text-dark-secondary">Training Paces</div>
         {R.compose(
           R.intersperse(<Divider />),
           R.map(([type, cols]) => type === kEasyPace.type ? this.buildEasyRow(cols[0]) : this.buildIntensityRow(type, cols)),
