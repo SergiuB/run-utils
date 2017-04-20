@@ -5,7 +5,6 @@ import RaceSlider from '../../components/RaceSlider';
 import TrainingTable from '../../components/TrainingTable';
 import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
 import { racePace, racePaceMile } from '../../services/raceCalculator';
-import { timeToSec } from '../../services/conversion';
 
 import './VdotPerformance.css';
 
@@ -17,13 +16,12 @@ const raceType = PropTypes.shape({
 export default class VdotPerformance extends React.Component {
     static propTypes = {
         races: PropTypes.arrayOf(raceType).isRequired,
-        baseRace: raceType.isRequired,
-        baseRaceTime: PropTypes.string.isRequired,
+        selectedRace: raceType.isRequired,
+        performance: PropTypes.object.isRequired,
         metric: PropTypes.bool,
     }
     render() {
-        const { performance, selectedRace } = this.state;
-        const { races, metric } = this.props;
+        const { races, metric, onPerformanceChange, onSelectedRaceChange, performance, selectedRace } = this.props;
 
         const paceFn = metric ? racePace : racePaceMile;
 
@@ -43,21 +41,14 @@ export default class VdotPerformance extends React.Component {
                             race={race}
                             seconds={performance.equivalents[race.label]}
                             paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
-                            onChange={seconds => {
-                                const newPerformance = getPerformanceSec(race, seconds);
-                                this.setState({
-                                    performance: newPerformance,
-                                })
-                            } }
+                            onChange={seconds => onPerformanceChange(getPerformanceSec(race, seconds))}
                             minSec={maxPerformanceSec.equivalents[race.label]}
                             maxSec={minPerformanceSec.equivalents[race.label]}
                             showPace
                             />
                         {race.label !== selectedRace.label && (
                             <div
-                                onClick={() => this.setState({
-                                    selectedRace: race,
-                                })}
+                                onClick={() => onSelectedRaceChange(race)}
                                 className='slider-overlay'>
                             </div>
                         )}
@@ -71,13 +62,5 @@ export default class VdotPerformance extends React.Component {
                     />
             </div>
         );
-    }
-
-    componentWillMount() {
-        const { baseRace, baseRaceTime} = this.props;
-        this.setState({
-            selectedRace: baseRace,
-            performance: getPerformanceSec(baseRace, timeToSec(baseRaceTime)),
-        })
     }
 }

@@ -17,12 +17,16 @@ import {
   k3,
   kMile,
 } from '../../services/constants';
+import { getPerformanceSec } from '../../services/vdotTable';
+import { timeToSec } from '../../services/conversion';
 
 
 class App extends Component {
   state = {
     metric: true,
     open: false,
+    selectedRace: kHalf,
+    performance: getPerformanceSec(kHalf, timeToSec('1:36:33')),
   }
 
   handleToggle = () => this.setState({open: !this.state.open})
@@ -34,6 +38,7 @@ class App extends Component {
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
 
   render() {
+    const { metric, selectedRace, performance, open } = this.state;
     return (
       <MuiThemeProvider>
         <div className="App mui--text-body1">
@@ -44,18 +49,20 @@ class App extends Component {
           <Drawer
             docked={false}
             width={200}
-            open={this.state.open}
+            open={open}
             onRequestChange={(open) => this.setState({ open })}
             >
             <MenuItem onTouchTap={this.doThenClose(this.handleMetricToggle)}>
-              Show {this.state.metric ? 'Miles' : 'Kilometers'}
+              Show {metric ? 'Miles' : 'Kilometers'}
             </MenuItem>
           </Drawer>
           <VdotPerformance
-            metric={this.state.metric}
-            baseRaceTime={'1:36:33'}
-            baseRace={kHalf}
+            metric={metric}
+            performance={performance}
+            selectedRace={selectedRace}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
+            onPerformanceChange={performance => this.setState({ performance })}
+            onSelectedRaceChange={selectedRace => this.setState({ selectedRace })}
             />
         </div>
       </MuiThemeProvider>
