@@ -49,7 +49,7 @@ class App extends Component {
         <div className="App mui--text-body1">
           <AppBar
             onLeftIconButtonTouchTap={this.handleToggle}
-            iconElementRight={changed && <FlatButton label="Save" onClick={() => this.savePerformance(performance)}/>}
+            iconElementRight={changed && <FlatButton label="Save" onClick={() => this.savePerformance({ selectedRace, performance })}/>}
             />
           <Drawer
             docked={false}
