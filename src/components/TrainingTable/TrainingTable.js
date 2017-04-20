@@ -23,7 +23,7 @@ class TrainingTable extends React.Component {
       R.map(({ val, distance }) => metric ? racePace(val, distance) : racePaceMile(val, distance))
     )(intensityCols);
     return (
-      <div className='row' key={type}>
+      <div className='row'>
         <div><p className='type mui--text-body2'>{type}</p></div>
         <div className='intensity-data'>
             {R.map(({id, label, val, distance}) => (
@@ -40,13 +40,13 @@ class TrainingTable extends React.Component {
     )
   }
 
-  buildEasyRow({ id, type, label, val } ) {
+  buildEasyRow({ val } ) {
     const { metric } = this.props;
     return (
-      <div className='row' key={type}>
-        <div><p className='type mui--text-body2'>{type}</p></div>
+      <div className='row'>
+        <div><p className='type mui--text-body2'>{kEasyPace.type}</p></div>
         <div className='intensity-data'>
-          <div key={id} className='intensity-data-col'>
+          <div className='intensity-data-col'>
             <span>{formatEasyPace(val, metric)}</span>
           </div>
         </div>
@@ -58,8 +58,13 @@ class TrainingTable extends React.Component {
     return (
       <div className='training-table'>
         {R.compose(
-          R.intersperse(<Divider />),
-          R.map(([type, cols]) => type === kEasyPace.type ? this.buildEasyRow(cols[0]) : this.buildIntensityRow(type, cols)),
+          R.map(([type, cols]) => (
+              <div key={type}>
+                {type !== kEasyPace.type && <Divider />}
+                {type === kEasyPace.type ? this.buildEasyRow(cols[0]) : this.buildIntensityRow(type, cols)}
+              </div>
+            )
+          ),
           R.toPairs,
           R.groupBy(({ type }) => type),
           R.map(([id, intensityVal]) => R.merge(allIntensitiesObj[id], { val: intensityVal })),

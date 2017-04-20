@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import {
@@ -24,10 +25,10 @@ export default class RaceTime extends React.Component {
 }
 
 RaceTime.propTypes = {
-  showHour: React.PropTypes.bool,
-  kph: React.PropTypes.number.isRequired,
-  km: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func,
+  showHour: PropTypes.bool,
+  kph: PropTypes.number.isRequired,
+  km: PropTypes.number.isRequired,
+  onChange: PropTypes.func,
 };
 
 RaceTime.defaultProps = {

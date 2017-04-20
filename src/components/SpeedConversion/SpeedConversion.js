@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import _ from 'lodash'
@@ -42,8 +43,8 @@ export default class SpeedConversion extends React.Component {
 }
 
 SpeedConversion.propTypes = {
-  kph: React.PropTypes.number.isRequired,
-  onChange: React.PropTypes.func.isRequired,
+  kph: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 SpeedConversion.defaultProps = {
