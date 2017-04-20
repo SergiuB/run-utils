@@ -20,12 +20,16 @@ class PerformanceChipList extends Component {
       <div className='chip-list'>
         {performances.map(({ selectedRace, performance }) => (
           <Chip
+            style={{ width: 150, display: 'flex', justifyContent: 'space-between', marginRight: 10 }}
+            labelStyle={{ display: 'flex', alignItems:'center', justifyContent: 'space-between', flexGrow: 1 }}
             key={this.getVdot(performance)}
             onRequestDelete={() => {}}
             onTouchTap={() => {}}
           >
-            <span className="mui--text-body2">{this.getVdot(performance).toFixed(1)}</span>
-            <span >{this.shortenLabel(selectedRace.label)}</span>
+            <div>
+              <span className="mui--text-body2">{this.getVdot(performance).toFixed(1)}</span>
+              <span >{this.shortenLabel(selectedRace.label)}</span>
+            </div>
             <span className="mui--text-caption">{secToTime(performance.equivalents[selectedRace.label])}</span>
           </Chip>
         ))}
