@@ -27,6 +27,8 @@ class App extends Component {
     open: false,
     selectedRace: kHalf,
     performance: getPerformanceSec(kHalf, timeToSec('1:36:33')),
+    savedPerformances: [],
+    changed: true,
   }
 
   handleToggle = () => this.setState({open: !this.state.open})
@@ -37,14 +39,17 @@ class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
 
+  savePerformance = (performance) => 
+    this.setState( { savedPerformances: [performance, ...this.state.savedPerformances], changed: false } );
+
   render() {
-    const { metric, selectedRace, performance, open } = this.state;
+    const { metric, selectedRace, performance, open, changed } = this.state;
     return (
       <MuiThemeProvider>
         <div className="App mui--text-body1">
           <AppBar
             onLeftIconButtonTouchTap={this.handleToggle}
-            iconElementRight={<FlatButton label="Save" />}
+            iconElementRight={changed && <FlatButton label="Save" onClick={() => this.savePerformance(performance)}/>}
             />
           <Drawer
             docked={false}
@@ -61,7 +66,7 @@ class App extends Component {
             performance={performance}
             selectedRace={selectedRace}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
-            onPerformanceChange={performance => this.setState({ performance })}
+            onPerformanceChange={performance => this.setState({ performance, changed: true })}
             onSelectedRaceChange={selectedRace => this.setState({ selectedRace })}
             />
         </div>
