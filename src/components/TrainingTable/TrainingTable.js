@@ -57,7 +57,6 @@ class TrainingTable extends React.Component {
   render() {
     return (
       <div className='training-table'>
-        <div className="mui--text-subhead mui--text-dark-secondary">Training Paces</div>
         {R.compose(
           R.intersperse(<Divider />),
           R.map(([type, cols]) => type === kEasyPace.type ? this.buildEasyRow(cols[0]) : this.buildIntensityRow(type, cols)),

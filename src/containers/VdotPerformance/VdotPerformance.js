@@ -28,6 +28,9 @@ export default class VdotPerformance extends React.Component {
 
         return (
             <div className='vdot-performance'>
+                <div className='vdot-value'>
+                    <div className="mui--text-headline">{(performance.vdot + performance.percentage).toFixed(1)}</div>
+                </div>
                 {races.map(race => (
                     <RaceSlider
                         metric={metric}
@@ -48,6 +51,8 @@ export default class VdotPerformance extends React.Component {
                         showPace
                         />
                 ))}
+
+                <p className="mui--text-subhead mui--text-dark-secondary">Training Paces</p>
                 <TrainingTable
                     metric={metric}
                     trainingIntensity={performance.trainingIntensity}
