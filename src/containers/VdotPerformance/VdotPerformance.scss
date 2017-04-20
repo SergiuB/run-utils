@@ -1,7 +1,7 @@
 .vdot-performance {
   padding-top: 10px;
   .slider {
-    padding-bottom: 10px;
+    margin-bottom: 10px;
   }
 
   .adjustments {
@@ -15,5 +15,18 @@
   .vdot-value {
     display: flex;
     justify-content: center;
+  }
+
+  .slider-wrapper {
+    position: relative;
+    .slider-overlay {
+      z-index: 1;
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      cursor: pointer;
+    }
   }
 }

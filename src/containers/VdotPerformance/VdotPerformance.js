@@ -32,24 +32,35 @@ export default class VdotPerformance extends React.Component {
                     <div className="mui--text-headline">{(performance.vdot + performance.percentage).toFixed(1)}</div>
                 </div>
                 {races.map(race => (
-                    <RaceSlider
-                        metric={metric}
-                        selected={race.label === selectedRace.label}
-                        key={race.label}
-                        race={race}
-                        seconds={performance.equivalents[race.label]}
-                        paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
-                        onChange={seconds => {
-                            const newPerformance = getPerformanceSec(race, seconds);
-                            this.setState({
-                                performance: newPerformance,
-                                selectedRace: race,
-                            })
-                        } }
-                        minSec={maxPerformanceSec.equivalents[race.label]}
-                        maxSec={minPerformanceSec.equivalents[race.label]}
-                        showPace
-                        />
+                    <div
+                       className='slider-wrapper'
+                       key={race.label}
+                        >
+                        <RaceSlider
+                            metric={metric}
+                            selected={race.label === selectedRace.label}
+                            race={race}
+                            seconds={performance.equivalents[race.label]}
+                            paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
+                            onChange={seconds => {
+                                const newPerformance = getPerformanceSec(race, seconds);
+                                this.setState({
+                                    performance: newPerformance,
+                                })
+                            } }
+                            minSec={maxPerformanceSec.equivalents[race.label]}
+                            maxSec={minPerformanceSec.equivalents[race.label]}
+                            showPace
+                            />
+                        {race.label !== selectedRace.label && (
+                            <div
+                                onClick={() => this.setState({
+                                    selectedRace: race,
+                                })}
+                                className='slider-overlay'>
+                            </div>
+                        )}
+                    </div>
                 ))}
 
                 <p className="mui--text-subhead mui--text-dark-secondary">Training Paces</p>

@@ -77,6 +77,7 @@ export default class RaceSlider extends React.Component {
               onChange={(_, value) => this.handleChange(value)}
               min={minSec - 1}
               max={maxSec + 1}
+              step={1}
               />
           )}
 
