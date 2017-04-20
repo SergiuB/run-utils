@@ -40,7 +40,13 @@ class App extends Component {
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
 
   savePerformance = (performance) => 
-    this.setState( { savedPerformances: [performance, ...this.state.savedPerformances], changed: false } );
+    this.setPersistentState( { savedPerformances: [performance, ...this.state.savedPerformances], changed: false } );
+
+  setPersistentState = (state) => this.setState(state, () => this.persistState());
+
+  persistState = () => localStorage.setItem('appState', JSON.stringify(this.state));
+
+  getPersistedState = () => JSON.parse(localStorage.getItem('appState'));
 
   render() {
     const { metric, selectedRace, performance, open, changed } = this.state;
@@ -55,7 +61,7 @@ class App extends Component {
             docked={false}
             width={200}
             open={open}
-            onRequestChange={(open) => this.setState({ open })}
+            onRequestChange={(open) => this.setPersistentState({ open })}
             >
             <MenuItem onTouchTap={this.doThenClose(this.handleMetricToggle)}>
               Show {metric ? 'Miles' : 'Kilometers'}
@@ -66,13 +72,19 @@ class App extends Component {
             performance={performance}
             selectedRace={selectedRace}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
-            onPerformanceChange={performance => this.setState({ performance, changed: true })}
-            onSelectedRaceChange={selectedRace => this.setState({ selectedRace })}
+            onPerformanceChange={performance => this.setPersistentState({ performance, changed: true })}
+            onSelectedRaceChange={selectedRace => this.setPersistentState({ selectedRace })}
             />
         </div>
       </MuiThemeProvider>
     );
   }
+
+  componentDidMount() {
+    const state = this.getPersistedState()
+    state && this.setState(state);
+  }
+  
 }
 
 export default App;
