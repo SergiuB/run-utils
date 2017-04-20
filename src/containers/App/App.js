@@ -9,6 +9,7 @@ import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
 import VdotPerformance from '../../containers/VdotPerformance';
+import PerformanceChipList from '../../components/PerformanceChipList';
 import {
   kMarathon,
   kHalf,
@@ -49,7 +50,7 @@ class App extends Component {
   getPersistedState = () => JSON.parse(localStorage.getItem('appState'));
 
   render() {
-    const { metric, selectedRace, performance, open, changed } = this.state;
+    const { metric, selectedRace, performance, open, changed, savedPerformances } = this.state;
     return (
       <MuiThemeProvider>
         <div className="App mui--text-body1">
@@ -70,6 +71,7 @@ class App extends Component {
               Show {metric ? 'Miles' : 'Kilometers'}
             </MenuItem>
           </Drawer>
+          <PerformanceChipList performances={savedPerformances}/>
           <VdotPerformance
             metric={metric}
             performance={performance}
