@@ -17,7 +17,6 @@ $divider-color:        #BDBDBD;
     flex-direction: column;
     flex-shrink: 0;
     justify-content: center;
-    background-color: $primary-color-light;
     box-sizing: border-box;
     user-select: none;
     border-radius: 50%;
@@ -28,6 +27,9 @@ $divider-color:        #BDBDBD;
     margin: 0px 2px;
     cursor: pointer;
     padding-bottom: 8px;
+    &.selected {
+      border-color: $accent-color;
+    }
 }
 
 .performance-list-helper {

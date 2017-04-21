@@ -1,58 +1,47 @@
 
 import React, { Component } from 'react';
+import R from 'ramda';
+import classNames from 'classnames';
 
 import { secToTime } from '../../services/conversion';
 
 import './PerformanceChipList.css';
 
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+const getVdot = (performance) => (performance.vdot + performance.percentage);
 
-const SortableItem = SortableElement(({ value }) => {
-  const { selectedRace, performance } = value;
-  const getVdot = (performance) => (performance.vdot + performance.percentage);
+const isSamePerformanceAs = (p1, p2) => getVdot(p1) === getVdot(p2);
+
+const PerformanceItem = ({ performanceData, onClick, selected }) => {
+  const { selectedRace, performance } = performanceData;
 
   return (
     <div
-      className={'performance-list-item'}
-      onClick={() => console.log('item clicked')}
+      className={classNames('performance-list-item', { selected })}
+      onClick={() => onClick(performanceData)}
       >
       <span className="mui--text-body2">{getVdot(performance).toFixed(1)}</span>
       <span >{selectedRace.label}</span>
       <span className="mui--text-caption">{secToTime(performance.equivalents[selectedRace.label])}</span>
     </div>
   );
-});
+};
 
-const SortableList = SortableContainer(({
-  items,
-  itemClass,
-}) => {
-  return (
-    <div className={'performance-list'}>
-      {items.map((performance, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={performance}
-          className={itemClass}
-          height={100}
-          />
-      ))}
-    </div>
-  );
-});
 
 class PerformanceChipList extends Component {
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.props.onOrderChanged(arrayMove(this.props.performances, oldIndex, newIndex));
-  };
   render() {
-    const { performances } = this.props;
-    return <SortableList
-      items={performances}
-      onSortEnd={this.onSortEnd}
-      pressDelay={200}
-      axis={'x'}
-      lockAxis={'x'}
-      helperClass={'performance-list-helper'}
-    />;
+    const { performances, onItemClick, selectedPerformance } = this.props;
+    return <div className={'performance-list'}>
+      {R.compose(
+        R.map((p) => <PerformanceItem
+          key={`${p.selectedRace.label}-${getVdot(p.performance)}`}
+          performanceData={p}
+          onClick={onItemClick}
+          selected={isSamePerformanceAs(selectedPerformance, p.performance)}
+          />
+        ),
+        R.sort(R.descend(p => getVdot(p.performance)))
+      )(performances)}
+    </div>;
   }
 }
 

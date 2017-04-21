@@ -4,6 +4,7 @@ import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import R from 'ramda';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
@@ -49,15 +50,41 @@ class App extends Component {
 
   getPersistedState = () => JSON.parse(localStorage.getItem('appState'));
 
+
   render() {
     const { metric, selectedRace, performance, open, changed, savedPerformances } = this.state;
+
+    const getVdot = (performance) => (performance.vdot + performance.percentage);
+
+    const isSamePerformanceAs = p1 => p2 => getVdot(p1) === getVdot(p2.performance);
+
+    const getAppBarButtonProps = () => {
+      if (changed) {
+        return {
+          label: "Save",
+          onClick: () => this.savePerformance({ selectedRace, performance })
+        }
+      }
+
+      if (R.find(isSamePerformanceAs(performance))(savedPerformances)) {
+        return {
+          label: "Remove",
+          onClick: () => this.setPersistentState({
+            savedPerformances: R.reject(isSamePerformanceAs(performance))(savedPerformances)
+          })
+        }
+      }
+    }
+
+    const appButtonProps = getAppBarButtonProps();
+
     return (
       <MuiThemeProvider>
         <div className="App mui--text-body1">
           <AppBar
             onLeftIconButtonTouchTap={this.handleToggle}
-            iconElementRight={changed 
-              ? <FlatButton label="Save" onClick={() => this.savePerformance({ selectedRace, performance })}/>
+            iconElementRight={appButtonProps 
+              ? <FlatButton {...appButtonProps}/>
               : <div />
             }
             />
@@ -74,6 +101,8 @@ class App extends Component {
           <PerformanceChipList
             performances={savedPerformances}
             onOrderChanged={performances => this.setPersistentState({ savedPerformances: performances })}
+            onItemClick={(p) => this.setPersistentState({ performance: p.performance, changed: false })}
+            selectedPerformance={performance}
             />
           <VdotPerformance
             metric={metric}
