@@ -70,7 +70,8 @@ class App extends Component {
         return {
           label: "Remove",
           onClick: () => this.setPersistentState({
-            savedPerformances: R.reject(isSamePerformanceAs(performance))(savedPerformances)
+            savedPerformances: R.reject(isSamePerformanceAs(performance))(savedPerformances),
+            changed: true,
           })
         }
       }
