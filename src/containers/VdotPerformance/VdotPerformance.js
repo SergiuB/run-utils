@@ -28,7 +28,7 @@ export default class VdotPerformance extends React.Component {
         return (
             <div className='vdot-performance'>
                 <div className='vdot-value'>
-                    <div className="mui--text-headline">{(performance.vdot + performance.percentage).toFixed(1)}</div>
+                    <div className="mui--text-display1">{(performance.vdot + performance.percentage).toFixed(1)}</div>
                 </div>
                 {races.map(race => (
                     <div

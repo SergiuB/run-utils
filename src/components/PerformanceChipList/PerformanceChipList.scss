@@ -1,8 +1,35 @@
-.chip-list {
-  margin: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  span {
+$primary-color-dark:   #0097A7;
+$primary-color:        #00BCD4;
+$primary-color-light:  #B2EBF2;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #FF4081;
+$primary-text-color:   #212121;
+$secondary-text-color: #757575;
+$divider-color:        #BDBDBD;
+
+.performance-list {
+    overflow: auto;
+    display: flex;
+}
+.performance-list-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-shrink: 0;
+    justify-content: center;
+    background-color: $primary-color-light;
+    box-sizing: border-box;
+    user-select: none;
+    border-radius: 50%;
+    color: $primary-text-color;
+    height: 80px;
+    width: 80px;
     margin: 0px 2px;
-  }
+    cursor: pointer;
+    padding-bottom: 8px;
+}
+
+.performance-list-helper {
+    background-color: rgba( $primary-color-light, .7 );
+    cursor: row-resize;
 }

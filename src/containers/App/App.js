@@ -71,7 +71,10 @@ class App extends Component {
               Show {metric ? 'Miles' : 'Kilometers'}
             </MenuItem>
           </Drawer>
-          <PerformanceChipList performances={savedPerformances}/>
+          <PerformanceChipList
+            performances={savedPerformances}
+            onOrderChanged={performances => this.setPersistentState({ savedPerformances: performances })}
+            />
           <VdotPerformance
             metric={metric}
             performance={performance}

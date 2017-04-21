@@ -1,40 +1,58 @@
+
 import React, { Component } from 'react';
-import Chip from 'material-ui/Chip';
 
 import { secToTime } from '../../services/conversion';
 
 import './PerformanceChipList.css';
 
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+
+const SortableItem = SortableElement(({ value }) => {
+  const { selectedRace, performance } = value;
+  const getVdot = (performance) => (performance.vdot + performance.percentage);
+
+  return (
+    <div
+      className={'performance-list-item'}
+      onClick={() => console.log('item clicked')}
+      >
+      <span className="mui--text-body2">{getVdot(performance).toFixed(1)}</span>
+      <span >{selectedRace.label}</span>
+      <span className="mui--text-caption">{secToTime(performance.equivalents[selectedRace.label])}</span>
+    </div>
+  );
+});
+
+const SortableList = SortableContainer(({
+  items,
+  itemClass,
+}) => {
+  return (
+    <div className={'performance-list'}>
+      {items.map((performance, index) => (
+        <SortableItem key={`item-${index}`} index={index} value={performance}
+          className={itemClass}
+          height={100}
+          />
+      ))}
+    </div>
+  );
+});
+
 class PerformanceChipList extends Component {
-
-  getVdot = (performance) => (performance.vdot + performance.percentage);
-
-  shortenLabel = (label) => {
-    const shortLabels = { 'Marathon': 'M', 'Half': 'H', 'Mile': '1M' };
-    return shortLabels[label] ? shortLabels[label] : label;
-  }
-
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.props.onOrderChanged(arrayMove(this.props.performances, oldIndex, newIndex));
+  };
   render() {
     const { performances } = this.props;
-    return (
-      <div className='chip-list'>
-        {performances.map(({ selectedRace, performance }) => (
-          <Chip
-            style={{ width: 150, display: 'flex', justifyContent: 'space-between', marginRight: 10 }}
-            labelStyle={{ display: 'flex', alignItems:'center', justifyContent: 'space-between', flexGrow: 1 }}
-            key={this.getVdot(performance)}
-            onRequestDelete={() => {}}
-            onTouchTap={() => {}}
-          >
-            <div>
-              <span className="mui--text-body2">{this.getVdot(performance).toFixed(1)}</span>
-              <span >{this.shortenLabel(selectedRace.label)}</span>
-            </div>
-            <span className="mui--text-caption">{secToTime(performance.equivalents[selectedRace.label])}</span>
-          </Chip>
-        ))}
-      </div>
-    );
+    return <SortableList
+      items={performances}
+      onSortEnd={this.onSortEnd}
+      pressDelay={200}
+      axis={'x'}
+      lockAxis={'x'}
+      helperClass={'performance-list-helper'}
+    />;
   }
 }
 

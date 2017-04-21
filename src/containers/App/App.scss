@@ -1,0 +1,11 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  .performance-list {
+    margin: 8px;
+  }
+  .vdot-performance {
+    padding-top: 10px;
+    margin: 8px;
+  }
+}
