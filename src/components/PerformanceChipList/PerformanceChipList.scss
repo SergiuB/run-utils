@@ -21,6 +21,7 @@ $divider-color:        #BDBDBD;
     box-sizing: border-box;
     user-select: none;
     border-radius: 50%;
+    border: 2px solid $primary-color;
     color: $primary-text-color;
     height: 80px;
     width: 80px;
