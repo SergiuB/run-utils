@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { secToTime } from '../../services/conversion';
 
-import './PerformanceChipList.css';
+import './PerformanceList.css';
 
 const getVdot = (performance) => (performance.vdot + performance.percentage);
 
@@ -27,7 +27,7 @@ const PerformanceItem = ({ performanceData, onClick, selected }) => {
 };
 
 
-class PerformanceChipList extends Component {
+class PerformanceList extends Component {
   render() {
     const { performances, onItemClick, selectedPerformance } = this.props;
     return <div className={'performance-list'}>
@@ -45,4 +45,4 @@ class PerformanceChipList extends Component {
   }
 }
 
-export default PerformanceChipList;
+export default PerformanceList;

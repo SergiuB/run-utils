@@ -10,7 +10,7 @@ import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
 import VdotPerformance from '../../containers/VdotPerformance';
-import PerformanceChipList from '../../components/PerformanceChipList';
+import PerformanceList from '../../components/PerformanceList';
 import {
   kMarathon,
   kHalf,
@@ -99,7 +99,7 @@ class App extends Component {
               Show {metric ? 'Miles' : 'Kilometers'}
             </MenuItem>
           </Drawer>
-          <PerformanceChipList
+          <PerformanceList
             performances={savedPerformances}
             onOrderChanged={performances => this.setPersistentState({ savedPerformances: performances })}
             onItemClick={(p) => this.setPersistentState({ performance: p.performance, changed: false })}
