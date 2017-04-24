@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 
 import RaceSlider from '../../components/RaceSlider';
 import TrainingTable from '../../components/TrainingTable';
-import { getPerformanceSec, minPerformanceSec, maxPerformanceSec } from '../../services/vdotTable';
+import {
+    getVdot,
+    minRaceEquivalents,
+    maxRaceEquivalents,
+    getRaceEquivalents,
+    getTrainingIntensity,
+} from '../../services/vdotTable';
 import { racePace, racePaceMile } from '../../services/raceCalculator';
 
 import './VdotPerformance.css';
@@ -13,22 +19,32 @@ const raceType = PropTypes.shape({
     distance: PropTypes.number
 });
 
+const performanceType = PropTypes.shape({
+    race: raceType,
+    vdot: PropTypes.number
+});
+
 export default class VdotPerformance extends React.Component {
     static propTypes = {
         races: PropTypes.arrayOf(raceType).isRequired,
-        selectedRace: raceType.isRequired,
-        performance: PropTypes.object.isRequired,
+        selectedPerformance: performanceType.isRequired,
         metric: PropTypes.bool,
     }
     render() {
-        const { races, metric, onPerformanceChange, onSelectedRaceChange, performance, selectedRace } = this.props;
+        const { races, metric, onVdotChange, onSelectedRaceChange, selectedPerformance } = this.props;
+
+        const { vdot } = selectedPerformance;
+        const selectedRace = selectedPerformance.race;
+
+        const raceEquivalents = getRaceEquivalents(vdot);
+        const trainingIntensity = getTrainingIntensity(vdot);
 
         const paceFn = metric ? racePace : racePaceMile;
 
         return (
             <div className='vdot-performance'>
                 <div className='vdot-value'>
-                    <div className="mui--text-display1">{(performance.vdot + performance.percentage).toFixed(1)}</div>
+                    <div className="mui--text-display1">{vdot.toFixed(1)}</div>
                 </div>
                 {races.map(race => (
                     <div
@@ -39,11 +55,11 @@ export default class VdotPerformance extends React.Component {
                             metric={metric}
                             selected={race.label === selectedRace.label}
                             race={race}
-                            seconds={performance.equivalents[race.label]}
-                            paceDelta={paceFn(performance.equivalents[race.label], race.distance) - paceFn(performance.equivalents[selectedRace.label], selectedRace.distance)}
-                            onChange={seconds => onPerformanceChange(getPerformanceSec(race, seconds))}
-                            minSec={maxPerformanceSec.equivalents[race.label]}
-                            maxSec={minPerformanceSec.equivalents[race.label]}
+                            seconds={raceEquivalents[race.label]}
+                            paceDelta={paceFn(raceEquivalents[race.label], race.distance) - paceFn(raceEquivalents[selectedRace.label], selectedRace.distance)}
+                            onChange={seconds => onVdotChange(getVdot(race, seconds))}
+                            minSec={maxRaceEquivalents[race.label]}
+                            maxSec={minRaceEquivalents[race.label]}
                             showPace
                             />
                         {race.label !== selectedRace.label && (
@@ -58,7 +74,7 @@ export default class VdotPerformance extends React.Component {
                 <p className="mui--text-subhead mui--text-dark-secondary">Training Paces</p>
                 <TrainingTable
                     metric={metric}
-                    trainingIntensity={performance.trainingIntensity}
+                    trainingIntensity={trainingIntensity}
                     />
             </div>
         );

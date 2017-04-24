@@ -19,50 +19,67 @@ import {
   k3,
   kMile,
 } from '../../services/constants';
-import { getPerformanceSec } from '../../services/vdotTable';
+import { getVdot, getRaceEquivalents } from '../../services/vdotTable';
 import { timeToSec } from '../../services/conversion';
 
-
 class App extends Component {
-  state = {
+  defaultState = {
     metric: true,
     open: false,
-    selectedRace: kHalf,
-    performance: getPerformanceSec(kHalf, timeToSec('1:36:33')),
+    selectedPerformance: {
+      race: kHalf,
+      vdot: getVdot(kHalf,timeToSec('1:36:33')),
+    },
     savedPerformances: [],
     changed: true,
   }
 
-  handleToggle = () => this.setState({open: !this.state.open})
+  handleToggle = () => this.setPersistentState({open: !this.state.open})
 
-  handleMetricToggle = () => this.setState({metric: !this.state.metric})
+  handleMetricToggle = () => this.setPersistentState({metric: !this.state.metric})
 
   handleClose = () => this.setState({open: false})
 
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
 
-  savePerformance = (performance) => 
-    this.setPersistentState( { savedPerformances: [performance, ...this.state.savedPerformances], changed: false } );
+  savePerformance = (performance) => {
+    const { race, vdot } = performance;
+    const toSave = {
+      vdot,
+      race,
+      time: getRaceEquivalents(vdot)[race.label],
+    };
+    this.setPersistentState( { savedPerformances: [toSave, ...this.state.savedPerformances], changed: false } );
+  };
 
-  setPersistentState = (state) => this.setState(state, () => this.persistState());
+  setPersistentState = (state, urlChange = true) => this.setState(state, () => this.persistState(urlChange));
 
-  persistState = () => localStorage.setItem('appState', JSON.stringify(this.state));
+  persistState = (urlChange) => { 
+    const strState = JSON.stringify(this.state);
+    localStorage.setItem('appState', strState);
+    urlChange && this.props.history.push('/' + encodeURI(strState));
+  };
 
-  getPersistedState = () => JSON.parse(localStorage.getItem('appState'));
-
+  getPersistedState = () => {
+    const state = JSON.parse(localStorage.getItem('appState'));
+    if (!state.selectedPerformance) {
+      // the saved state is not valid (possibly an older version)
+      return undefined;
+    }
+    return state;
+  };
 
   render() {
-    const { metric, selectedRace, performance, open, changed, savedPerformances } = this.state;
+    const { metric, selectedPerformance, open, changed, savedPerformances } = this.state;
+    const { race, vdot } = selectedPerformance;
 
-    const getVdot = (performance) => (performance.vdot + performance.percentage);
-
-    const isSamePerformanceAs = p1 => p2 => getVdot(p1) === getVdot(p2.performance);
+    const isSamePerformanceAs = p1 => p2 => p1.vdot === p2.vdot;
 
     const getAppBarButtonProps = () => {
       if (changed) {
         return {
           label: "Save",
-          onClick: () => this.savePerformance({ selectedRace, performance })
+          onClick: () => this.savePerformance(selectedPerformance)
         }
       }
 
@@ -101,25 +118,36 @@ class App extends Component {
           </Drawer>
           <PerformanceList
             performances={savedPerformances}
-            onOrderChanged={performances => this.setPersistentState({ savedPerformances: performances })}
-            onItemClick={(p) => this.setPersistentState({ performance: p.performance, changed: false })}
-            selectedPerformance={performance}
+            onItemClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
+            selectedPerformance={selectedPerformance}
             />
           <VdotPerformance
             metric={metric}
-            performance={performance}
-            selectedRace={selectedRace}
+            selectedPerformance={selectedPerformance}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
-            onPerformanceChange={performance => this.setPersistentState({ performance, changed: true })}
-            onSelectedRaceChange={selectedRace => this.setPersistentState({ selectedRace })}
+            onVdotChange={newVdot => this.setPersistentState({
+              selectedPerformance: {
+                vdot: newVdot,
+                race,
+              },
+              changed: true
+            }, false)}
+            onSelectedRaceChange={selectedRace => this.setPersistentState({
+              selectedPerformance: {
+                vdot,
+                race: selectedRace,
+              }
+            })}
             />
         </div>
       </MuiThemeProvider>
     );
   }
 
-  componentDidMount() {
-    const state = this.getPersistedState()
+  componentWillMount() {
+    const state = this.props.urlState 
+      || this.getPersistedState()
+      || this.defaultState;
     state && this.setState(state);
   }
   

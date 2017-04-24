@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { allRaces, allIntensities } from './constants';
-import { timeToSec, secToTime } from './conversion';
+import { timeToSec } from './conversion';
 
 
 const raceTimes = [];
@@ -144,29 +144,21 @@ const intensitySec = R.zipObj(
   processTable(intensity)
 );
 
-const minPerformanceSec = {
-  vdot: VDOT_MIN,
-  percentage: 0,
-  equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]),
-}
+const minRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
 
-const maxPerformanceSec = {
-  vdot: VDOT_MIN,
-  percentage: 0,
-  equivalents: R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]),
-}
+const maxRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
 
-function getPerformance(race, time) {
-  if (!R.is(Object, race) || !R.is(String, race.label)) {
-    throw new Error('Race object not valid. Valid ones are in constants, import from there.');
-  }
-  const timeSec = timeToSec(time);
-  const equivLens = R.lensProp('equivalents');
-  const perfSec = getPerformanceSec(race, timeSec);
-  return R.over(equivLens, R.map(secToTime), perfSec);
-}
+// function getPerformance(race, time) {
+//   if (!R.is(Object, race) || !R.is(String, race.label)) {
+//     throw new Error('Race object not valid. Valid ones are in constants, import from there.');
+//   }
+//   const timeSec = timeToSec(time);
+//   const equivLens = R.lensProp('equivalents');
+//   const perfSec = getVdot(race, timeSec);
+//   return R.over(equivLens, R.map(secToTime), perfSec);
+// }
 
-function getPerformanceSec(race, timeSec) {
+function getVdot(race, timeSec) {
   if (!R.is(Object, race) || !R.is(String, race.label)) {
     throw new Error('Race object not valid. Valid ones are in constants, import from there.');
   }
@@ -181,51 +173,65 @@ function getPerformanceSec(race, timeSec) {
 
   const skillAboveIdx = R.findIndex(R.compose(R.gt(timeSec), R.prop(1)), specificRaceTimes);
   if (skillAboveIdx === 0) {
-    return minPerformanceSec;
+    return VDOT_MIN;
   }
 
   if (skillAboveIdx < 0) {
-    return maxPerformanceSec;
+    return VDOT_MAX;
   }
 
   const skillBelowIdx = skillAboveIdx - 1;
-  const [vdotAbove, timeAbove] = specificRaceTimes[skillAboveIdx];
-  const [vdotBelow, timeBelow] = specificRaceTimes[skillBelowIdx];
+  const [, timeAbove] = specificRaceTimes[skillAboveIdx];
+  const [, timeBelow] = specificRaceTimes[skillBelowIdx];
   const percentage = ((timeSec - timeBelow) / (timeAbove - timeBelow));
+  const vdot = parseInt(specificRaceTimes[skillBelowIdx][0], 10) + percentage;
 
-  const [below, above] = [raceTimesSec[vdotBelow], raceTimesSec[vdotAbove]];
-  const addPercentage = (p, [t1, t2]) => (t1 + p * (t2 - t1));
-  const equivalents = R.compose(
-    R.zipObj(sortedLabels),
-    R.map(addPercentage.bind(null, percentage))
-  )(R.zip(below, above));
+  return vdot;
+}
 
-  const vdot = parseInt(specificRaceTimes[skillBelowIdx][0], 10);
-
+function splitVdot(vdot) {
   return {
-    vdot,
-    percentage,
-    equivalents,
-    trainingIntensity: getTrainingIntensitySec(vdot, percentage),
+    vdotInt: Math.floor(vdot),
+    vdotFraction: vdot - Math.floor(vdot),
   }
 }
 
-function getTrainingIntensitySec(vdot, percentage) {
-  if (vdot < VDOT_MIN)
+function getRaceEquivalents(vdot) {
+  const  { vdotInt, vdotFraction } = splitVdot(vdot);
+
+  if (vdotInt < VDOT_MIN)
+    return R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
+  if (vdotInt >= VDOT_MAX)
+    return R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
+
+  const [below, above] = [raceTimesSec[vdotInt], raceTimesSec[vdotInt + 1]];
+  const addPercentage = (p, [t1, t2]) => (t1 + p * (t2 - t1));
+  return R.compose(
+    R.zipObj(sortedLabels),
+    R.map(addPercentage.bind(null, vdotFraction))
+  )(R.zip(below, above));
+}
+
+function getTrainingIntensity(vdot) {
+  const  { vdotInt, vdotFraction } = splitVdot(vdot);
+
+  if (vdotInt < VDOT_MIN)
     return intensitySec[VDOT_MIN];
-  if (vdot >= VDOT_MAX)
+  if (vdotInt >= VDOT_MAX)
     return intensitySec[VDOT_MAX];
-  const [below, above] = [intensitySec[vdot], intensitySec[vdot + 1]];
+  const [below, above] = [intensitySec[vdotInt], intensitySec[vdotInt + 1]];
   const addPercentage = (p, [t1, t2]) => t1 > 0 ? (t1 + p * (t2 - t1)) : t1;
   return R.compose(
     R.zipObj(R.map(({ id }) => id, allIntensities)),
-    R.map(addPercentage.bind(null, percentage))
+    R.map(addPercentage.bind(null, vdotFraction))
   )(R.zip(below, above));
 }
 
 export {
-  getPerformance,
-  getPerformanceSec,
-  minPerformanceSec,
-  maxPerformanceSec,
+  // getPerformance,
+  getVdot,
+  getRaceEquivalents,
+  getTrainingIntensity,
+  minRaceEquivalents,
+  maxRaceEquivalents,
 }

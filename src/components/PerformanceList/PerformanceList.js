@@ -9,9 +9,7 @@ import { secToTime } from '../../services/conversion';
 
 import './PerformanceList.css';
 
-const getVdot = (performance) => (performance.vdot + performance.percentage);
-
-const isSamePerformanceAs = (p1, p2) => getVdot(p1) === getVdot(p2);
+const isSamePerformanceAs = (p1, p2) => p1.vdot === p2.vdot;
 
 class PerformanceItem extends Component {
   state = {
@@ -30,19 +28,18 @@ class PerformanceItem extends Component {
   }
 
   render() {
-    const { performanceData, onClick, selected } = this.props;
-    const { selectedRace, performance } = performanceData;
+    const { performance, onClick, selected } = this.props;
 
     return (
       <div
         className={classNames('performance-list-item', 'Ripple-parent', { selected })}
         onMouseUp={this.handleClick.bind(this)}
         onTouchEnd={this.handleClick.bind(this)}
-        onClick={() => onClick(performanceData)}
+        onClick={() => onClick(performance)}
         >
-        <span className="mui--text-body2">{getVdot(performance).toFixed(1)}</span>
-        <span >{selectedRace.label}</span>
-        <span className="mui--text-caption">{secToTime(performance.equivalents[selectedRace.label])}</span>
+        <span className="mui--text-body2">{performance.vdot.toFixed(1)}</span>
+        <span >{performance.race.label}</span>
+        <span className="mui--text-caption">{secToTime(performance.time)}</span>
 
         <Ripple cursorPos={this.state.cursorPos} />
       </div>
@@ -56,14 +53,14 @@ class PerformanceList extends Component {
     const { performances, onItemClick, selectedPerformance } = this.props;
     return <div className={'performance-list'}>
       {R.compose(
-        R.map((p) => <PerformanceItem
-          key={`${p.selectedRace.label}-${getVdot(p.performance)}`}
-          performanceData={p}
-          onClick={onItemClick}
-          selected={isSamePerformanceAs(selectedPerformance, p.performance)}
+        R.map(performance => <PerformanceItem
+          key={`${performance.race.label}-${performance.vdot}`}
+          performance={performance}
+          onClick={() => onItemClick(performance)}
+          selected={isSamePerformanceAs(selectedPerformance, performance)}
           />
         ),
-        R.sort(R.descend(p => getVdot(p.performance)))
+        R.sort(R.descend(p => p.vdot))
       )(performances)}
     </div>;
   }
