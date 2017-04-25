@@ -21,6 +21,25 @@ import {
 } from '../../services/constants';
 import { getVdot, getRaceEquivalents } from '../../services/vdotTable';
 import { timeToSec } from '../../services/conversion';
+import { allRacesObj } from '../../services/constants';
+
+const performancesToUri = R.compose(
+  encodeURI,
+  JSON.stringify,
+  R.map(({ race, vdot, time }) => [ race.label, vdot, time ]),
+);
+
+const performancesFromUri = R.compose(
+  R.map(([ raceLabel, vdot, time ]) => ({
+    race: allRacesObj[raceLabel],
+    vdot,
+    time,
+  })),
+  JSON.parse,
+  decodeURI,
+);
+
+const isSamePerformanceAs = p1 => p2 => p1.vdot === p2.vdot;
 
 class App extends Component {
   defaultState = {
@@ -44,25 +63,34 @@ class App extends Component {
 
   savePerformance = (performance) => {
     const { race, vdot } = performance;
-    const toSave = {
-      vdot,
-      race,
-      time: getRaceEquivalents(vdot)[race.label],
-    };
-    this.setPersistentState( { savedPerformances: [toSave, ...this.state.savedPerformances], changed: false } );
+    const savedPerformances = [
+      {
+        vdot,
+        race,
+        time: getRaceEquivalents(vdot)[race.label],
+      },
+      ...this.state.savedPerformances,
+    ];
+    this.setState( { savedPerformances, changed: false } );
+    this.props.history.push('/' + performancesToUri(savedPerformances));
+  };
+    
+  removePerformance = (performance) => {
+    const savedPerformances = R.reject(isSamePerformanceAs(performance))(this.state.savedPerformances);
+    this.setState( { savedPerformances, changed: true } );
+    this.props.history.push('/' + performancesToUri(savedPerformances));
   };
 
-  setPersistentState = (state, urlChange = true) => this.setState(state, () => this.persistState(urlChange));
+  setPersistentState = (state) => this.setState(state, () => this.persistState());
 
-  persistState = (urlChange) => { 
+  persistState = () => { 
     const strState = JSON.stringify(this.state);
     localStorage.setItem('appState', strState);
-    urlChange && this.props.history.push('/' + encodeURI(strState));
   };
 
   getPersistedState = () => {
     const state = JSON.parse(localStorage.getItem('appState'));
-    if (!state.selectedPerformance) {
+    if (!state || !state.selectedPerformance) {
       // the saved state is not valid (possibly an older version)
       return undefined;
     }
@@ -73,8 +101,6 @@ class App extends Component {
     const { metric, selectedPerformance, open, changed, savedPerformances } = this.state;
     const { race, vdot } = selectedPerformance;
 
-    const isSamePerformanceAs = p1 => p2 => p1.vdot === p2.vdot;
-
     const getAppBarButtonProps = () => {
       if (changed) {
         return {
@@ -83,13 +109,10 @@ class App extends Component {
         }
       }
 
-      if (R.find(isSamePerformanceAs(performance))(savedPerformances)) {
+      if (R.find(isSamePerformanceAs(selectedPerformance))(savedPerformances)) {
         return {
           label: "Remove",
-          onClick: () => this.setPersistentState({
-            savedPerformances: R.reject(isSamePerformanceAs(performance))(savedPerformances),
-            changed: true,
-          })
+          onClick: () => this.removePerformance(selectedPerformance)
         }
       }
     }
@@ -145,10 +168,12 @@ class App extends Component {
   }
 
   componentWillMount() {
-    const state = this.props.urlState 
-      || this.getPersistedState()
+    const state = this.getPersistedState()
       || this.defaultState;
-    state && this.setState(state);
+    if (this.props.savedPerformances) {
+      state.savedPerformances = performancesFromUri(this.props.savedPerformances);
+    }
+    this.setState(state);
   }
   
 }

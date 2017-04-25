@@ -171,8 +171,14 @@ const allRaces = [
   k1500,
 ]
 
+const allRacesObj = R.compose(
+  R.map(R.head),
+  R.groupBy(R.prop('label')),
+)(allRaces);
+
 export {
   allRaces,
+  allRacesObj,
   kMarathon,
   k30,
   k25,

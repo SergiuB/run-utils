@@ -13,8 +13,8 @@ ReactDOM.render(
   <Router>
     <div>
       <Route exact={true} path='/' component={App} />
-      <Route path='/:vdotState' render={({ match, history }) => {
-        return <App history={history} urlState={JSON.parse(decodeURI(match.params.vdotState))} />;
+      <Route path='/:savedPerformances' render={({ match, history }) => {
+        return <App history={history} savedPerformances={match.params.savedPerformances} />;
       } } />
     </div>
   </Router>,
