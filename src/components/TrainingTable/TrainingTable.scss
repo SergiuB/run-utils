@@ -1,11 +1,7 @@
 .training-table{
-  .row {
+  .training-table-row {
     display: flex;
     align-content: center;
-  }
-  .col {
-    display: flex;
-    flex-direction: row;
   }
   .intensity-data {
     flex-grow: 1;
@@ -20,8 +16,6 @@
       align-items: flex-end;
       flex-grow: 1;
     }
-  }
-  .type {
   }
   .distance-row {
     display: flex;

@@ -121,7 +121,7 @@ class App extends Component {
 
     return (
       <MuiThemeProvider>
-        <div className="App mui--text-body1">
+        <div className="App mui--text-body1 container">
           <AppBar
             onLeftIconButtonTouchTap={this.handleToggle}
             iconElementRight={appButtonProps 

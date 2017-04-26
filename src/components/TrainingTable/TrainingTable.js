@@ -23,7 +23,7 @@ class TrainingTable extends React.Component {
       R.map(({ val, distance }) => metric ? racePace(val, distance) : racePaceMile(val, distance))
     )(intensityCols);
     return (
-      <div className='row'>
+      <div className='training-table-row'>
         <div><p className='type mui--text-body2'>{type}</p></div>
         <div className='intensity-data'>
             {R.map(({id, label, val, distance}) => (
@@ -43,7 +43,7 @@ class TrainingTable extends React.Component {
   buildEasyRow({ val } ) {
     const { metric } = this.props;
     return (
-      <div className='row'>
+      <div className='training-table-row'>
         <div><p className='type mui--text-body2'>{kEasyPace.type}</p></div>
         <div className='intensity-data'>
           <div className='intensity-data-col'>
