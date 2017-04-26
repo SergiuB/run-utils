@@ -26,11 +26,11 @@ import { allRacesObj } from '../../services/constants';
 const performancesToUri = R.compose(
   encodeURI,
   JSON.stringify,
-  R.map(({ race, vdot, time }) => [ race.label, vdot, time ]),
+  R.map(({ race, vdot, time }) => [race.label, vdot, time]),
 );
 
 const performancesFromUri = R.compose(
-  R.map(([ raceLabel, vdot, time ]) => ({
+  R.map(([raceLabel, vdot, time]) => ({
     race: allRacesObj[raceLabel],
     vdot,
     time,
@@ -47,17 +47,17 @@ class App extends Component {
     open: false,
     selectedPerformance: {
       race: kHalf,
-      vdot: getVdot(kHalf,timeToSec('1:36:33')),
+      vdot: getVdot(kHalf, timeToSec('1:36:33')),
     },
     savedPerformances: [],
     changed: true,
   }
 
-  handleToggle = () => this.setPersistentState({open: !this.state.open})
+  handleToggle = () => this.setPersistentState({ open: !this.state.open })
 
-  handleMetricToggle = () => this.setPersistentState({metric: !this.state.metric})
+  handleMetricToggle = () => this.setPersistentState({ metric: !this.state.metric })
 
-  handleClose = () => this.setState({open: false})
+  handleClose = () => this.setState({ open: false })
 
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
 
@@ -71,19 +71,19 @@ class App extends Component {
       },
       ...this.state.savedPerformances,
     ];
-    this.setState( { savedPerformances, changed: false } );
+    this.setState({ savedPerformances, changed: false });
     this.props.history.push('/' + performancesToUri(savedPerformances));
   };
-    
+
   removePerformance = (performance) => {
     const savedPerformances = R.reject(isSamePerformanceAs(performance))(this.state.savedPerformances);
-    this.setState( { savedPerformances, changed: true } );
+    this.setState({ savedPerformances, changed: true });
     this.props.history.push('/' + performancesToUri(savedPerformances));
   };
 
   setPersistentState = (state) => this.setState(state, () => this.persistState());
 
-  persistState = () => { 
+  persistState = () => {
     const strState = JSON.stringify(this.state);
     localStorage.setItem('appState', strState);
   };
@@ -122,13 +122,16 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App mui--text-body1 container">
-          <AppBar
-            onLeftIconButtonTouchTap={this.handleToggle}
-            iconElementRight={appButtonProps 
-              ? <FlatButton {...appButtonProps}/>
-              : <div />
-            }
-            />
+
+          <div className='row'>
+            <AppBar
+              onLeftIconButtonTouchTap={this.handleToggle}
+              iconElementRight={appButtonProps
+                ? <FlatButton {...appButtonProps} />
+                : <div />
+              }
+              />
+          </div>
           <Drawer
             docked={false}
             width={200}
@@ -139,11 +142,14 @@ class App extends Component {
               Show {metric ? 'Miles' : 'Kilometers'}
             </MenuItem>
           </Drawer>
-          <PerformanceList
-            performances={savedPerformances}
-            onItemClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
-            selectedPerformance={selectedPerformance}
-            />
+          <div className='row'>
+            <PerformanceList
+              performances={savedPerformances}
+              onItemClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
+              selectedPerformance={selectedPerformance}
+              />
+          </div>
+          <div className='row'>
           <VdotPerformance
             metric={metric}
             selectedPerformance={selectedPerformance}
@@ -162,6 +168,7 @@ class App extends Component {
               }
             })}
             />
+            </div>
         </div>
       </MuiThemeProvider>
     );
@@ -175,7 +182,7 @@ class App extends Component {
     }
     this.setState(state);
   }
-  
+
 }
 
 export default App;
