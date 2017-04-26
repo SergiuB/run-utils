@@ -65,7 +65,7 @@ function minToTime(min, showHour = false) {
   const pad0 = n => n < 10 ? '0' + n : n;
 
   return showHour || h > 0
-    ? `${pad0(h)}:${pad0(m)}:${pad0(s)}`
+    ? `${h}:${pad0(m)}:${pad0(s)}`
     : `${pad0(m)}:${pad0(s)}`;
 }
 
