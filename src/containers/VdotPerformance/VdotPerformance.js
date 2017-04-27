@@ -51,7 +51,7 @@ const helpVdot = [
     "Drag the slider for one distance, and see the equivalent performance for the other distances."
 ];
 const helpTraining = [
-    vdot => `Recommended training paces given a VDOT of ${vdot}`,
+    vdot => `Recommended training paces for VDOT ${vdot}`,
     'LT - Threshold intervals',
     'VO2 - VO2Max intervals',
     'Speed - Repetition intervals',
