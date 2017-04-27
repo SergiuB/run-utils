@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import IconButton from 'material-ui/IconButton';
+import ActionHelp from 'material-ui/svg-icons/action/help-outline';
+
+import { grey400 } from 'material-ui/styles/colors';
 
 import RaceSlider from '../../components/RaceSlider';
 import TrainingTable from '../../components/TrainingTable';
@@ -24,6 +28,23 @@ const performanceType = PropTypes.shape({
     vdot: PropTypes.number
 });
 
+const helpIconStyle = {
+    color: grey400,
+    width: 24,
+    height: 24,
+};
+const helpBtnStyle = {
+    padding: 0,
+    width: 36,
+    height: 36,
+    zIndex: 3
+};
+
+const helpVdot = [
+    "VDOT is a measure of running ability, a combination of VO2Max and efficiency. It lets you equate a time in one distance against another.",
+    "Drag the slider for one distance, and see the equivalent performance for the other distances."
+];
+
 export default class VdotPerformance extends React.Component {
     static propTypes = {
         races: PropTypes.arrayOf(raceType).isRequired,
@@ -45,11 +66,20 @@ export default class VdotPerformance extends React.Component {
             <div className='vdot-performance'>
                 <div className='vdot-value'>
                     <div className="mui--text-display1">{vdot.toFixed(1)}</div>
+
+                    <IconButton
+                        tooltip={<div style={{ width: 200, lineHeight: '16px', whiteSpace: 'normal', textAlign: 'left' }}>{helpVdot[0]}<br/>{helpVdot[1]}</div>}
+                        iconStyle={helpIconStyle}
+                        style={helpBtnStyle}
+
+                        >
+                        <ActionHelp />
+                    </IconButton>
                 </div>
                 {races.map(race => (
                     <div
-                       className='slider-wrapper'
-                       key={race.label}
+                        className='slider-wrapper'
+                        key={race.label}
                         >
                         <RaceSlider
                             metric={metric}
