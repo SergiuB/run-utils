@@ -28,22 +28,35 @@ const performanceType = PropTypes.shape({
     vdot: PropTypes.number
 });
 
-const helpIconStyle = {
-    color: grey400,
-    width: 24,
-    height: 24,
-};
-const helpBtnStyle = {
-    padding: 0,
-    width: 36,
-    height: 36,
-    zIndex: 3
-};
+const getHelpStyle = (size) => ({
+    icon: {
+        color: grey400,
+        width: size,
+        height: size,
+    },
+    button: {
+        padding: 0,
+        width: size * 3 / 2,
+        height: size * 3 / 2,
+        zIndex: 3
+    },
+    tooltip: { width: 250, lineHeight: '16px', whiteSpace: 'normal', textAlign: 'left' },
+});
+
+const helpVdotStyle = getHelpStyle(24);
+const helpTrainingStyle = getHelpStyle(16);
 
 const helpVdot = [
     "VDOT is a measure of running ability, a combination of VO2Max and efficiency. It lets you equate a time in one distance against another.",
     "Drag the slider for one distance, and see the equivalent performance for the other distances."
 ];
+const helpTraining = [
+    vdot => `Recommended training paces given a VDOT of ${vdot}`,
+    'LT - Threshold intervals',
+    'VO2 - VO2Max intervals',
+    'Speed - Repetition intervals',
+];
+
 
 export default class VdotPerformance extends React.Component {
     static propTypes = {
@@ -68,9 +81,9 @@ export default class VdotPerformance extends React.Component {
                     <div className="mui--text-display1">{vdot.toFixed(1)}</div>
 
                     <IconButton
-                        tooltip={<div style={{ width: 200, lineHeight: '16px', whiteSpace: 'normal', textAlign: 'left' }}>{helpVdot[0]}<br/>{helpVdot[1]}</div>}
-                        iconStyle={helpIconStyle}
-                        style={helpBtnStyle}
+                        tooltip={<div style={helpVdotStyle.tooltip}>{helpVdot[0]}<br/>{helpVdot[1]}</div>}
+                        iconStyle={helpVdotStyle.icon}
+                        style={helpVdotStyle.button}
 
                         >
                         <ActionHelp />
@@ -100,8 +113,21 @@ export default class VdotPerformance extends React.Component {
                         )}
                     </div>
                 ))}
+                <div style={{ display: 'flex'}}>
+                    <div className="mui--text-subhead mui--text-dark-secondary">Training Paces</div>
 
-                <p className="mui--text-subhead mui--text-dark-secondary">Training Paces</p>
+                    <IconButton
+                        tooltip={
+                            <div style={helpTrainingStyle.tooltip}>
+                                {helpTraining[0](vdot.toFixed(1))}<br/>{helpTraining[1]}<br/>{helpTraining[2]}<br/>{helpTraining[3]}
+                            </div>}
+                        iconStyle={helpTrainingStyle.icon}
+                        style={helpTrainingStyle.button}
+
+                        >
+                        <ActionHelp />
+                    </IconButton>
+                </div>
                 <TrainingTable
                     metric={metric}
                     trainingIntensity={trainingIntensity}
