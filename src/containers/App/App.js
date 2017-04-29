@@ -6,6 +6,9 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import R from 'ramda';
 
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
@@ -72,13 +75,13 @@ class App extends Component {
       ...this.state.savedPerformances,
     ];
     this.setState({ savedPerformances, changed: false });
-    this.props.history.push('/' + performancesToUri(savedPerformances));
+    this.props.dispatch(push('/' + performancesToUri(savedPerformances)));
   };
 
   removePerformance = (performance) => {
     const savedPerformances = R.reject(isSamePerformanceAs(performance))(this.state.savedPerformances);
     this.setState({ savedPerformances, changed: true });
-    this.props.history.push('/' + performancesToUri(savedPerformances));
+    this.props.dispatch(push('/' + performancesToUri(savedPerformances)));
   };
 
   setPersistentState = (state) => this.setState(state, () => this.persistState());
@@ -185,4 +188,4 @@ class App extends Component {
 
 }
 
-export default App;
+export default connect()(App);
