@@ -9,22 +9,17 @@ import R from 'ramda';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import './App.css';
-import 'muicss/dist/css/mui-noglobals.min.css';
+import RaceEquivPage from '../RaceEquivPage';
 
-import VdotPerformance from '../../containers/VdotPerformance';
-import PerformanceList from '../../components/PerformanceList';
 import {
-  kMarathon,
   kHalf,
-  k10,
-  k5,
-  k3,
-  kMile,
 } from '../../services/constants';
 import { getVdot, getRaceEquivalents } from '../../services/vdotTable';
 import { timeToSec } from '../../services/conversion';
 import { allRacesObj } from '../../services/constants';
+
+import './App.css';
+import 'muicss/dist/css/mui-noglobals.min.css';
 
 const performancesToUri = R.compose(
   encodeURI,
@@ -146,32 +141,26 @@ class App extends Component {
             </MenuItem>
           </Drawer>
           <div className='row'>
-            <PerformanceList
-              performances={savedPerformances}
-              onItemClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
+            <RaceEquivPage
               selectedPerformance={selectedPerformance}
+              savedPerformances={savedPerformances}
+              metric={metric}
+              onSavedPerformanceClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
+              onVdotChange={newVdot => this.setPersistentState({
+                selectedPerformance: {
+                  vdot: newVdot,
+                  race,
+                },
+                changed: true
+              }, false)}
+              onSelectedRaceChange={selectedRace => this.setPersistentState({
+                selectedPerformance: {
+                  vdot,
+                  race: selectedRace,
+                }
+              })}
               />
           </div>
-          <div className='row'>
-          <VdotPerformance
-            metric={metric}
-            selectedPerformance={selectedPerformance}
-            races={[kMarathon, kHalf, k10, k5, k3, kMile]}
-            onVdotChange={newVdot => this.setPersistentState({
-              selectedPerformance: {
-                vdot: newVdot,
-                race,
-              },
-              changed: true
-            }, false)}
-            onSelectedRaceChange={selectedRace => this.setPersistentState({
-              selectedPerformance: {
-                vdot,
-                race: selectedRace,
-              }
-            })}
-            />
-            </div>
         </div>
       </MuiThemeProvider>
     );
