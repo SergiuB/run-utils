@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import createHistory from 'history/createBrowserHistory';
-import { Route } from 'react-router';
 
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -40,14 +41,10 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    { /* ConnectedRouter will use the store from Provider automatically */}
     <ConnectedRouter history={history}>
-      <div>
-        <Route exact={true} path='/' component={App} />
-        <Route path='/:savedPerformances' render={({ match }) => {
-          return <App savedPerformances={match.params.savedPerformances} />;
-        } } />
-      </div>
+      <MuiThemeProvider>
+        <App />
+      </MuiThemeProvider>
     </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
