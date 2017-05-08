@@ -53,7 +53,7 @@ it('converts from minutes to hh:mm:ss', () => {
   expect(minToTime(10 + 59 / 60)).toEqual("10:59");
   expect(minToTime(2 + 3 / 60)).toEqual("02:03");
   expect(minToTime(1.5)).toEqual("01:30");
-  expect(minToTime(60)).toEqual("01:00:00");
+  expect(minToTime(60)).toEqual("1:00:00");
   expect(minToTime(1)).toEqual("01:00");
 
   expect(minToTime(4.988966400000001)).toEqual("05:00");
