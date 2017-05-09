@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router';
+import { connect } from 'react-redux';
+
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import R from 'ramda';
-import queryString from 'query-string';
-
-import { Route } from 'react-router';
-
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-
-import RaceEquivPage from '../RaceEquivPage';
-
 import { cyan700 } from 'material-ui/styles/colors';
 
-import {
-  kHalf,
-} from '../../services/constants';
-import { getVdot, getRaceEquivalents } from '../../services/vdotTable';
-import { timeToSec } from '../../services/conversion';
-import { allRacesObj } from '../../services/constants';
+import RaceEquivPage from '../RaceEquivPage';
+import { getRaceEquivalents } from '../../services/vdotTable';
+
+import * as actionCreators from '../../actions';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
@@ -41,47 +32,12 @@ import 'muicss/dist/css/mui-noglobals.min.css';
 //   x => R.isNil(x) || x === 'undefined' ? '[]' : x,
 //   decodeURI
 // );
-const isSamePerformanceAs = p1 => p2 => p1.vdot === p2.vdot;
 
 class App extends Component {
-  defaultState = {
-    metric: true,
-    open: false,
-    selectedPerformance: {
-      race: kHalf,
-      vdot: getVdot(kHalf, timeToSec('1:36:33')),
-    },
-    savedPerformances: [],
-    changed: true,
-  }
 
-  handleToggle = () => this.setPersistentState({ open: !this.state.open })
-
-  handleMetricToggle = () => this.setPersistentState({ metric: !this.state.metric })
-
-  handleClose = () => this.setState({ open: false })
+  handleClose = () => this.props.openMenu(false)
 
   doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
-
-  savePerformance = (performance) => {
-    const { race, vdot } = performance;
-    const savedPerformances = [
-      {
-        vdot,
-        race,
-        time: getRaceEquivalents(vdot)[race.label],
-      },
-      ...this.state.savedPerformances,
-    ];
-    this.setPersistentState({ savedPerformances, changed: false });
-   // this.props.dispatch(push(`/raceEquivalence?savedPerformances=${performancesToUri(savedPerformances)}`));
-  };
-
-  removePerformance = (performance) => {
-    const savedPerformances = R.reject(isSamePerformanceAs(performance))(this.state.savedPerformances);
-    this.setPersistentState({ savedPerformances, changed: true });
-    //this.props.dispatch(push(`/raceEquivalence?savedPerformances=${performancesToUri(savedPerformances)}`));
-  };
 
   setPersistentState = (state) => this.setState(state, () => this.persistState());
 
@@ -100,24 +56,26 @@ class App extends Component {
   };
 
   render() {
-    const { metric, selectedPerformance, open, changed, savedPerformances } = this.state;
-    const { race, vdot } = selectedPerformance;
+    const {
+      metric, selectedPerformance, menuOpen, changed, savedPerformances,
+      savePerformance, removePerformance, openMenu, setMetric, selectPerformance, changeVdot, changeRace
+    } = this.props;
     return (
       <div className="App mui--text-body1 container">
 
         <div className='row'>
           <AppBar
             style={{ backgroundColor: cyan700 }}
-            onLeftIconButtonTouchTap={this.handleToggle}
+            onLeftIconButtonTouchTap={() => openMenu(true)}
             />
         </div>
         <Drawer
           docked={false}
           width={200}
-          open={open}
-          onRequestChange={(open) => this.setPersistentState({ open })}
+          open={menuOpen}
+          onRequestChange={(open) => openMenu(open)}
           >
-          <MenuItem onTouchTap={this.doThenClose(this.handleMetricToggle)}>
+          <MenuItem onTouchTap={this.doThenClose(() => setMetric(!metric))}>
             Show {metric ? 'Miles' : 'Kilometers'}
           </MenuItem>
         </Drawer>
@@ -129,23 +87,12 @@ class App extends Component {
               selectedPerformance={selectedPerformance}
               savedPerformances={/*performancesFromUri(urlPerformances) ||*/ savedPerformances}
               metric={metric}
-              onSavedPerformanceClick={performance => this.setPersistentState({ selectedPerformance: performance, changed: false })}
-              onVdotChange={newVdot => this.setPersistentState({
-                selectedPerformance: {
-                  vdot: newVdot,
-                  race,
-                },
-                changed: true
-              }, false)}
-              onSelectedRaceChange={selectedRace => this.setPersistentState({
-                selectedPerformance: {
-                  vdot,
-                  race: selectedRace,
-                }
-              })}
+              onSavedPerformanceClick={selectPerformance}
+              onVdotChange={changeVdot}
+              onSelectedRaceChange={changeRace}
               changed={changed}
-              onSavePerformance={performance => this.savePerformance(performance)}
-              onRemovePerformance={performance => this.removePerformance(performance)}
+              onSavePerformance={savePerformance}
+              onRemovePerformance={removePerformance}
               />
           } } />
 
@@ -162,4 +109,20 @@ class App extends Component {
 
 }
 
-export default connect()(App);
+const mapStateToProps = (state) => {
+  const newState = {
+    ...state.app,
+    ...state.raceEquiv,
+    savedPerformances: state.raceEquiv.savedPerformances.map(({ race, vdot }) => ({
+      race,
+      vdot,
+      time: getRaceEquivalents(vdot)[race.label],
+    }))
+  }
+  return newState;
+}
+
+export default connect(
+  mapStateToProps,
+  actionCreators,
+)(App);

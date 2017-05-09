@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import R from 'ramda';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
 
 import { cyan500, white } from 'material-ui/styles/colors';

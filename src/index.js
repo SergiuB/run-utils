@@ -13,6 +13,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 
 import App from './containers/App';
+
+import reducers from './reducers';
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import './index.css';
 import 'bootstrap-grid';
@@ -31,7 +34,7 @@ const middleware = routerMiddleware(history)
 // Also apply our middleware for navigating
 const store = createStore(
   combineReducers({
-    // ...reducers,
+    ...reducers,
     router: routerReducer
   }),
   composeWithDevTools(
