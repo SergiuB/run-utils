@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import R from 'ramda';
+
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
-
 import { cyan500, white } from 'material-ui/styles/colors';
 
 import VdotPerformance from '../VdotPerformance';
@@ -15,21 +17,18 @@ import {
   k3,
   kMile,
 } from '../../services/constants';
+import { getRaceEquivalents } from '../../services/vdotTable';
+
+
+import * as raceEquivActions from '../../actions/raceEquiv';
 
 import './RaceEquivPage.css';
 
 class RaceEquivPage extends Component {
   render() {
     const {
-      savedPerformances,
-      selectedPerformance,
-      metric,
-      onSavedPerformanceClick,
-      onVdotChange,
-      onSelectedRaceChange,
-      onSavePerformance,
-      onRemovePerformance,
-      changed,
+      metric, selectedPerformance, changed, savedPerformances,
+      savePerformance, removePerformance, selectPerformance, changeVdot, changeRace
     } = this.props;
 
     const isSamePerformanceAs = p1 => p2 => p1.vdot === p2.vdot;
@@ -37,12 +36,12 @@ class RaceEquivPage extends Component {
       if (changed) {
         return {
           label: "Save",
-          onClick: () => onSavePerformance(selectedPerformance)
+          onClick: () => savePerformance(selectedPerformance)
         }
       } else if (R.find(isSamePerformanceAs(selectedPerformance))(savedPerformances)) {
         return {
           label: "Remove",
-          onClick: () => onRemovePerformance(selectedPerformance)
+          onClick: () => removePerformance(selectedPerformance)
         }
       }
     }
@@ -69,14 +68,14 @@ class RaceEquivPage extends Component {
           <PerformanceList
             performances={savedPerformances}
             selectedPerformance={selectedPerformance}
-            onItemClick={onSavedPerformanceClick}
+            onItemClick={selectPerformance}
             />
           <VdotPerformance
             metric={metric}
             selectedPerformance={selectedPerformance}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
-            onVdotChange={onVdotChange}
-            onSelectedRaceChange={onSelectedRaceChange}
+            onVdotChange={changeVdot}
+            onSelectedRaceChange={changeRace}
             />
         </div>
       </div>
@@ -84,4 +83,17 @@ class RaceEquivPage extends Component {
   }
 }
 
-export default RaceEquivPage;
+const mapStateToProps = (state) => ({
+  metric: state.app.metric,
+  ...state.raceEquiv,
+  savedPerformances: state.raceEquiv.savedPerformances.map(({ race, vdot }) => ({
+    race,
+    vdot,
+    time: getRaceEquivalents(vdot)[race.label],
+  }))
+});
+
+export default connect(
+  mapStateToProps,
+  raceEquivActions,
+)(RaceEquivPage);

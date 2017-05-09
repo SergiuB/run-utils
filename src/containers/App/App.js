@@ -8,10 +8,8 @@ import MenuItem from 'material-ui/MenuItem';
 import { cyan700 } from 'material-ui/styles/colors';
 
 import RaceEquivPage from '../RaceEquivPage';
-import { getRaceEquivalents } from '../../services/vdotTable';
 
 import * as appActions from '../../actions/app';
-import * as raceEquivActions from '../../actions/raceEquiv';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
@@ -57,10 +55,7 @@ class App extends Component {
   };
 
   render() {
-    const {
-      metric, selectedPerformance, menuOpen, changed, savedPerformances,
-      savePerformance, removePerformance, openMenu, setMetric, selectPerformance, changeVdot, changeRace
-    } = this.props;
+    const { metric, selectedPerformance, menuOpen, savedPerformances, openMenu, setMetric } = this.props;
     return (
       <div className="App mui--text-body1 container">
 
@@ -88,12 +83,6 @@ class App extends Component {
               selectedPerformance={selectedPerformance}
               savedPerformances={/*performancesFromUri(urlPerformances) ||*/ savedPerformances}
               metric={metric}
-              onSavedPerformanceClick={selectPerformance}
-              onVdotChange={changeVdot}
-              onSelectedRaceChange={changeRace}
-              changed={changed}
-              onSavePerformance={savePerformance}
-              onRemovePerformance={removePerformance}
               />
           } } />
 
@@ -107,26 +96,11 @@ class App extends Component {
       || this.defaultState;
     this.setState(state);
   }
-
 }
 
-const mapStateToProps = (state) => {
-  const newState = {
-    ...state.app,
-    ...state.raceEquiv,
-    savedPerformances: state.raceEquiv.savedPerformances.map(({ race, vdot }) => ({
-      race,
-      vdot,
-      time: getRaceEquivalents(vdot)[race.label],
-    }))
-  }
-  return newState;
-}
+const mapStateToProps = state => state.app;
 
 export default connect(
   mapStateToProps,
-  {
-    ...appActions,
-    ...raceEquivActions,
-  },
+  appActions,
 )(App);
