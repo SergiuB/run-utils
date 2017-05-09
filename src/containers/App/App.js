@@ -10,7 +10,8 @@ import { cyan700 } from 'material-ui/styles/colors';
 import RaceEquivPage from '../RaceEquivPage';
 import { getRaceEquivalents } from '../../services/vdotTable';
 
-import * as actionCreators from '../../actions';
+import * as appActions from '../../actions/app';
+import * as raceEquivActions from '../../actions/raceEquiv';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
@@ -124,5 +125,8 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  actionCreators,
+  {
+    ...appActions,
+    ...raceEquivActions,
+  },
 )(App);
