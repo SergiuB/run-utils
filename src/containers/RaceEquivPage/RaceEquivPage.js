@@ -84,7 +84,6 @@ class RaceEquivPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  metric: state.app.metric,
   ...state.raceEquiv,
   savedPerformances: state.raceEquiv.savedPerformances.map(({ race, vdot }) => ({
     race,

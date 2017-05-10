@@ -1,6 +1,6 @@
 const initialState = {
   metric: true,
-  menuOpen: false,
+  isMenuOpen: false,
 };
 
 const app = (state = initialState, action) => {
@@ -15,7 +15,7 @@ const app = (state = initialState, action) => {
     case 'OPEN_MENU':
       return {
         ...state,
-        menuOpen: action.open,
+        isMenuOpen: action.open,
       };
 
     default:

@@ -34,9 +34,7 @@ import 'muicss/dist/css/mui-noglobals.min.css';
 
 class App extends Component {
 
-  handleClose = () => this.props.openMenu(false)
-
-  doThenClose = (fn) => () => { fn.call(this); this.handleClose(); }
+  doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
   setPersistentState = (state) => this.setState(state, () => this.persistState());
 
@@ -55,7 +53,7 @@ class App extends Component {
   };
 
   render() {
-    const { metric, selectedPerformance, menuOpen, savedPerformances, openMenu, setMetric } = this.props;
+    const { metric, isMenuOpen, openMenu, setMetric } = this.props;
     return (
       <div className="App mui--text-body1 container">
 
@@ -68,7 +66,7 @@ class App extends Component {
         <Drawer
           docked={false}
           width={200}
-          open={menuOpen}
+          open={isMenuOpen}
           onRequestChange={(open) => openMenu(open)}
           >
           <MenuItem onTouchTap={this.doThenClose(() => setMetric(!metric))}>
@@ -79,11 +77,7 @@ class App extends Component {
         <div className='row'>
           <Route path='/raceEquivalence' render={({ match, location }) => {
             //const { savedPerformances: urlPerformances } = queryString.parse(location.search);
-            return <RaceEquivPage
-              selectedPerformance={selectedPerformance}
-              savedPerformances={/*performancesFromUri(urlPerformances) ||*/ savedPerformances}
-              metric={metric}
-              />
+            return <RaceEquivPage metric={metric}/>
           } } />
 
         </div>
