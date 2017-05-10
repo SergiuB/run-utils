@@ -1,6 +1,7 @@
 import R from 'ramda';
-import { allRaces, allIntensities } from './constants';
+import { allRaces, allIntensities, kMarathon, kEasyPace, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
 import { timeToSec } from './conversion';
+import { racePace } from './raceCalculator';
 
 
 const raceTimes = [];
@@ -227,11 +228,29 @@ function getTrainingIntensity(vdot) {
   )(R.zip(below, above));
 }
 
+function getTrainingPaces(vdot) {
+  const raceEquivalents = getRaceEquivalents(vdot);
+  const trainingIntensities = getTrainingIntensity(vdot);
+  const computeMaxPace = R.compose(
+    R.reduce(R.max, 0),
+    R.map(({ id, distance }) => racePace(trainingIntensities[id], distance))
+  );
+  return {
+    'E': trainingIntensities[kEasyPace.id] / 60,
+    'M': racePace(raceEquivalents[kMarathon.label], kMarathon.distance),
+    'T': computeMaxPace([kT400, kT800, kT1000, kTMile]),
+    'T10K': racePace(raceEquivalents[k10.label], k10.distance),
+    'I': computeMaxPace([kI400, kI1000, kI1200, kIMile]),
+    'R': computeMaxPace([kR200, kR400, kR800]),
+  }
+}
+
 export {
   // getPerformance,
   getVdot,
   getRaceEquivalents,
   getTrainingIntensity,
+  getTrainingPaces,
   minRaceEquivalents,
   maxRaceEquivalents,
 }

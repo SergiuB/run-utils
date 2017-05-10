@@ -1,8 +1,8 @@
 import R from 'ramda';
-import { getRaceEquivalents } from './vdotTable';
-import { secToTime } from './conversion';
+import { getRaceEquivalents, getTrainingPaces } from './vdotTable';
+import { secToTime, minToTime } from './conversion';
 
-it('psses basic tests', () => {
+it('getRaceEquivalents', () => {
   const eqv = R.map(secToTime, getRaceEquivalents(40.04838709677419355));
   expect(eqv).toEqual({
     '1500': '06:35',
@@ -22,3 +22,16 @@ it('psses basic tests', () => {
     Marathon: '3:49:32'
   });  
 });
+
+it('getTrainingPaces', () => {
+  const eqv = R.map(minToTime, getTrainingPaces(47));
+  expect(eqv).toEqual({
+    'E': '05:34',
+    'M': '04:46',
+    'T': '04:30',
+    'T10K': '04:22',
+    'I': '04:07',
+    'R': '03:51',
+  });  
+});
+
