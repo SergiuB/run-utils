@@ -235,8 +235,10 @@ function getTrainingPaces(vdot) {
     R.reduce(R.max, 0),
     R.map(({ id, distance }) => racePace(trainingIntensities[id], distance))
   );
+  const easyPace = trainingIntensities[kEasyPace.id] / 60;
   return {
-    'E': trainingIntensities[kEasyPace.id] / 60,
+    'J': easyPace + 0.5,
+    'E': easyPace,
     'M': racePace(raceEquivalents[kMarathon.label], kMarathon.distance),
     'T': computeMaxPace([kT400, kT800, kT1000, kTMile]),
     'T10K': racePace(raceEquivalents[k10.label], k10.distance),

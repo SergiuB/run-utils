@@ -20,12 +20,13 @@ it('getRaceEquivalents', () => {
     '25K': '2:12:50',
     '30K': '2:40:57',
     Marathon: '3:49:32'
-  });  
+  });
 });
 
 it('getTrainingPaces', () => {
   const eqv = R.map(minToTime, getTrainingPaces(47));
   expect(eqv).toEqual({
+    'J': '06:04',
     'E': '05:34',
     'M': '04:46',
     'T': '04:30',
