@@ -53,11 +53,10 @@ const raceEquiv = (state = initialState, action) => {
       };
 
     case 'REMOVE_PERFORMANCE':
-      const condition = ({ vdot }) => vdot !== action.performance.vdot;
       return {
         ...state,
-        changed: true,
-        savedPerformances: state.savedPerformances.filter(condition),
+        changed: state.savedPerformances.findIndex(({ vdot }) => vdot === action.performance.vdot) !== -1,
+        savedPerformances: state.savedPerformances.filter(({ vdot }) => vdot !== action.performance.vdot),
       };
 
     default:

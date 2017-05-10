@@ -49,8 +49,10 @@ describe('raceEquiv reducer', () => {
     expect(
       raceEquiv(initialState, {
         type: 'SAVE_PERFORMANCE',
-        race: k5,
-        vdot: 52,
+        performance: {
+          race: k5,
+          vdot: 52,
+        }
       })
     ).toEqual({
       ...initialState,
@@ -69,7 +71,9 @@ describe('raceEquiv reducer', () => {
     expect(
       raceEquiv(initialState, {
         type: 'REMOVE_PERFORMANCE',
-        vdot: 43,
+        performance: {
+          vdot: 43,
+        }
       })
     ).toEqual({
       ...initialState,
@@ -82,7 +86,9 @@ describe('raceEquiv reducer', () => {
     expect(
       raceEquiv(initialState, {
         type: 'REMOVE_PERFORMANCE',
-        vdot: 999,
+        performance: {
+          vdot: 999,
+        }
       })
     ).toEqual({
       ...initialState,

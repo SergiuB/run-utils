@@ -33,16 +33,16 @@ it('parses interval workouts', () => {
   });
 
   expect(parse('400mR/400m')).toEqual({
-   "work": {
-      "num": 400,
-      "unit": "m"
-   },
-   "type": "R",
-   "rest": {
-      "num": 400,
-      "unit": "m"
-   }
-});  
+    "work": {
+        "num": 400,
+        "unit": "m"
+    },
+    "type": "R",
+    "rest": {
+        "num": 400,
+        "unit": "m"
+    }
+  });  
 });
 
 it('parses workout sequences', () => {
