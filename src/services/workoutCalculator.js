@@ -58,12 +58,12 @@ const getDistanceAndTime = ({pace, num, unit}) => {
   return { time, distance }
 }
 
-const calculateWorkout = ({ pace, num, unit, type }) => {
+const calculateWorkout = ({ pace, num, unit, type, givePoints=true }) => {
   const { distance, time } = getDistanceAndTime({pace, num, unit});
   const data = {
     distance,
     time,
-    points: round(pointTable[type] * time),
+    points: givePoints ? round(pointTable[type] * time) : 0,
   }
   return {
     ...data,
@@ -130,4 +130,6 @@ const calculate = vdot => {
 
 export {
   calculate,
+  mergeWorkoutData,
+  pointTable,
 }

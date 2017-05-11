@@ -8,6 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { cyan700 } from 'material-ui/styles/colors';
 
 import RaceEquivPage from '../RaceEquivPage';
+import ProgramPage from '../ProgramPage';
 
 import * as appActions from '../../actions/app';
 
@@ -80,6 +81,7 @@ class App extends Component {
             return <RaceEquivPage metric={metric}/>
           } } />
 
+          <Route path='/programBuilder' render={() => <ProgramPage metric={metric}/>}/>
         </div>
       </div>
     );

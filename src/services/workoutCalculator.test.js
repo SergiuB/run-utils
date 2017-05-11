@@ -69,8 +69,6 @@ it('calculates for intervals with rest', () => {
   });
 });
 
-
-
 it('calculates for sequence of work parts', () => {
   expect(calc47('20\'T+3*1miI/90"')).toEqual({                                                                                                                    
     distance: 10.04,                                                                                                                   
@@ -107,4 +105,13 @@ it('calculates for another sequence of work parts', () => {
       T: { distance: 4.46, time: 20, points: 12 } 
     }
   });
+});
+
+it('calculates for yet another sequence of work parts', () => {
+  expect(calc47("2*(200mR/200m+200mR/400m+400mR/200m+4'E)")).toEqual({ distance: 4.64,                                                                                                                                                    
+        time: 23.84,                                                                                                                                                       
+        points: 12.78,                                                                                                                                                     
+        zones:                                                                                                                                                             
+         { R: { distance: 1.6, time: 6.14, points: 9.24 },                                                                                                                 
+           E: { distance: 3.04, time: 17.7, points: 3.54 } } }   );
 });
