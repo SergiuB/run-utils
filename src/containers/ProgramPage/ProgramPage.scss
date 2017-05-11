@@ -18,19 +18,19 @@ $accent-color:         #FF4081;
   .pace-distribution {
     display: flex;
     .zone-E {
-      background-color: lighten( $accent-color, 30% )
+      background-color: lighten(adjust-hue( $accent-color, 80% ), 20%)
     }
     .zone-M {
-      background-color: lighten( $accent-color, 20% )
+      background-color: lighten(adjust-hue( $accent-color, 50% ), 10%)
     }
     .zone-T {
-      background-color: lighten( $accent-color, 10% )
+      background-color: lighten(adjust-hue( $accent-color, 35% ), 5%)
     }
     .zone-I {
-      background-color: darken( $accent-color, 10% )
+      background-color: adjust-hue( $accent-color, 10% )
     }
     .zone-R {
-      background-color: darken( $accent-color, 30% )
+      background-color: darken($accent-color, 30%)
     }
   }
 }

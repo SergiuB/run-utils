@@ -34,7 +34,7 @@ const program = [
   [
     "120'E",
     "8kmE",
-    "2kmE+10*200mR/200m",
+    "2kmE+10*200mR/200m+2kmE",
     "8kmE",
     "8kmE",
     "2kmE+2*2miT/2'+4*200mR/200m+2kmE",
@@ -57,6 +57,33 @@ const program = [
     "2kmE+20'T+4*200mR/200m+2kmE",
     "8kmE",
     "8kmE",
+  ],
+  [
+    "110'E",
+    "8kmE",
+    "8kmE",
+    "2kmE+4*5'T/1'+2kmE",
+    "8kmE",
+    "8kmE",
+    "2kmE+60'M+2kmE",
+  ],
+  [
+    "8kmE",
+    "8kmE",
+    "8kmE",
+    "2kmE+2*10'T/2'+2*5'T/1'+2kmE",
+    "8kmE",
+    "8kmE",
+    "90'E",
+  ],
+  [
+    "45'E",
+    "45'E",
+    "2kmE+3*1miT/2'+2kmE",
+    "45'E",
+    "30'E",
+    "30'E",
+    "2kmE+21kmT+2kmE",
   ]
 ]
 
@@ -126,7 +153,7 @@ class ProgramPage extends Component {
               R.map(R.prop(1))
             )(wData);
             return (
-              <div className='cycle' key={ci}>
+              <div className='cycle mui--text-caption' key={ci}>
                 {wData.map(([name, data], wi) => {
                   return (
                     <div className='workout' key={wi}>
@@ -145,7 +172,7 @@ class ProgramPage extends Component {
                     </div>
                   )}
                 )}
-                <div className='cycle-totals'>
+                <div className='cycle-totals mui--text-menu'>
                   <div className='workout'>
                     <div></div>
                     <div className='workout-numbers'>
