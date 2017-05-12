@@ -119,7 +119,7 @@ class ProgramPage extends Component {
   render() {
     const { metric } = this.props;
     const { vdot } = this.state;
-    const calc = R.compose(calculate(vdot), parse);
+    const calc = calculate(vdot);
     const formatWorkout = addPaces(vdot);
     const race = kHalf;
     const raceEquivalents = getRaceEquivalents(vdot);

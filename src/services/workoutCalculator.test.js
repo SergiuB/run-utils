@@ -1,8 +1,7 @@
 import R from 'ramda';
-import { parse } from './workoutParser'
-import { calculate } from './workoutCalculator';
+import { calculate, expandTemplate } from './workoutCalculator';
 
-const calc47 = R.compose(calculate(47), parse);
+const calc47 = calculate(47);
 
 it('calculates for easy run', () => {
   expect(calc47('2kmE')).toEqual({
@@ -115,3 +114,23 @@ it('calculates for yet another sequence of work parts', () => {
          { R: { distance: 1.6, time: 6.14, points: 9.24 },                                                                                                                 
            E: { distance: 3.04, time: 17.7, points: 3.54 } } }   );
 });
+
+it('expandTemplate with 2 variables', () => {
+  const workouts = expandTemplate("X*Y'T/Z'", {
+    "variables": [
+      ["X", [2,3]],
+      ["Y'T/Z'", ["5'T/1'","10'T/2'"]],
+    ],
+  });
+  expect(workouts).toEqual([ '2*5\'T/1\'', '2*10\'T/2\'', '3*5\'T/1\'', '3*10\'T/2\'' ] );
+})
+
+it('expandTemplate with 1 variable', () => {
+  const workouts = expandTemplate("X'T+4*200mR/200m", {
+    "variables": [
+      ["X", [20,25]],
+    ],
+  });
+  expect(workouts).toEqual([ "20'T+4*200mR/200m", "25'T+4*200mR/200m" ] );
+})
+

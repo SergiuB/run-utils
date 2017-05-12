@@ -1,6 +1,7 @@
 import R from 'ramda';
 import { getTrainingPaces } from './vdotTable';
 import { kMile } from './constants';
+import { parse } from './workoutParser';
 
 const pointTable = {
   E: .2,
@@ -125,11 +126,26 @@ const calculate = vdot => {
       return R.reduce((acc, workPart) => mergeWorkoutData(acc, calculateForVdot(workPart)), {}, workout);
     }
   };
-  return calculateForVdot; 
+  return R.compose(calculateForVdot, parse); 
+}
+
+const expandTemplate = (template ,{ variables }) => {
+  const [cX, cY] = variables.map(([name, values]) => R.xprod([name], values));
+  const workoutFromTemplate = R.reduce((acc, [varName, val]) => acc.replace(new RegExp(varName, "g"), val), template);
+  
+  if (!cX && !cY) {
+    return [template];
+  } else if (!cY) {
+    return cX.map(([varName, val]) => template.replace(new RegExp(varName, "g"), val));
+  } else {
+    const cXY = R.xprod(cX, cY);
+    return cXY.map(workoutFromTemplate);
+  }
 }
 
 export {
   calculate,
   mergeWorkoutData,
   pointTable,
+  expandTemplate,
 }
