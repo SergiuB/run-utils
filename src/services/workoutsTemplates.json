@@ -1,19 +1,19 @@
 [{
   "workout": "X*(200mR/200m+200mR/400m+400mR/200m+4'E)",
   "variables": [["X", [2,3,4,5]]],
-  "tags": ["Half", "Phase2"]
+  "tags": ["Half", "Phase2", "R-pace"]
 },{
   "workout": "X*YmI/3'",
   "variables": [
     ["X", [3,4,5,6]],
     ["Y", [1000,1200]]
   ],
-  "tags": ["Half", "Phase3"]
+  "tags": ["Half", "Phase3", "I-pace"]
 },{
-  "workout": "X*Y'T/3'",
+  "workout": "X*Y'T/Z'",
   "variables": [
-    ["X", [2,3,4,5,6]],
-    ["Y", [5,10,15]]
+      ["X", [2,3]],
+      ["Y'T/Z'", ["5'T/1'","10'T/2'"]]
   ],
-  "tags": ["Half", "Phase4"]
+  "tags": ["Half", "Phase4", "T-pace"]
 }]
