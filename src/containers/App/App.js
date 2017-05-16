@@ -37,22 +37,6 @@ class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
-  setPersistentState = (state) => this.setState(state, () => this.persistState());
-
-  persistState = () => {
-    const strState = JSON.stringify(this.state);
-    localStorage.setItem('appState', strState);
-  };
-
-  getPersistedState = () => {
-    const state = JSON.parse(localStorage.getItem('appState'));
-    if (!state || !state.selectedPerformance) {
-      // the saved state is not valid (possibly an older version)
-      return undefined;
-    }
-    return state;
-  };
-
   render() {
     const { metric, isMenuOpen, openMenu, setMetric } = this.props;
     return (
@@ -85,12 +69,6 @@ class App extends Component {
         </div>
       </div>
     );
-  }
-
-  componentWillMount() {
-    const state = this.getPersistedState()
-      || this.defaultState;
-    this.setState(state);
   }
 }
 

@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import R from 'ramda';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-import createHistory from 'history/createBrowserHistory';
+import persistState from 'redux-localstorage';
 
+import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
+
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 
@@ -38,7 +41,8 @@ const store = createStore(
     router: routerReducer
   }),
   composeWithDevTools(
-    applyMiddleware(middleware)
+    applyMiddleware(middleware),
+    persistState(null, { key: 'run-utils' }),
   )
 )
 
