@@ -1,7 +1,19 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
 
+const { fbcfg, stravacfg } = functions.config();
+
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: fbcfg.projectid,
+    clientEmail: fbcfg.clientemail,
+    // When pasting the private key in the command line (firebase functions:config:set fbcfg.privatekey='[KEY]') newline slashes are doubled
+    privateKey: fbcfg.privatekey.replace(/\\n/g, '\n'),
+  }),
+  databaseURL: fbcfg.databaseurl,
+});
+
+const R = require('ramda');
 const express = require('express');
 const cors = require('cors')({origin: true});
 const router = new express.Router();
@@ -13,9 +25,9 @@ const StravaStrategy = require('passport-strava-oauth2').Strategy;
 
 const oauthIds = {
   strava: {
-    clientID: '9244',
-    clientSecret: '94b8617916ead111be4ebf700ca1d610e2fb2ff0',
-    callbackURL: 'https://us-central1-run-utils.cloudfunctions.net/api/stravaCallback'
+    clientID: stravacfg.clientid,
+    clientSecret: stravacfg.clientsecret,
+    callbackURL: stravacfg.callbackurl,
   }
 };
 
@@ -40,17 +52,43 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+const printValue = message => value => {
+  console.log(message, value);
+  return value;
+}
+
+const rethrowIfNotErrorCode = code => error => {
+  if (code !== error.code) throw error;
+};
+
 passport.use(new StravaStrategy({
   clientID: oauthIds.strava.clientID,
   clientSecret: oauthIds.strava.clientSecret,
   callbackURL: oauthIds.strava.callbackURL
   },
-  (accessToken, refreshToken, profile, done) => {
-    console.log('logged in!', accessToken);
+  (accessToken, refreshToken, { id, displayName, photos, emails }, done) => {
+    printValue('logged in!')(accessToken);
     //credentials = {accessToken, profile};
-    process.nextTick(function () {
-      return done(null, profile.id);
-    });
+    const uid = `strava:${id}`;
+    const createToken = () => admin.auth().createCustomToken(uid);
+    const doneOk = result => done(null, result);
+    const doneError = done;
+    const userData = {
+      uid,
+      displayName,
+      email: emails[0].value,
+      photoURL: photos[0].value,
+    };
+    admin.auth().createUser(userData)
+      .then(printValue("Successfully created new user"))
+      .catch(R.pipe(
+        printValue("Cannot create user"),
+        rethrowIfNotErrorCode('auth/uid-already-exists')
+      ))
+      .then(createToken)
+      .then(printValue('Firebase token created'))
+      .then(doneOk)
+      .catch(doneError);
   }
 ));
 
@@ -76,13 +114,11 @@ router.get('/hello',
 });
 
 router.get('/stravaCallback',
-  passport.authenticate('strava', { successRedirect: 'hello',
-                                   failureRedirect: 'error',
-                                   failureFlash: true })
+  passport.authenticate('strava', { failureRedirect: 'error',
+                                   failureFlash: true }),
+  (req, res) => res.redirect('hello?token=' + req.user)                                 
 );
 
-router.get('/authStrava',
-   passport.authenticate('strava')
-);
+router.get('/authStrava', passport.authenticate('strava'));
 
 exports.api = functions.https.onRequest(router);
