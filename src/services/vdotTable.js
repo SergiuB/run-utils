@@ -165,8 +165,8 @@ const splitVdot = vdot => ({
   vdotFraction: vdot - Math.floor(vdot),
 });
 
-const minRaceEquivalents = withRaceLabels(raceTimesSec[0]);
-const maxRaceEquivalents = withRaceLabels(raceTimesSec[VDOT_MAX_IDX]);
+const minRaceEquivalents = getRaceEquivalents(VDOT_MIN);//withRaceLabels(raceTimesSec[0]);
+const maxRaceEquivalents = getRaceEquivalents(VDOT_MAX);//withRaceLabels(raceTimesSec[VDOT_MAX_IDX]);
 
 function getVdot(race, timeSec) {
   let distance = race.distance ? race.distance : race;

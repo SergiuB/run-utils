@@ -3,8 +3,6 @@ import { getRaceEquivalents, getTrainingPaces, getVdot, minRaceEquivalents, maxR
 import { secToTime, minToTime, timeToSec } from './conversion';
 import { kHalf, k10 } from './constants';
 
-
-
 it('minRaceEquivalents', () => {
   const expectGt = (v1, v2) => expect(v1).toBeGreaterThan(v2);
   R.zipWith(expectGt, getRaceEquivalents(VDOT_MIN), minRaceEquivalents);
@@ -13,7 +11,7 @@ it('minRaceEquivalents', () => {
 it('maxRaceEquivalents', () => {
   const expectLt = (v1, v2) => expect(v1).toBeLessThan(v2);
   R.zipWith(expectLt, getRaceEquivalents(VDOT_MAX), maxRaceEquivalents);
-  expect(secToTime(maxRaceEquivalents[k10.label])).toEqual("26:19");
+  expect(secToTime(maxRaceEquivalents[k10.label])).toEqual("26:22");
 })
 
 it('getVdot using race object', () => {
