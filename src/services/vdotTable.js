@@ -1,14 +1,15 @@
 import R from 'ramda';
 import { interpolateBasis } from 'd3-interpolate';
 import { scaleLinear } from 'd3-scale';
-import { allRaces, allIntensities, kMarathon, kHalf, kEasyPace, k1500, k5, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
-import { timeToSec, secToTime } from './conversion';
-import { racePace, raceTimeFromPace } from './raceCalculator';
+import { allRaces, allIntensities, kMarathon, kEasyPace, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
+import { timeToSec } from './conversion';
+import { racePace, raceTimeFromPace, racePaceList } from './raceCalculator';
 
 
 const raceTimes = [];
 const VDOT_MIN = 30;
 const VDOT_MAX = 85;
+const VDOT_MAX_IDX = VDOT_MAX - VDOT_MIN;
 
 // ["1500", "Mile", "3k", "2-mile", "5k", "8k", "5-mile", "10k", "15k", "10-mile", "20k", "1/2 Marathon", "25k", "30k", "Marathon"];
 raceTimes[85] = ["3:23.5", "3:39.6", "7:14.1", "7:48.9", "12:37", "20:50", "20:58", "26:19", "40:17", "43:26", "54:40", "57:50", "1:09:33", "1:24:33", "2:01:10"];
@@ -127,51 +128,39 @@ intensity[83] = ["3:31", "01:08", "02:15", "02:49", "04:32", "01:02", "02:36", "
 intensity[84] = ["3:29", "01:07", "02:14", "02:48", "04:30", "01:01", "02:35", "03:05", "4:08", "27", "55", "1:52"];
 intensity[85] = ["3:27", "01:06", "02:13", "02:46", "04:27", "01:01", "02:33", "03:03", "4:05", "27", "55", "1:51"];
 
+const sortedRaces = allRaces.sort(R.ascend(R.prop('distance')));
+const sortedLabels = sortedRaces.map(R.prop('label'));
+const sortedDistances = sortedRaces.map(R.prop('distance'));
 
-const sortedRaces = R.sortBy(R.prop('distance'), allRaces);
-const sortedLabels = R.map(R.prop('label'), sortedRaces);
+const matrixTimesToSec = R.map(R.map(timeToSec));
 
-const processTable = R.compose(
-  R.map(R.map(timeToSec)),
-  R.slice(VDOT_MIN, VDOT_MAX + 1)
+const tableTimesToSec = R.compose(
+  matrixTimesToSec,
+  R.slice(VDOT_MIN, VDOT_MAX + 1) // data in VDOT tables is btw indices 30 and 85
 );
 
-const raceTimesSec = R.zipObj(
-  R.range(VDOT_MIN, VDOT_MAX + 1),
-  processTable(raceTimes)
-);
+const raceTimesSec = tableTimesToSec(raceTimes);
+const intensitySec = tableTimesToSec(intensity);
 
-const intensitySec = R.zipObj(
-  R.range(VDOT_MIN, VDOT_MAX + 1),
-  processTable(intensity)
-);
+const timesToPaces = R.flip(racePaceList)(sortedDistances);
 
-const distances = R.compose(
-  R.map(R.prop('distance')),
-  R.reverse,
-)(allRaces)
+const racePaces = raceTimesSec.map(timesToPaces);
 
-const racePaces = R.compose(
-  R.map(R.compose(
-    R.map(([d, p]) => racePace(p, d)),
-    R.zip(distances)
-  )),
-  processTable
-)(raceTimes)
+const interpolations = racePaces.map(interpolateBasis);
+const indexes = arr => R.range(0, arr.length);
+const progression = indexes(sortedDistances).map(x => x / (sortedDistances.length - 1) );
 
-const interpolations = R.map(interpolateBasis)(racePaces);
+// Maps between a distance and a number between 0 and 1
+const mapDistanceToPercentage = scaleLinear()
+  .domain(sortedDistances)
+  .range(progression);
 
-const percentage = scaleLinear()
-  .domain(distances)
-  .range(R.range(0,distances.length).map(x => x / (distances.length - 1) ));
+const withRaceLabels = R.zipObj(sortedLabels);
+const minRaceEquivalents = withRaceLabels(raceTimesSec[0]);
+const maxRaceEquivalents = withRaceLabels(raceTimesSec[VDOT_MAX_IDX]);
 
-const minRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
-
-const maxRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
-
-const valueBetween = percentage => ([v1, v2]) => v1 + percentage * (v2 - v1);
-
-const listBetween = (percentage) => (l1, l2) => R.zip(l1, l2).map(valueBetween(percentage));
+const valueBetween = p => ([v1, v2]) => v1 + p * (v2 - v1);
+const listBetween = p => (l1, l2) => R.zip(l1, l2).map(valueBetween(p));
 
 function getVdot(race, timeSec) {
   let distance = race.distance ? race.distance : race;
@@ -182,10 +171,12 @@ function getVdot(race, timeSec) {
     throw new Error('Invalid time ' + timeSec + '. Time must be in seconds.');
   }
 
-  let pace = racePace(timeSec, distance);
-  let t = percentage(distance);
-  const allPaces = interpolations.map(interpolation => interpolation(t));
+  // For a given distance calculate paces corresponding to all VDOT values
+  let p = mapDistanceToPercentage(distance);
+  const allPaces = interpolations.map(interpolation => interpolation(p));
 
+  // Find the first pace slower than given race pace, this is the lower VDOT limit
+  let pace = racePace(timeSec, distance);
   const paceAboveIdx = R.findIndex(R.gt(pace), allPaces);
   if (paceAboveIdx === 0) {
     return VDOT_MIN;
@@ -204,38 +195,33 @@ function getVdot(race, timeSec) {
   return vdot;
 }
 
-function splitVdot(vdot) {
-  return {
-    vdotInt: Math.floor(vdot),
-    vdotFraction: vdot - Math.floor(vdot),
-  }
-}
+const splitVdot = vdot => ({
+  vdotInt: Math.floor(vdot),
+  vdotFraction: vdot - Math.floor(vdot),
+});
 
 function getRaceEquivalents(vdot) {
   const  { vdotInt, vdotFraction } = splitVdot(vdot);
   const vdotIdx = R.clamp(VDOT_MIN, VDOT_MAX, vdotInt) - VDOT_MIN;
 
-  const pacesForVdotIdx = vdotIdx => distances
-    .map(percentage)
+  const pacesForVdotIdx = vdotIdx => sortedDistances
+    .map(mapDistanceToPercentage)
     .map(interpolations[vdotIdx]);
 
   const [pacesBelow, pacesAbove] = [pacesForVdotIdx(vdotIdx), pacesForVdotIdx(vdotIdx + 1)];
   const paces = listBetween(vdotFraction)(pacesBelow, pacesAbove);
 
-  const times = R.zip(paces, distances)
+  const times = R.zip(paces, sortedDistances)
     .map(([p, d]) => raceTimeFromPace(p, d));
 
-  return R.zipObj(sortedLabels, times);
+  return withRaceLabels(times);
 }
 
 function getTrainingIntensity(vdot) {
   const  { vdotInt, vdotFraction } = splitVdot(vdot);
+  const vdotIdx = R.clamp(VDOT_MIN, VDOT_MAX, vdotInt) - VDOT_MIN;
 
-  if (vdotInt < VDOT_MIN)
-    return intensitySec[VDOT_MIN];
-  if (vdotInt >= VDOT_MAX)
-    return intensitySec[VDOT_MAX];
-  const [below, above] = [intensitySec[vdotInt], intensitySec[vdotInt + 1]];
+  const [below, above] = [intensitySec[vdotIdx], intensitySec[vdotIdx + 1]];
   return R.compose(
     R.zipObj(R.map(R.prop('id'), allIntensities)),
     listBetween(vdotFraction)
@@ -245,24 +231,25 @@ function getTrainingIntensity(vdot) {
 function getTrainingPaces(vdot) {
   const raceEquivalents = getRaceEquivalents(vdot);
   const trainingIntensities = getTrainingIntensity(vdot);
-  const computeMaxPace = R.compose(
-    R.reduce(R.max, 0),
-    R.map(({ id, distance }) => racePace(trainingIntensities[id], distance))
+  const intensityToPace = ({ id, distance }) => racePace(trainingIntensities[id], distance);
+  const maxValue = R.reduce(R.max, 0);
+  const highestIntensity = R.compose(
+    maxValue,
+    R.map(intensityToPace)
   );
   const easyPace = trainingIntensities[kEasyPace.id] / 60;
   return {
     'J': easyPace + 0.5,
     'E': easyPace,
     'M': racePace(raceEquivalents[kMarathon.label], kMarathon.distance),
-    'T': computeMaxPace([kT400, kT800, kT1000, kTMile]),
+    'T': highestIntensity([kT400, kT800, kT1000, kTMile]),
     'T10K': racePace(raceEquivalents[k10.label], k10.distance),
-    'I': computeMaxPace([kI400, kI1000, kI1200, kIMile]),
-    'R': computeMaxPace([kR200, kR400, kR800]),
+    'I': highestIntensity([kI400, kI1000, kI1200, kIMile]),
+    'R': highestIntensity([kR200, kR400, kR800]),
   }
 }
 
 export {
-  // getPerformance,
   getVdot,
   getRaceEquivalents,
   getTrainingIntensity,
