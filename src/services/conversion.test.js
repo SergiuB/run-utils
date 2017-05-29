@@ -56,9 +56,15 @@ it('converts from minutes to hh:mm:ss', () => {
   expect(minToTime(60)).toEqual("1:00:00");
   expect(minToTime(1)).toEqual("01:00");
 
-  expect(minToTime(4.988966400000001)).toEqual("05:00");
+  expect(minToTime(4.999)).toEqual("05:00");
 });
 
 it('converts from seconds to hh:mm:ss', () => {
   expect(secToTime(10 * 60 + 59)).toEqual("10:59");
 });
+
+it('converts from seconds to hh:mm:ss and back', () => {
+  const time = '1:35:40';
+  expect(secToTime(timeToSec(time))).toEqual(time);
+});
+

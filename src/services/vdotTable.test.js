@@ -9,24 +9,30 @@ it('getVdot using race object', () => {
   expect(getVdot(k10, timeToSec('44:30'))).toEqual(46.056709825464914);
 });
 
+it('time obtained from race equivalents is same as time used to compute them', () => {
+  const halfTime = timeToSec('1:35:40');
+  const eqvHalfTime = getRaceEquivalents(getVdot(kHalf, halfTime))[kHalf.label];
+  expect(eqvHalfTime).toEqual(halfTime);
+});
+
 it('getRaceEquivalents', () => {
-  const eqv = R.map(secToTime, getRaceEquivalents(40.04838709677419355));
+  const eqv = R.map(secToTime, getRaceEquivalents(30));
   expect(eqv).toEqual({
-    '1500': '06:35',
-    Mile: '07:07',
-    '3K': '14:03',
-    '2M': '15:08',
-    '5K': '24:07',
-    '8K': '39:39',
-    '5M': '39:54',
-    '10K': '50:00',
-    '15K': '1:17:02',
-    '10M': '1:23:06',
-    '20K': '1:44:47',
-    Half: '1:50:53',
-    '25K': '2:12:50',
-    '30K': '2:40:57',
-    Marathon: '3:49:32'
+    "10K": "1:03:57",
+    "10M": "1:46:04",
+    "1500": "08:30",
+    "15K": "1:37:53",
+    "20K": "2:13:08",
+    "25K": "2:48:28",
+    "2M": "19:22",
+    "30K": "3:23:43",
+    "3K": "17:49", 
+    "5K": "30:43",
+    "5M": "50:55",
+    "8K": "50:17",
+    "Half": "2:21:11",
+    "Marathon": "4:49:17",
+    "Mile": "09:15"
   });
 });
 
@@ -36,10 +42,10 @@ it('getTrainingPaces', () => {
     'J': '06:04',
     'E': '05:34',
     'M': '04:46',
-    'T': '04:30',
+    'T': '04:29',
     'T10K': '04:22',
     'I': '04:07',
-    'R': '03:51',
+    'R': '03:50',
   });  
 });
 

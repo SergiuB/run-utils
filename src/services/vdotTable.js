@@ -2,8 +2,8 @@ import R from 'ramda';
 import { interpolateBasis } from 'd3-interpolate';
 import { scaleLinear } from 'd3-scale';
 import { allRaces, allIntensities, kMarathon, kHalf, kEasyPace, k1500, k5, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
-import { timeToSec, minToTime } from './conversion';
-import { racePace } from './raceCalculator';
+import { timeToSec, secToTime } from './conversion';
+import { racePace, raceTimeFromPace } from './raceCalculator';
 
 
 const raceTimes = [];
@@ -169,6 +169,10 @@ const minRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
 
 const maxRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
 
+const valueBetween = percentage => ([v1, v2]) => v1 + percentage * (v2 - v1);
+
+const listBetween = (percentage) => (l1, l2) => R.zip(l1, l2).map(valueBetween(percentage));
+
 function getVdot(race, timeSec) {
   let distance = race.distance ? race.distance : race;
   if (!R.is(Number, distance)) {
@@ -209,18 +213,19 @@ function splitVdot(vdot) {
 
 function getRaceEquivalents(vdot) {
   const  { vdotInt, vdotFraction } = splitVdot(vdot);
+  const vdotIdx = R.clamp(VDOT_MIN, VDOT_MAX, vdotInt) - VDOT_MIN;
 
-  if (vdotInt < VDOT_MIN)
-    return R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
-  if (vdotInt >= VDOT_MAX)
-    return R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
+  const pacesForVdotIdx = vdotIdx => distances
+    .map(percentage)
+    .map(interpolations[vdotIdx]);
 
-  const [below, above] = [raceTimesSec[vdotInt], raceTimesSec[vdotInt + 1]];
-  const addPercentage = (p, [t1, t2]) => (t1 + p * (t2 - t1));
-  return R.compose(
-    R.zipObj(sortedLabels),
-    R.map(addPercentage.bind(null, vdotFraction))
-  )(R.zip(below, above));
+  const [pacesBelow, pacesAbove] = [pacesForVdotIdx(vdotIdx), pacesForVdotIdx(vdotIdx + 1)];
+  const paces = listBetween(vdotFraction)(pacesBelow, pacesAbove);
+
+  const times = R.zip(paces, distances)
+    .map(([p, d]) => raceTimeFromPace(p, d));
+
+  return R.zipObj(sortedLabels, times);
 }
 
 function getTrainingIntensity(vdot) {
@@ -231,11 +236,10 @@ function getTrainingIntensity(vdot) {
   if (vdotInt >= VDOT_MAX)
     return intensitySec[VDOT_MAX];
   const [below, above] = [intensitySec[vdotInt], intensitySec[vdotInt + 1]];
-  const addPercentage = (p, [t1, t2]) => t1 > 0 ? (t1 + p * (t2 - t1)) : t1;
   return R.compose(
-    R.zipObj(R.map(({ id }) => id, allIntensities)),
-    R.map(addPercentage.bind(null, vdotFraction))
-  )(R.zip(below, above));
+    R.zipObj(R.map(R.prop('id'), allIntensities)),
+    listBetween(vdotFraction)
+  )(below, above);
 }
 
 function getTrainingPaces(vdot) {

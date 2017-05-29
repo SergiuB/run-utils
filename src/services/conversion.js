@@ -49,7 +49,7 @@ function minToTime(min, showHour = false) {
   const rest = min % 60;
   if (rest) {
     m = Math.floor(rest);
-    s = Math.ceil((rest - m) * 60);
+    s = Math.round((rest - m) * 60);
   }
 
   // Adjust for 60 seconds case

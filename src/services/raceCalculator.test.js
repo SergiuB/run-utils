@@ -1,5 +1,6 @@
 import {
   raceTime,
+  raceTimeFromPace,
 } from './raceCalculator';
 
 import {
@@ -16,4 +17,12 @@ it('computes time in seconds to run various distances based on speed and distanc
   expect(raceTime(10, k10.distance)).toEqual(3600);
   expect(raceTime(10, k5.distance)).toEqual(1800);
   expect(raceTime(10, kMile.distance)).toEqual(579.36384);
+});
+
+it('computes time in seconds to run various distances based on speed and distance', () => {
+  expect(raceTimeFromPace(6, kMarathon.distance)).toEqual(15190.2);
+  expect(raceTimeFromPace(6, kHalf.distance)).toEqual(7595.1);
+  expect(raceTimeFromPace(6, k10.distance)).toEqual(3600);
+  expect(raceTimeFromPace(6, k5.distance)).toEqual(1800);
+  expect(raceTimeFromPace(6, kMile.distance)).toEqual(579.36384);
 });
