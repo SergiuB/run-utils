@@ -1,6 +1,8 @@
 import R from 'ramda';
-import { allRaces, allIntensities, kMarathon, kEasyPace, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
-import { timeToSec } from './conversion';
+import { interpolateBasis } from 'd3-interpolate';
+import { scaleLinear } from 'd3-scale';
+import { allRaces, allIntensities, kMarathon, kHalf, kEasyPace, k1500, k5, k10, kT400, kT800, kT1000, kTMile, kI400, kI1000, kI1200, kIMile, kR200, kR400, kR800 } from './constants';
+import { timeToSec, minToTime } from './conversion';
 import { racePace } from './raceCalculator';
 
 
@@ -128,7 +130,6 @@ intensity[85] = ["3:27", "01:06", "02:13", "02:46", "04:27", "01:01", "02:33", "
 
 const sortedRaces = R.sortBy(R.prop('distance'), allRaces);
 const sortedLabels = R.map(R.prop('label'), sortedRaces);
-const indices = R.zipObj(sortedLabels, [...Array(sortedLabels.length).keys()]);
 
 const processTable = R.compose(
   R.map(R.map(timeToSec)),
@@ -145,47 +146,56 @@ const intensitySec = R.zipObj(
   processTable(intensity)
 );
 
+const distances = R.compose(
+  R.map(R.prop('distance')),
+  R.reverse,
+)(allRaces)
+
+const racePaces = R.compose(
+  R.map(R.compose(
+    R.map(([d, p]) => racePace(p, d)),
+    R.zip(distances)
+  )),
+  processTable
+)(raceTimes)
+
+const interpolations = R.map(interpolateBasis)(racePaces);
+
+const percentage = scaleLinear()
+  .domain(distances)
+  .range(R.range(0,distances.length).map(x => x / (distances.length - 1) ));
+
 const minRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MIN]);
 
 const maxRaceEquivalents = R.zipObj(sortedLabels, raceTimesSec[VDOT_MAX]);
 
-// function getPerformance(race, time) {
-//   if (!R.is(Object, race) || !R.is(String, race.label)) {
-//     throw new Error('Race object not valid. Valid ones are in constants, import from there.');
-//   }
-//   const timeSec = timeToSec(time);
-//   const equivLens = R.lensProp('equivalents');
-//   const perfSec = getVdot(race, timeSec);
-//   return R.over(equivLens, R.map(secToTime), perfSec);
-// }
-
 function getVdot(race, timeSec) {
-  if (!R.is(Object, race) || !R.is(String, race.label)) {
-    throw new Error('Race object not valid. Valid ones are in constants, import from there.');
+  let distance = race.distance ? race.distance : race;
+  if (!R.is(Number, distance)) {
+    throw new Error('Invalid distance ' + distance + '. Distance must be in kilometers.');
   }
   if (!R.is(Number, timeSec)) {
-    throw new Error('Time must be in seconds.');
+    throw new Error('Invalid time ' + timeSec + '. Time must be in seconds.');
   }
-  const specificRaceTimes = R.compose(
-    R.sortBy(R.prop(0)),
-    R.toPairs,
-    R.map(times => times[indices[race.label]])
-  )(raceTimesSec);
 
-  const skillAboveIdx = R.findIndex(R.compose(R.gt(timeSec), R.prop(1)), specificRaceTimes);
-  if (skillAboveIdx === 0) {
+  let pace = racePace(timeSec, distance);
+  let t = percentage(distance);
+  const allPaces = interpolations.map(interpolation => interpolation(t));
+
+  const paceAboveIdx = R.findIndex(R.gt(pace), allPaces);
+  if (paceAboveIdx === 0) {
     return VDOT_MIN;
   }
 
-  if (skillAboveIdx < 0) {
+  if (paceAboveIdx < 0) {
     return VDOT_MAX;
   }
 
-  const skillBelowIdx = skillAboveIdx - 1;
-  const [, timeAbove] = specificRaceTimes[skillAboveIdx];
-  const [, timeBelow] = specificRaceTimes[skillBelowIdx];
-  const percentage = ((timeSec - timeBelow) / (timeAbove - timeBelow));
-  const vdot = parseInt(specificRaceTimes[skillBelowIdx][0], 10) + percentage;
+  const paceBelowIdx = paceAboveIdx - 1;
+  const paceBelow = allPaces[paceBelowIdx];
+  const paceAbove = allPaces[paceAboveIdx];
+  const percent = ((pace - paceBelow) / (paceAbove - paceBelow));
+  const vdot = paceBelowIdx + VDOT_MIN + percent;
 
   return vdot;
 }

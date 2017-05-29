@@ -1,6 +1,13 @@
 import R from 'ramda';
-import { getRaceEquivalents, getTrainingPaces } from './vdotTable';
-import { secToTime, minToTime } from './conversion';
+import { getRaceEquivalents, getTrainingPaces, getVdot } from './vdotTable';
+import { secToTime, minToTime, timeToSec } from './conversion';
+import { kHalf, k10 } from './constants';
+
+it('getVdot using race object', () => {
+  expect(getVdot(kHalf, timeToSec('57:50'))).toEqual(85);
+  expect(getVdot(kHalf, timeToSec('2:21:04'))).toEqual(30.032202911832528);
+  expect(getVdot(k10, timeToSec('44:30'))).toEqual(46.056709825464914);
+});
 
 it('getRaceEquivalents', () => {
   const eqv = R.map(secToTime, getRaceEquivalents(40.04838709677419355));
