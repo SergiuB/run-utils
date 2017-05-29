@@ -156,11 +156,17 @@ const mapDistanceToPercentage = scaleLinear()
   .range(progression);
 
 const withRaceLabels = R.zipObj(sortedLabels);
-const minRaceEquivalents = withRaceLabels(raceTimesSec[0]);
-const maxRaceEquivalents = withRaceLabels(raceTimesSec[VDOT_MAX_IDX]);
 
 const valueBetween = p => ([v1, v2]) => v1 + p * (v2 - v1);
 const listBetween = p => (l1, l2) => R.zip(l1, l2).map(valueBetween(p));
+
+const splitVdot = vdot => ({
+  vdotInt: Math.floor(vdot),
+  vdotFraction: vdot - Math.floor(vdot),
+});
+
+const minRaceEquivalents = withRaceLabels(raceTimesSec[0]);
+const maxRaceEquivalents = withRaceLabels(raceTimesSec[VDOT_MAX_IDX]);
 
 function getVdot(race, timeSec) {
   let distance = race.distance ? race.distance : race;
@@ -195,11 +201,6 @@ function getVdot(race, timeSec) {
   return vdot;
 }
 
-const splitVdot = vdot => ({
-  vdotInt: Math.floor(vdot),
-  vdotFraction: vdot - Math.floor(vdot),
-});
-
 function getRaceEquivalents(vdot) {
   const  { vdotInt, vdotFraction } = splitVdot(vdot);
   const vdotIdx = R.clamp(VDOT_MIN, VDOT_MAX, vdotInt) - VDOT_MIN;
@@ -208,20 +209,31 @@ function getRaceEquivalents(vdot) {
     .map(mapDistanceToPercentage)
     .map(interpolations[vdotIdx]);
 
-  const [pacesBelow, pacesAbove] = [pacesForVdotIdx(vdotIdx), pacesForVdotIdx(vdotIdx + 1)];
+  const idxAbove = R.clamp(0, VDOT_MAX_IDX, vdotIdx + 1);
+
+  const [pacesBelow, pacesAbove] = [pacesForVdotIdx(vdotIdx), pacesForVdotIdx(idxAbove)];
   const paces = listBetween(vdotFraction)(pacesBelow, pacesAbove);
 
   const times = R.zip(paces, sortedDistances)
     .map(([p, d]) => raceTimeFromPace(p, d));
 
-  return withRaceLabels(times);
+  const limits = R.converge(R.zip, [R.head, R.last]);
+  const clamp = ([h, l], v) => R.clamp(l, h, v);
+  const keepInLimits = R.zipWith(clamp, limits(raceTimesSec));
+
+  return R.compose(
+    withRaceLabels,
+    keepInLimits,
+  )(times);
 }
 
 function getTrainingIntensity(vdot) {
   const  { vdotInt, vdotFraction } = splitVdot(vdot);
   const vdotIdx = R.clamp(VDOT_MIN, VDOT_MAX, vdotInt) - VDOT_MIN;
 
-  const [below, above] = [intensitySec[vdotIdx], intensitySec[vdotIdx + 1]];
+  const idxAbove = R.clamp(0, VDOT_MAX_IDX, vdotIdx + 1);
+
+  const [below, above] = [intensitySec[vdotIdx], intensitySec[idxAbove]];
   return R.compose(
     R.zipObj(R.map(R.prop('id'), allIntensities)),
     listBetween(vdotFraction)
@@ -256,4 +268,6 @@ export {
   getTrainingPaces,
   minRaceEquivalents,
   maxRaceEquivalents,
+  VDOT_MIN,
+  VDOT_MAX,
 }
