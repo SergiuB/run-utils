@@ -11,19 +11,22 @@ import * as appActions from '../../actions/app';
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
+import { push } from 'react-router-redux';
+
 class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
   render() {
-    const { metric, isMenuOpen, openMenu, setMetric, children } = this.props;
-    console.log(children);
+    const { metric, isMenuOpen, openMenu, setMetric, children, push } = this.props;
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })
     );
-    const subappMenuItems = React.Children.map(children,
-      child => <MenuItem key={child.props.id}>{child.props.title}</MenuItem>
-    );
+    const subappMenuItems = React.Children.map(children, ({ props }) => (
+      <MenuItem key={props.id} onTouchTap={this.doThenClose(() => push(`${props.id}`))}>
+        {props.title}
+      </MenuItem>
+    ));
     return (
       <div className="App mui--text-body1 container">
 
@@ -57,5 +60,8 @@ const mapStateToProps = state => state.app;
 
 export default connect(
   mapStateToProps,
-  appActions,
+  {
+    push,
+    ...appActions,
+  },
 )(App);

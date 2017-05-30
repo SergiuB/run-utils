@@ -51,7 +51,7 @@ const store = createStore(
   )
 )
 
-const Subapp = ({ id, component, metric }) => <Route path={`/${id}`} component={withProps({ metric })(component)}/>;
+const Subapp = ({ title, id, component, ...other }) => <Route path={`/${id}`} component={withProps({ ...other })(component)}/>;
 
 ReactDOM.render(
   <Provider store={store}>
