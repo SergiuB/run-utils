@@ -116,7 +116,7 @@ router.get('/hello',
 router.get('/stravaCallback',
   passport.authenticate('strava', { failureRedirect: 'error',
                                    failureFlash: true }),
-  (req, res) => res.redirect('hello?token=' + req.user)                                 
+  (req, res) => res.redirect('http://run-utils.surge.sh?token=' + req.user)                                 
 );
 
 router.get('/authStrava', passport.authenticate('strava'));
