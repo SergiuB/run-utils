@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
 import { connect } from 'react-redux';
 
 import AppBar from 'material-ui/AppBar';
@@ -7,38 +6,24 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import { cyan700 } from 'material-ui/styles/colors';
 
-import RaceEquivPage from '../RaceEquivPage';
-import ProgramPage from '../ProgramPage';
-
 import * as appActions from '../../actions/app';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
-
-// const performancesToUri = R.compose(
-//   encodeURI,
-//   JSON.stringify,
-//   R.map(({ race, vdot, time }) => [race.label, vdot, time]),
-// );
-
-// const performancesFromUri = R.compose(
-//   x => x.length ? x : undefined,
-//   R.map(([raceLabel, vdot, time]) => ({
-//     race: allRacesObj[raceLabel],
-//     vdot,
-//     time,
-//   })),
-//   JSON.parse,
-//   x => R.isNil(x) || x === 'undefined' ? '[]' : x,
-//   decodeURI
-// );
 
 class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
   render() {
-    const { metric, isMenuOpen, openMenu, setMetric } = this.props;
+    const { metric, isMenuOpen, openMenu, setMetric, children } = this.props;
+    console.log(children);
+    const childrenWithProps = React.Children.map(children,
+     child => React.cloneElement(child, { metric })
+    );
+    const subappMenuItems = React.Children.map(children,
+      child => <MenuItem key={child.props.id}>{child.props.title}</MenuItem>
+    );
     return (
       <div className="App mui--text-body1 container">
 
@@ -57,15 +42,11 @@ class App extends Component {
           <MenuItem onTouchTap={this.doThenClose(() => setMetric(!metric))}>
             Show {metric ? 'Miles' : 'Kilometers'}
           </MenuItem>
+          {subappMenuItems}
         </Drawer>
 
         <div className='row'>
-          <Route path='/raceEquivalence' render={({ match, location }) => {
-            //const { savedPerformances: urlPerformances } = queryString.parse(location.search);
-            return <RaceEquivPage metric={metric}/>
-          } } />
-
-          <Route path='/programBuilder' render={() => <ProgramPage metric={metric}/>}/>
+          {childrenWithProps}
         </div>
       </div>
     );

@@ -9,13 +9,18 @@ import { Provider } from 'react-redux';
 
 import persistState from 'redux-localstorage';
 
+import { Route } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import { withProps } from 'recompose';
 
 import App from './containers/App';
+
+import RaceEquivPage from './containers/RaceEquivPage';
+import ProgramPage from './containers/ProgramPage';
 
 import reducers from './reducers';
 
@@ -46,11 +51,16 @@ const store = createStore(
   )
 )
 
+const Subapp = ({ id, component, metric }) => <Route path={`/${id}`} component={withProps({ metric })(component)}/>;
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <MuiThemeProvider>
-        <App />
+        <App>
+          <Subapp title='Race Equivalence' id='raceEquivalence' component={RaceEquivPage} />
+          <Subapp title='Program Builder' id='programBuilder' component={ProgramPage}/>
+        </App>
       </MuiThemeProvider>
     </ConnectedRouter>
   </Provider>,
