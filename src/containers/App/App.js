@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import { cyan700 } from 'material-ui/styles/colors';
+import { cyan700, white } from 'material-ui/styles/colors';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
 
 import * as appActions from '../../actions/app';
 
@@ -13,12 +16,32 @@ import 'muicss/dist/css/mui-noglobals.min.css';
 
 import { push } from 'react-router-redux';
 
+const AppBarMenu = ({ toggleMetric, metric }) => (
+  <IconMenu
+    iconStyle={{ color: white }}
+    touchTapCloseDelay={10}
+    iconButtonElement={
+      <IconButton><MoreVertIcon /></IconButton>
+    }
+    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+  >
+    <MenuItem onTouchTap={toggleMetric}>
+      Show {metric ? 'Miles' : 'Kilometers'}
+    </MenuItem>
+  </IconMenu>
+);
+
 class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
   render() {
     const { metric, isMenuOpen, openMenu, setMetric, children, push } = this.props;
+    const appBarMenuProps = {
+      toggleMetric: () => setMetric(!metric),
+      metric,
+    };
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })
     );
@@ -34,6 +57,7 @@ class App extends Component {
           <AppBar
             style={{ backgroundColor: cyan700 }}
             onLeftIconButtonTouchTap={() => openMenu(true)}
+            iconElementRight={<AppBarMenu {...appBarMenuProps}/>}
             />
         </div>
         <Drawer
@@ -42,9 +66,6 @@ class App extends Component {
           open={isMenuOpen}
           onRequestChange={(open) => openMenu(open)}
           >
-          <MenuItem onTouchTap={this.doThenClose(() => setMetric(!metric))}>
-            Show {metric ? 'Miles' : 'Kilometers'}
-          </MenuItem>
           {subappMenuItems}
         </Drawer>
 

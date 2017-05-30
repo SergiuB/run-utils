@@ -57,7 +57,7 @@ class RaceEquivPage extends Component {
               text="Race Equivalence"
             />
           </ToolbarGroup>
-          <ToolbarGroup>
+          <ToolbarGroup lastChild={true}>
             {appButtonProps && <FlatButton
               style={{ color: white }}
               {...appButtonProps}
