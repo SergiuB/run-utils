@@ -1,5 +1,8 @@
+import R from 'ramda';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router';
+import { push } from 'react-router-redux';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -13,8 +16,6 @@ import * as appActions from '../../actions/app';
 
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
-
-import { push } from 'react-router-redux';
 
 const AppBarMenu = ({ toggleMetric, metric }) => (
   <IconMenu
@@ -45,6 +46,10 @@ class App extends Component {
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })
     );
+
+    const defaultChild = childrenWithProps.find(R.pathEq(['props', 'isDefault'], true));
+    const defaultRoute = defaultChild && <Route key='default' exact path='/' render={() => <Redirect to={`/${defaultChild.props.id}`} />} />;
+
     const subappMenuItems = React.Children.map(children, ({ props }) => (
       <MenuItem key={props.id} onTouchTap={this.doThenClose(() => push(`${props.id}`))}>
         {props.title}
@@ -71,13 +76,17 @@ class App extends Component {
 
         <div className='row'>
           {childrenWithProps}
+          {defaultRoute}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => state.app;
+const mapStateToProps = state => ({
+  ...state.app,
+  location: state.router.location,
+});
 
 export default connect(
   mapStateToProps,

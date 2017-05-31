@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import R from 'ramda';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -9,15 +8,12 @@ import { Provider } from 'react-redux';
 
 import persistState from 'redux-localstorage';
 
-import { Route } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { withProps } from 'recompose';
-
-import App from './containers/App';
+import App, { Subapp } from './containers/App';
 
 import RaceEquivPage from './containers/RaceEquivPage';
 import ProgramPage from './containers/ProgramPage';
@@ -51,14 +47,12 @@ const store = createStore(
   )
 )
 
-const Subapp = ({ title, id, component, ...other }) => <Route path={`/${id}`} component={withProps({ ...other })(component)}/>;
-
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <MuiThemeProvider>
         <App>
-          <Subapp title='Race Equivalence' id='raceEquivalence' component={RaceEquivPage} />
+          <Subapp isDefault title='Race Equivalence' id='raceEquivalence' component={RaceEquivPage} />
           <Subapp title='Program Builder' id='programBuilder' component={ProgramPage}/>
         </App>
       </MuiThemeProvider>
