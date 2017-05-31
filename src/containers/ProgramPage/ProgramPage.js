@@ -8,10 +8,9 @@ import { cyan500, white } from 'material-ui/styles/colors';
 import RaceSlider from '../../components/RaceSlider';
 
 import { calculate, mergeWorkoutData, pointTable } from '../../services/workoutCalculator';
-import { parse } from '../../services/workoutParser';
 import { 
     getVdot,
-    getTrainingPaces,
+    // getTrainingPaces,
     minRaceEquivalents,
     maxRaceEquivalents,
     getRaceEquivalents,
@@ -88,7 +87,7 @@ const program = [
 ]
 
 const addPaces = vdot => {
-  const paces = getTrainingPaces(vdot);
+  // const paces = getTrainingPaces(vdot);
   return workout => workout
     // .replace(/E/g, `@${minToTime(paces.E)}`)
     // .replace(/M/g, `@${minToTime(paces.M)}`)
