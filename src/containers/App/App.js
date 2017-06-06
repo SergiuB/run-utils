@@ -20,12 +20,6 @@ import * as appActions from '../../actions/app';
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
-/*
- global
-  firebase: false
-*/
-
-
 const LoginButton = (props) => (
   <FlatButton label="Login" onClick={props.logIn}/>
 );
