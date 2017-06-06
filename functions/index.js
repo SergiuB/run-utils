@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 const { fbcfg, stravacfg } = functions.config();
+const FRONTEND_URL = 'https://run-utils.surge.sh';
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -70,7 +71,9 @@ passport.use(new StravaStrategy({
     printValue('logged in!')(accessToken);
     //credentials = {accessToken, profile};
     const uid = `strava:${id}`;
-    const createToken = () => admin.auth().createCustomToken(uid);
+    const createCustomToken = () => admin.auth().createCustomToken(uid);
+    const saveAccessToken = admin.database().ref(`/instagramAccessToken/${uid}`)
+      .set(accessToken);
     const doneOk = result => done(null, result);
     const doneError = done;
     const userData = {
@@ -85,7 +88,9 @@ passport.use(new StravaStrategy({
         printValue("Cannot create user"),
         rethrowIfNotErrorCode('auth/uid-already-exists')
       ))
-      .then(createToken)
+      .then(saveAccessToken)
+      .then(printValue('Saved access token'))
+      .then(createCustomToken)
       .then(printValue('Firebase token created'))
       .then(doneOk)
       .catch(doneError);
@@ -106,18 +111,58 @@ const log = ({ user, url }, req, next) => {
 
 router.use(log);
 
-router.get('/hello',
-  authenticateIfNot,
-  (req, res) => {
-  const { user } = req;
-  res.send(user ? 'Hello user ' + user : 'Dont know you!' );
-});
+// router.get('/hello',
+//   authenticateIfNot,
+//   (req, res) => {
+//   const { user } = req;
+//   const getUser = ({ uid }) => admin.auth().getUser(uid);
+//   const sayHello = ({ email }) => res.send('Hello ' + email);
+//   admin.auth().verifyIdToken(user)
+//     .then(printValue("User verification successful"))
+//     .then(getUser)
+//     .then(printValue("User retrieved successfully"))
+//     .then(sayHello)
+//     .catch(function(error) {
+//       res.send('Dont know you! Error: ' + error);
+//     });
+// });
 
 router.get('/stravaCallback',
   passport.authenticate('strava', { failureRedirect: 'error',
                                    failureFlash: true }),
-  (req, res) => res.redirect('http://run-utils.surge.sh?token=' + req.user)                                 
+  (req, res) => res.send(sendToken(req.user))                            
 );
+
+function sendToken(token) {
+  return `
+    <script>
+      window.opener.postMessage('${token}', 'http://localhost:3000');
+    </script>
+  `;
+}
+
+// function sendToken(token) {
+//   return `
+//     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+//     <script>
+//       var token = '${token}';
+//       var config = {
+//         apiKey: '${fbcfg.apikey}',
+//         authDomain: 'run-utils.surge.sh',
+//         databaseURL: '${fbcfg.databaseurl}'
+//       };
+//       firebase.initializeApp(config);
+//       console.log(token);
+//       console.log(window.opener);
+
+//       window.opener.postMessage(token);
+//       window.close();
+//       firebase.auth().signInWithCustomToken(token).then(function() {
+//         console.log('signed in with custom token');
+//       });
+//     </script>`;
+// }
+
 
 router.get('/authStrava', passport.authenticate('strava'));
 

@@ -17,6 +17,7 @@
   "dependencies": {
     "bootstrap-grid": "^2.0.1",
     "classnames": "^2.2.5",
+    "firebase": "^4.1.1",
     "jss-theme-reactor": "^0.10.0",
     "material-ui": "^0.17.3",
     "muicss": "^0.9.15",
@@ -36,7 +37,8 @@
     "recompose": "^0.23.4",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
-    "redux-localstorage": "^0.4.1"
+    "redux-localstorage": "^0.4.1",
+    "redux-thunk": "^2.2.0"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
@@ -45,7 +47,7 @@
     "start-js": "react-scripts start",
     "start": "npm run generate-parser && npm-run-all -p watch-css start-js",
     "build": "npm run generate-parser && npm run build-css && react-scripts build",
-    "deploy": "npm run build && node scripts/rename-file build/index.html build/200.html && surge ./build run-utils.surge.sh",
+    "deploy": "npm run build && node scripts/rename-file build/index.html build/200.html && surge ./build https://run-utils.surge.sh",
     "test": "npm run generate-parser && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook-js": "start-storybook -p 9001 -c .storybook",

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 import persistState from 'redux-localstorage';
@@ -42,7 +43,10 @@ const store = createStore(
     router: routerReducer
   }),
   composeWithDevTools(
-    applyMiddleware(middleware),
+    applyMiddleware(
+      thunkMiddleware, 
+      middleware
+    ),
     persistState(null, { key: 'run-utils' }),
   )
 )
