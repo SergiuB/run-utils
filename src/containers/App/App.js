@@ -1,7 +1,7 @@
 import R from 'ramda';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router';
+import { Route, Redirect, withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 
 import AppBar from 'material-ui/AppBar';
@@ -105,13 +105,16 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   ...state.app,
-  location: state.router.location,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    push,
-    ...appActions,
-  },
-)(App);
+const mapDispatchToProps = {
+  push,
+  ...appActions,
+}
+
+const enhance = R.compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+);
+
+export default enhance(App);
