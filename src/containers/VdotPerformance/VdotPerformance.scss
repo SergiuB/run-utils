@@ -16,6 +16,12 @@
     justify-content: center;
     align-items: flex-end;
     margin: 10px;
+    position: relative;
+
+    .save-btn {
+      position: absolute !important;
+      right: 0px;
+    }
   }
 
   .slider-wrapper {

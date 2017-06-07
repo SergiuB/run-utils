@@ -1,7 +1,10 @@
-
 import React, { Component } from 'react';
 import R from 'ramda';
 import classNames from 'classnames';
+import IconButton from 'material-ui/IconButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
+
+import { pinkA200 } from 'material-ui/styles/colors';
 
 import Ripple from '../Ripple';
 
@@ -28,20 +31,31 @@ class PerformanceItem extends Component {
   }
 
   render() {
-    const { performance, onClick, selected } = this.props;
+    const { performance, onClick, onRemove, selected } = this.props;
 
     return (
-      <div
-        className={classNames('performance-list-item', 'Ripple-parent', { selected })}
-        onMouseUp={this.handleClick.bind(this)}
-        onTouchEnd={this.handleClick.bind(this)}
-        onClick={() => onClick(performance)}
-        >
-        <span className="mui--text-body2">{performance.vdot.toFixed(1)}</span>
-        <span >{performance.race.label}</span>
-        <span className="mui--text-caption">{secToTime(performance.time)}</span>
+      <div className='performance-list-item-wrapper'>
+        <div
+          className={classNames('performance-list-item', 'Ripple-parent', { selected })}
+          onMouseUp={this.handleClick.bind(this)}
+          onTouchEnd={this.handleClick.bind(this)}
+          onClick={() => onClick(performance)}
+          >
+          <span className="mui--text-body2">{performance.vdot.toFixed(1)}</span>
+          <span >{performance.race.label}</span>
+          <span className="mui--text-caption">{secToTime(performance.time)}</span>
 
-        <Ripple cursorPos={this.state.cursorPos} />
+          <Ripple cursorPos={this.state.cursorPos} />
+        </div>
+        {selected && 
+          <IconButton
+              className='remove-btn' 
+              iconStyle={{ color: pinkA200 }}
+              onTouchTap={() => onRemove(performance)}
+          >
+            <ContentRemove />
+          </IconButton>
+        }
       </div>
     );
   }
@@ -50,13 +64,14 @@ class PerformanceItem extends Component {
 
 class PerformanceList extends Component {
   render() {
-    const { performances, onItemClick, selectedPerformance } = this.props;
+    const { performances, onItemClick, onItemRemove, selectedPerformance } = this.props;
     return <div className={'performance-list'}>
       {R.compose(
         R.map(performance => <PerformanceItem
           key={`${performance.race.label}-${performance.vdot}`}
           performance={performance}
           onClick={() => onItemClick(performance)}
+          onRemove={() => onItemRemove(performance)}
           selected={isSamePerformanceAs(selectedPerformance, performance)}
           />
         ),

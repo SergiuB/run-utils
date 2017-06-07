@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import ActionHelp from 'material-ui/svg-icons/action/help-outline';
+import FlatButton from 'material-ui/FlatButton';
 
 import { grey400 } from 'material-ui/styles/colors';
 
@@ -65,7 +66,7 @@ export default class VdotPerformance extends React.Component {
         metric: PropTypes.bool,
     }
     render() {
-        const { races, metric, onVdotChange, onSelectedRaceChange, selectedPerformance } = this.props;
+        const { changed, races, metric, onVdotChange, onSelectedRaceChange, selectedPerformance, onSave } = this.props;
 
         const { vdot } = selectedPerformance;
         const selectedRace = selectedPerformance.race;
@@ -88,6 +89,13 @@ export default class VdotPerformance extends React.Component {
                         >
                         <ActionHelp />
                     </IconButton>
+
+                    {changed && <FlatButton
+                        className='save-btn'
+                        primary={true}
+                        label='Save'
+                        onClick={() => onSave(selectedPerformance)}
+                        />}
                 </div>
                 {races.map(race => (
                     <div

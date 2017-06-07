@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import { cyan700, white } from 'material-ui/styles/colors';
+import { cyan500, white } from 'material-ui/styles/colors';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -52,7 +52,7 @@ class App extends Component {
   }
 
   render() {
-    const { metric, isMenuOpen, openMenu, setMetric, children, push, userData, logIn } = this.props;
+    const { metric, isMenuOpen, openMenu, setMetric, children, push, userData, logIn, location } = this.props;
     const appBarMenuProps = {
       toggleMetric: () => setMetric(!metric),
       metric,
@@ -69,12 +69,18 @@ class App extends Component {
         {props.title}
       </MenuItem>
     ));
+
+    const currentSubappId = location.pathname.split('/')[1];
+    const currentSubapp = childrenWithProps.find(R.pathEq(['props', 'id'], currentSubappId));
+    const title = currentSubapp ? currentSubapp.props.title : '';
+
     return (
       <div className="App mui--text-body1 container">
 
         <div className='row'>
           <AppBar
-            style={{ backgroundColor: cyan700 }}
+            title={title}
+            style={{ backgroundColor: cyan500 }}
             onLeftIconButtonTouchTap={() => openMenu(true)}
             iconElementRight={userData ? <AppBarMenu {...appBarMenuProps}/> : <LoginButton logIn={logIn} />}
             />

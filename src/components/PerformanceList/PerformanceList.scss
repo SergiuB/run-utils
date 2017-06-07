@@ -11,26 +11,35 @@ $divider-color:        #BDBDBD;
     overflow: auto;
     display: flex;
 }
-.performance-list-item {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    flex-shrink: 0;
-    justify-content: center;
-    box-sizing: border-box;
-    user-select: none;
-    border-radius: 50%;
-    border: 2px solid $primary-color;
-    color: $primary-text-color;
-    height: 80px;
-    width: 80px;
-    margin: 0px 2px;
-    cursor: pointer;
-    padding-bottom: 8px;
-    &.selected {
-      border-color: $accent-color;
+.performance-list-item-wrapper {
+    position: relative;
+    height: 110px;
+    .performance-list-item {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex-shrink: 0;
+        justify-content: center;
+        box-sizing: border-box;
+        user-select: none;
+        border-radius: 50%;
+        border: 2px solid $primary-color;
+        color: $primary-text-color;
+        height: 80px;
+        width: 80px;
+        margin: 0px 2px;
+        cursor: pointer;
+        padding-bottom: 8px;
+        &.selected {
+        border-color: $accent-color;
+        }
+        -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
     }
-    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+    .remove-btn {
+        position: absolute !important;
+        bottom: -5px;
+        left: 18px;
+    }
 }
 
 .performance-list-helper {
