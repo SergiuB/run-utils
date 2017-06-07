@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import R from 'ramda';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

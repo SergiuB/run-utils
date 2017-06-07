@@ -28,12 +28,14 @@ class RaceEquivPage extends Component {
     return (
       <div className='race-equiv-page'>
         <div className='page-content'>
-          {saveEnabled && <PerformanceList
-            performances={savedPerformances}
-            selectedPerformance={selectedPerformance}
-            onItemClick={selectPerformance}
-            onItemRemove={removePerformance}
-          />}
+          {saveEnabled && !!savedPerformances.length &&
+            <PerformanceList
+              performances={savedPerformances}
+              selectedPerformance={selectedPerformance}
+              onItemClick={selectPerformance}
+              onItemRemove={removePerformance}
+            />
+          }
           <VdotPerformance
             metric={metric}
             selectedPerformance={selectedPerformance}
