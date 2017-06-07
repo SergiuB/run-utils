@@ -113,6 +113,7 @@ function sendToken(token) {
   return `
     <script>
       window.opener.postMessage('${token}', '${fbcfg.frontendurl}');
+      window.close();
     </script>
   `;
 }
