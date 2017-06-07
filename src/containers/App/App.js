@@ -20,25 +20,25 @@ import * as appActions from '../../actions/app';
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
-const LoginButton = (props) => (
-  <FlatButton label="Log in with Strava" 
-    style={{ color: white }} onClick={props.logIn}/>
-);
-
-const AppBarMenu = ({ toggleMetric, metric }) => (
-  <IconMenu
-    iconStyle={{ color: white }}
-    touchTapCloseDelay={10}
-    iconButtonElement={
-      <IconButton><MoreVertIcon /></IconButton>
+const AppBarMenu = ({ toggleMetric, metric, userData, logIn }) => (
+  <div className='app-bar-menu'>
+    {!userData &&
+      <FlatButton label="Login" style={{ color: white }} onClick={logIn}/>
     }
-    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-  >
-    <MenuItem onTouchTap={toggleMetric}>
-      Show {metric ? 'Miles' : 'Kilometers'}
-    </MenuItem>
-  </IconMenu>
+    <IconMenu
+      iconStyle={{ color: white }}
+      touchTapCloseDelay={10}
+      iconButtonElement={
+        <IconButton><MoreVertIcon /></IconButton>
+      }
+      targetOrigin={{horizontal: 'right', vertical: 'top'}}
+      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+    >
+      <MenuItem onTouchTap={toggleMetric}>
+        Show {metric ? 'Miles' : 'Kilometers'}
+      </MenuItem>
+    </IconMenu>
+  </div>
 );
 
 class App extends Component {
@@ -56,6 +56,8 @@ class App extends Component {
     const appBarMenuProps = {
       toggleMetric: () => setMetric(!metric),
       metric,
+      userData,
+      logIn
     };
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })
@@ -82,7 +84,7 @@ class App extends Component {
             title={title}
             style={{ backgroundColor: cyan500 }}
             onLeftIconButtonTouchTap={() => openMenu(true)}
-            iconElementRight={userData ? <AppBarMenu {...appBarMenuProps}/> : <LoginButton logIn={logIn} />}
+            iconElementRight={<AppBarMenu {...appBarMenuProps}/>}
             />
         </div>
         <Drawer
