@@ -66,7 +66,7 @@ export default class VdotPerformance extends React.Component {
         metric: PropTypes.bool,
     }
     render() {
-        const { changed, races, metric, onVdotChange, onSelectedRaceChange, selectedPerformance, onSave } = this.props;
+        const { changed, races, metric, onVdotChange, onSelectedRaceChange, selectedPerformance, onSave, saveEnabled } = this.props;
 
         const { vdot } = selectedPerformance;
         const selectedRace = selectedPerformance.race;
@@ -90,7 +90,7 @@ export default class VdotPerformance extends React.Component {
                         <ActionHelp />
                     </IconButton>
 
-                    {changed && <FlatButton
+                    {saveEnabled && changed && <FlatButton
                         className='save-btn'
                         primary={true}
                         label='Save'

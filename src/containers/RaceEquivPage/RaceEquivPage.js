@@ -21,25 +21,26 @@ import './RaceEquivPage.css';
 class RaceEquivPage extends Component {
   render() {
     const {
-      metric, selectedPerformance, changed, savedPerformances,
+      metric, selectedPerformance, changed, savedPerformances, saveEnabled,
       savePerformance, removePerformance, selectPerformance, changeVdot, changeRace
     } = this.props;
 
     return (
       <div className='race-equiv-page'>
         <div className='page-content'>
-          <PerformanceList
+          {saveEnabled && <PerformanceList
             performances={savedPerformances}
             selectedPerformance={selectedPerformance}
             onItemClick={selectPerformance}
             onItemRemove={removePerformance}
-            />
+          />}
           <VdotPerformance
             metric={metric}
             selectedPerformance={selectedPerformance}
             races={[kMarathon, kHalf, k10, k5, k3, kMile]}
             onVdotChange={changeVdot}
             onSave={savePerformance}
+            saveEnabled={saveEnabled}
             changed={changed}
             onSelectedRaceChange={changeRace}
             />
@@ -51,6 +52,7 @@ class RaceEquivPage extends Component {
 
 const mapStateToProps = (state) => ({
   ...state.raceEquiv,
+  saveEnabled: !!state.app.userData,
   savedPerformances: state.raceEquiv.savedPerformances.map(({ race, vdot }) => ({
     race,
     vdot,
