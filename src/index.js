@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import R from 'ramda';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -35,6 +36,18 @@ const history = createHistory()
 // Build the middleware for intercepting and dispatching navigation actions
 const middleware = routerMiddleware(history)
 
+const reduxLsSlicer = (paths) => (state) => ({
+  ...state,
+  app: {
+    ...state.app,
+    userData: null,
+  },
+  raceEquiv: {
+    ...state.raceEquiv,
+    savedPerformances: [],
+  },
+})
+
 // Add the reducer to your store on the `router` key
 // Also apply our middleware for navigating
 const store = createStore(
@@ -47,7 +60,7 @@ const store = createStore(
       thunkMiddleware, 
       middleware
     ),
-    persistState(null, { key: 'run-utils' }),
+    persistState(null, { key: 'run-utils', slicer: reduxLsSlicer }),
   )
 )
 
