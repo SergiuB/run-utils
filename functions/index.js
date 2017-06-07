@@ -112,7 +112,7 @@ router.get('/stravaCallback',
 function sendToken(token) {
   return `
     <script>
-      window.opener.postMessage('${token}', '${fbcfg.frontendurl}');
+      window.opener.postMessage({ stravaAuthToken: '${token}' }, '${fbcfg.frontendurl}');
     </script>
   `;
 }

@@ -22,3 +22,4 @@ yarn-error.log*
 
 # firebase
 setenv
+firebase-debug.log

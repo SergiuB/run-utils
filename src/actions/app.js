@@ -31,8 +31,10 @@ export const logIn = () => dispatch => {
   const handleTokenMessage = ({ data, origin }) => {
     if (origin !== "https://us-central1-run-utils.cloudfunctions.net")
       return;
+
+    const { stravaAuthToken } = data;
     
-    signInWithCustomToken(data).catch(error => dispatch(authFail(error)));
+    signInWithCustomToken(stravaAuthToken).catch(error => dispatch(authFail(error)));
 
     window.removeEventListener("message", handleTokenMessage, false);
     popup.close();
