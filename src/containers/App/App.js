@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import FlatButton from 'material-ui/FlatButton';
 
-import * as firebase from "firebase";
+import { firebaseInit } from '../../services/firebaseWrapper';
 
 import * as appActions from '../../actions/app';
 
@@ -21,7 +21,8 @@ import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
 const LoginButton = (props) => (
-  <FlatButton label="Login" onClick={props.logIn}/>
+  <FlatButton label="Log in with Strava" 
+    style={{ color: white }} onClick={props.logIn}/>
 );
 
 const AppBarMenu = ({ toggleMetric, metric }) => (
@@ -46,36 +47,8 @@ class App extends Component {
 
   componentWillMount () {
     const { authSuccess, authFail } = this.props;
-    var config = {
-      apiKey: "AIzaSyCHAoB9rAywEHUeO2XMZKVW2tHzyuitIWI",
-      authDomain: "run-utils.surge.sh",
-      databaseURL: "https://run-utils.firebaseio.com",
-    };
-    firebase.initializeApp(config);
-
-    window.addEventListener("message", ({ data, origin }) => {
-      if (origin !== "https://us-central1-run-utils.cloudfunctions.net")
-        return;
-      
-      firebase.auth().signInWithCustomToken(data).catch(error => authFail(error));
-    }, false);
-
-    firebase.auth().onAuthStateChanged(
-      (user) => {
-        if (user) {
-          const { uid, displayName, email, photoURL } = user;
-          firebase.database()
-            .ref(`/instagramAccessToken/${uid}`)
-            .once('value')
-            .then((snapshot) => {
-              const accessToken = snapshot.val();
-              authSuccess({ uid, displayName, email, photoURL, accessToken });
-            })
-            .catch(error => authFail(error));
-        }
-      },
-      error => console.log(error)
-    );
+    
+    firebaseInit({ authSuccess, authFail });
   }
 
   render() {

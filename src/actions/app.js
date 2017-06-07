@@ -1,5 +1,5 @@
 
-import * as firebase from "firebase";
+import { signInWithCustomToken } from "../services/firebaseWrapper";
 
 export const setMetric = (metric) => ({
   type: 'SET_METRIC',
@@ -26,6 +26,20 @@ export const authFail = (error) =>  ({
 })
 
 export const logIn = () => dispatch => {
-  dispatch(requestAuth);
-  window.open('https://us-central1-run-utils.cloudfunctions.net/api/authStrava', 'firebaseAuth', 'height=315,width=400');
+  let popup;
+
+  const handleTokenMessage = ({ data, origin }) => {
+    if (origin !== "https://us-central1-run-utils.cloudfunctions.net")
+      return;
+    
+    signInWithCustomToken(data).catch(error => dispatch(authFail(error)));
+
+    window.removeEventListener("message", handleTokenMessage, false);
+    popup.close();
+  }
+
+  dispatch(requestAuth());
+
+  window.addEventListener("message", handleTokenMessage, false);
+  popup = window.open('https://us-central1-run-utils.cloudfunctions.net/api/authStrava', 'firebaseAuth', 'height=315,width=400');
 }
