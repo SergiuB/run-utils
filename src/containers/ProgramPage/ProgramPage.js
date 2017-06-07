@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import R from 'ramda';
 
-import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
-import { cyan500, white } from 'material-ui/styles/colors';
-
 import RaceSlider from '../../components/RaceSlider';
 
 import { calculate, mergeWorkoutData, pointTable } from '../../services/workoutCalculator';
@@ -125,14 +122,6 @@ class ProgramPage extends Component {
 
     return (
       <div className='program-page'>
-        <Toolbar style={{ backgroundColor: cyan500 }}>
-          <ToolbarGroup>
-            <ToolbarTitle
-              style={{ color: white }}
-              text="Program Builder"
-            />
-          </ToolbarGroup>
-        </Toolbar>
         <RaceSlider
           metric={metric}
           selected={true}
