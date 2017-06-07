@@ -1,6 +1,8 @@
 import * as firebase from "firebase";
 
-const firebaseInit = ({ authSuccess, authFail }) => {
+const firebaseInit = ({ authSuccess, authFail, notAuth, requestAuth }) => {
+  requestAuth();
+
   var config = {
       apiKey: "AIzaSyCHAoB9rAywEHUeO2XMZKVW2tHzyuitIWI",
       authDomain: "run-utils.surge.sh",
@@ -20,6 +22,8 @@ const firebaseInit = ({ authSuccess, authFail }) => {
               authSuccess({ uid, displayName, email, photoURL, accessToken });
             })
             .catch(error => authFail(error));
+        } else {
+          notAuth();
         }
       },
       error => console.log(error)

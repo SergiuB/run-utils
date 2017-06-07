@@ -40,6 +40,7 @@ const reduxLsSlicer = (paths) => (state) => ({
   app: {
     ...state.app,
     userData: null,
+    isAuthenticating: false,
   },
   raceEquiv: {
     ...state.raceEquiv,

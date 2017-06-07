@@ -20,9 +20,9 @@ import * as appActions from '../../actions/app';
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
-const AppBarMenu = ({ toggleMetric, metric, userData, logIn }) => (
+const AppBarMenu = ({ toggleMetric, metric, userData, logIn, isAuthenticating }) => (
   <div className='app-bar-menu'>
-    {!userData &&
+    {!userData && !isAuthenticating &&
       <FlatButton label="Login" style={{ color: white }} onClick={logIn}/>
     }
     <IconMenu
@@ -46,18 +46,19 @@ class App extends Component {
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
   componentWillMount () {
-    const { authSuccess, authFail } = this.props;
+    const { authSuccess, authFail, notAuth, requestAuth } = this.props;
     
-    firebaseInit({ authSuccess, authFail });
+    firebaseInit({ authSuccess, authFail, notAuth, requestAuth });
   }
 
   render() {
-    const { metric, isMenuOpen, openMenu, setMetric, children, push, userData, logIn, location } = this.props;
+    const { metric, isMenuOpen, openMenu, setMetric, children, push, userData, logIn, location, isAuthenticating } = this.props;
     const appBarMenuProps = {
       toggleMetric: () => setMetric(!metric),
       metric,
       userData,
-      logIn
+      logIn,
+      isAuthenticating,
     };
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })

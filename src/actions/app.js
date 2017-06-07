@@ -25,6 +25,10 @@ export const authFail = (error) =>  ({
   error,
 })
 
+export const notAuth = () =>  ({
+  type: 'NOT_AUTH',
+})
+
 export const logIn = () => dispatch => {
   let popup;
 

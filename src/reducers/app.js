@@ -26,6 +26,12 @@ const app = (state = initialState, action) => {
         ...state,
         isAuthenticating: true,
       };
+
+    case 'NOT_AUTH':
+      return {
+        ...state,
+        isAuthenticating: false,
+      };
     
     case 'AUTH_SUCCESS':
       return {
