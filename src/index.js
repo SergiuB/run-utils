@@ -14,16 +14,17 @@ import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-r
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import App, { Subapp } from './containers/App';
-
-import RaceEquivPage from './containers/RaceEquivPage';
-import ProgramPage from './containers/ProgramPage';
-
-import reducers from './reducers';
+import app from './modules/app';
+import raceEquiv from './modules/race-equivalence';
+import programBuilder from './modules/program-builder';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import './index.css';
 import 'bootstrap-grid';
+
+const { App, Subapp } = app.components;
+const { RaceEquivPage } = raceEquiv.components;
+const { ProgramPage } = programBuilder.components;
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -37,28 +38,22 @@ const middleware = routerMiddleware(history)
 
 const reduxLsSlicer = (paths) => (state) => ({
   ...state,
-  app: {
-    ...state.app,
-    userData: null,
-    isAuthenticating: false,
-  },
-  raceEquiv: {
-    ...state.raceEquiv,
-    savedPerformances: [],
-  },
+  app: app.slicer(state),
+  raceEquiv: raceEquiv.slicer(state),
 })
 
 // Add the reducer to your store on the `router` key
 // Also apply our middleware for navigating
 const store = createStore(
   combineReducers({
-    ...reducers,
-    router: routerReducer
+    app: app.reducer,
+    raceEquiv: raceEquiv.reducer,
+    router: routerReducer,
   }),
   composeWithDevTools(
     applyMiddleware(
       thunkMiddleware, 
-      middleware
+      middleware,
     ),
     persistState(null, { key: 'run-utils', slicer: reduxLsSlicer }),
   )

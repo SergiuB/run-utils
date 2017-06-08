@@ -43,7 +43,7 @@
   "scripts": {
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
-    "generate-parser": "pegjs -o src/services/workoutParser.js src/services/workoutGrammar.pegjs",
+    "generate-parser": "pegjs -o src/modules/core/services/workoutParser.js src/modules/core/services/workoutGrammar.pegjs",
     "start-js": "react-scripts start",
     "start": "npm run generate-parser && npm-run-all -p watch-css start-js",
     "build": "npm run generate-parser && npm run build-css && react-scripts build",
