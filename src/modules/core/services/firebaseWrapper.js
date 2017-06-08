@@ -15,7 +15,7 @@ const init = ({ authSuccess, authFail, notAuth, requestAuth }) => {
         if (user) {
           const { uid, displayName, email, photoURL } = user;
           firebase.database()
-            .ref(`/instagramAccessToken/${uid}`)
+            .ref(`/stravaAccessToken/${uid}`)
             .once('value')
             .then((snapshot) => {
               const accessToken = snapshot.val();
@@ -32,7 +32,11 @@ const init = ({ authSuccess, authFail, notAuth, requestAuth }) => {
 
 const signInWithCustomToken = token => firebase.auth().signInWithCustomToken(token);
 
+const getRaces = uid => firebase.database().ref(`/runRaces/${uid}`).once('value')
+  .then(snapshot => snapshot.val());
+
 export {
   init,
   signInWithCustomToken,
+  getRaces,
 }

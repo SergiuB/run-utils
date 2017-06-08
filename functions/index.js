@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const stravaApi = require('./stravaApi');
 
 const { fbcfg, stravacfg } = functions.config();
 
@@ -71,7 +72,7 @@ passport.use(new StravaStrategy({
     //credentials = {accessToken, profile};
     const uid = `strava:${id}`;
     const createCustomToken = () => admin.auth().createCustomToken(uid);
-    const saveAccessToken = admin.database().ref(`/instagramAccessToken/${uid}`)
+    const saveAccessToken = admin.database().ref(`/stravaAccessToken/${uid}`)
       .set(accessToken);
     const doneOk = result => done(null, result);
     const doneError = done;
@@ -120,3 +121,26 @@ function sendToken(token) {
 router.get('/authStrava', passport.authenticate('strava'));
 
 exports.api = functions.https.onRequest(router);
+
+exports.findStravaRaces = functions.database.ref('/stravaAccessToken/{uid}')
+    .onWrite(event => {
+      // Grab the current value of what was written to the Realtime Database.
+      const token = event.data.val();
+      const uid = event.params.uid;
+      console.log(`Access token ${token ? (token + ' stored'): 'removed'} for user ${uid}`);
+      
+      if (token) {
+        const isRun = R.propEq('type', 'Run');
+        const isRace = R.propEq('workout_type', 1);
+        const filterRunRaces = R.filter(R.allPass([isRace, isRun]));
+
+        const saveRaces = races => admin.database().ref(`/runRaces/${uid}`)
+          .set(races);
+        
+        return stravaApi(token).getAllActivities()
+          .then(R.prop('activities'))
+          .then(filterRunRaces)
+          .then(printValue('Running races'))
+          .then(saveRaces);
+      }
+    });

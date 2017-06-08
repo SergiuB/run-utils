@@ -5,11 +5,14 @@ import * as actions from '../actions';
 class RacePredictionPage extends Component {
   
   componentWillMount() {
-    const { accessToken, fetchRaces } = this.props;
-    console.log('cwm', accessToken);
-    fetchRaces(accessToken);
+    const { userData, fetchRaces } = this.props;
+
+    if (!userData)
+      return;
+    console.log('cwm', userData.uid);
+    fetchRaces(userData.uid);
   }
-  
+
   render() {
     const { races } = this.props;
     return <div>{races.map(race => <div key={race.id}>{race.name}</div>)}</div>;
@@ -17,7 +20,7 @@ class RacePredictionPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  accessToken: state.app.userData && state.app.userData.accessToken,
+  userData: state.app.userData,
   races: state.racePrediction.races,
 });
 
