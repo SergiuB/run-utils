@@ -31,15 +31,13 @@ const selectedPerformance = {
 
 const mountComponent = ({ metric = true, changed = true, saveEnabled = true, savedPerf = savedPerformances, selectedPerf = selectedPerformance  } = {}) => mount(
   <MuiThemeProvider>
-    <div style={{ width: 300, height: 800}}>
-      <RaceEquivPage
-        metric={metric}
-        changed={changed}
-        saveEnabled={saveEnabled}
-        savedPerformances={savedPerf}
-        selectedPerformance={selectedPerf}
-      />
-    </div>
+    <RaceEquivPage
+      metric={metric}
+      changed={changed}
+      saveEnabled={saveEnabled}
+      savedPerformances={savedPerf}
+      selectedPerformance={selectedPerf}
+    />
   </MuiThemeProvider>
 );
 
