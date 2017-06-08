@@ -42,7 +42,8 @@ const AppBarMenu = ({ toggleMetric, metric, userData, logIn, isAuthenticating })
   </div>
 );
 
-class App extends Component {
+// Export dumb component for testing purposes
+export class App extends Component {
 
   doThenClose = (fn) => () => { fn.call(this); this.props.openMenu(false); }
 
@@ -74,7 +75,7 @@ class App extends Component {
       </MenuItem>
     ));
 
-    const currentSubappId = location.pathname.split('/')[1];
+    const currentSubappId = location && location.pathname && location.pathname.split('/')[1];
     const currentSubapp = childrenWithProps.find(R.pathEq(['props', 'id'], currentSubappId));
     const title = currentSubapp ? currentSubapp.props.title : '';
 
