@@ -17,6 +17,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import app from './modules/app';
 import raceEquiv from './modules/race-equivalence';
 import programBuilder from './modules/program-builder';
+import racePrediction from './modules/race-prediction';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import './index.css';
@@ -25,6 +26,7 @@ import 'bootstrap-grid';
 const { App, Subapp } = app.components;
 const { RaceEquivPage } = raceEquiv.components;
 const { ProgramPage } = programBuilder.components;
+const { RacePredictionPage } = racePrediction.components;
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -40,6 +42,7 @@ const reduxLsSlicer = (paths) => (state) => ({
   ...state,
   app: app.slicer(state),
   raceEquiv: raceEquiv.slicer(state),
+  racePrediction: racePrediction.slicer(state),
 })
 
 // Add the reducer to your store on the `router` key
@@ -48,6 +51,7 @@ const store = createStore(
   combineReducers({
     app: app.reducer,
     raceEquiv: raceEquiv.reducer,
+    racePrediction: racePrediction.reducer,
     router: routerReducer,
   }),
   composeWithDevTools(
@@ -66,6 +70,7 @@ ReactDOM.render(
         <App>
           <Subapp isDefault title='Race Equivalence' id='raceEquivalence' component={RaceEquivPage} />
           <Subapp title='Program Builder' id='programBuilder' component={ProgramPage}/>
+          <Subapp title='Race Prediction' id='racePrediction' component={RacePredictionPage}/>
         </App>
       </MuiThemeProvider>
     </ConnectedRouter>
