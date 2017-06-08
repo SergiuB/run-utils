@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import R from 'ramda';
 import classNames from 'classnames';
 import IconButton from 'material-ui/IconButton';
@@ -63,6 +64,12 @@ class PerformanceItem extends Component {
 
 
 class PerformanceList extends Component {
+  static propTypes = {
+    performances: PropTypes.array,
+  }
+  static defaultProps ={
+    performances: [],
+  }
   render() {
     const { performances, onItemClick, onItemRemove, selectedPerformance } = this.props;
     return <div className={'performance-list'}>
