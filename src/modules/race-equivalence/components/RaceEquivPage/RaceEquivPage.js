@@ -19,7 +19,8 @@ import * as raceEquivActions from '../../actions';
 
 import './RaceEquivPage.css';
 
-class RaceEquivPage extends Component {
+// exporting dumb component for testing purposes
+export class RaceEquivPage extends Component {
   render() {
     const {
       metric, selectedPerformance, changed, savedPerformances, saveEnabled,
