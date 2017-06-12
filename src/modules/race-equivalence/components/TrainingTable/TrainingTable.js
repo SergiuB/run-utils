@@ -3,7 +3,7 @@ import R from 'ramda';
 
 import Divider from 'material-ui/Divider';
 
-import core from '../../../core';
+import core from 'modules/core';
 const { secToTime, minToTime } = core.services.conversion;
 const { kEasyPace, kMile, allIntensitiesObj } = core.constants;
 const { racePace, racePaceMile } = core.services.raceCalculator;

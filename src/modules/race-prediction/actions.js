@@ -1,5 +1,5 @@
 // import strava from 'strava-v3';
-import core from '../core';
+import core from 'modules/core'
 const { firebase } = core.services;
 
 // const getErrorOrResult = (errorOrResult, emptyResult = []) => {

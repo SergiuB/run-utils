@@ -1,5 +1,5 @@
 
-import core from "../core";
+import core from 'modules/core';
 const { firebase } = core.services;
 
 export const setMetric = (metric) => ({

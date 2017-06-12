@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import { grey400 } from 'material-ui/styles/colors';
 
-import core from '../../../core';
+import core from 'modules/core';
 const { RaceSlider } = core.components;
 import TrainingTable from '../TrainingTable';
 

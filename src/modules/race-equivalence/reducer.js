@@ -1,4 +1,4 @@
-import core from '../core';
+import core from 'modules/core'
 
 const { kHalf } = core.constants;
 const { getVdot } = core.services.vdotCalculator;

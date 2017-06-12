@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import FlatButton from 'material-ui/FlatButton';
 
-import core from '../../core';
+import core from 'modules/core';
 const { firebase } = core.services;
 
 import * as appActions from '../actions';

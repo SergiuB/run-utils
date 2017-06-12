@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import VdotPerformance from '../VdotPerformance';
 import PerformanceList from '../PerformanceList';
 
-import core from '../../../core';
+import core from 'modules/core';
 const {
   kMarathon,
   kHalf,

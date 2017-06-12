@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import R from 'ramda';
 
-import core from '../../../core';
+import core from 'modules/core';
 const { RaceSlider } = core.components;
 
 const { calculate, mergeWorkoutData, pointTable } = core.services.workoutCalculator;

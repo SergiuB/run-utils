@@ -1,5 +1,5 @@
 import reducer from './reducer';
-import core from '../core';
+import core from 'modules/core'
 const {
   kHalf,
   k10,

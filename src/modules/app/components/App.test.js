@@ -6,7 +6,7 @@ import Subapp from './Subapp';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-jest.mock('../../core');
+jest.mock('modules/core');
 jest.mock('react-router');
 
 const mountComponent = ({ metric = true, isMenuOpen = false, userData = null, isAuthenticating = false, subapps = [] } = {}) => mount(

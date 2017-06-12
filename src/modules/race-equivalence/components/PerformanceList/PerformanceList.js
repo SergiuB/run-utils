@@ -7,7 +7,7 @@ import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
 
 import { pinkA200 } from 'material-ui/styles/colors';
 
-import core from '../../../core';
+import core from 'modules/core';
 const { Ripple } = core.components;
 const  { secToTime } = core.services.conversion;
 
