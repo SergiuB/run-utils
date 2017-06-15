@@ -1,5 +1,6 @@
 const initialState = {
-  races: []
+  races: [],
+  selectedRaceIds: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -9,7 +10,23 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         races: [...action.races],
+        selectedRaceIds: state.selectedRaceIds && state.selectedRaceIds.length
+          ? state.selectedRaceIds
+          : [...action.races.map(({ id }) => id)]
       };
+    
+    case 'SELECT_RACE': 
+      return {
+        ...state,
+        selectedRaceIds: [action.id, ...state.selectedRaceIds]
+      };
+
+    case 'DESELECT_RACE': 
+      return {
+        ...state,
+        selectedRaceIds: state.selectedRaceIds.filter(id => id !== action.id)
+      };
+
     default:
       return state;
   }
