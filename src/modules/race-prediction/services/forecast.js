@@ -1,6 +1,6 @@
 const timeseries = require("timeseries-analysis");
 const R = require('ramda');
-const { timeDay, timeWeek } = require('d3-time');
+const { timeDay } = require('d3-time');
 const moment = require('moment');
 
 const stringToDate = R.constructN(1, Date);
@@ -38,6 +38,7 @@ const forecast = ({
     let result = {};
     let prevResult = {};
     const all = process(data);
+    const prediction = [];
     
     const coeffOp = method === 'ARMaxEntropy' ? R.subtract : R.add;
     
@@ -58,14 +59,22 @@ const forecast = ({
         const nextDate = nextDay(lastDate(t.data));
         prevResult = result;
         result = { date: nextDate, val: forecastVal };
+
+        all.push([nextDate, forecastVal]);
+        prediction.push([nextDate, forecastVal])
         
         if (stopCond.call(null, result, prevResult)) {
             break;
         }
-        all.push([nextDate, forecastVal]);
         i++;
     }
-    return result;
+    const weekly = prediction
+        .filter(([ date ], idx) => date.getDay() === 0 || idx === prediction.length - 1)
+        .map(([ date, val]) => ({
+            date: moment(date).format('YYYY-MM-DD'),
+            val
+        }));
+    return weekly;
 }
 
 export default forecast;
