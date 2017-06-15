@@ -59,7 +59,7 @@ class VdotChart extends Component {
             [futureSeriesLS, ...futureVdotValuesLS],
         ],
         types: {
-            [pastSeries]: 'spline',
+            [pastSeries]: 'line',
             [futureSeriesME]: 'line',
             [futureSeriesLS]: 'line',
         },
@@ -122,6 +122,9 @@ class VdotChart extends Component {
         axis={axis}
         point={point}
         tooltip={tooltip}
+        padding={{
+          right: 15
+        }}
       />
     );
   }

@@ -12,6 +12,7 @@ const { getVdot } = core.services.vdotCalculator;
 
 import * as actions from '../actions';
 
+import './RacePredictionPage.css';
 
 class RaceTable extends Component {
   isSelected(raceId) {
@@ -20,7 +21,7 @@ class RaceTable extends Component {
   render() {
     const { races, selectedRaceIds, selectRace, deselectRace } = this.props;
     return (
-        <div>
+        <div className='race-table'>
           {races.map(({ id, name }) => (
               <Toggle key={id} label={name} toggled={this.isSelected(id)}
                 onToggle={(event, tState) => tState ? selectRace(id): deselectRace(id)}
@@ -56,7 +57,9 @@ class RacePredictionPage extends Component {
     
     return (
       <div className='race-prediction-page'>
-        <VdotChart races={selectedRaces}/>
+        <div className="vdot-chart">
+          <VdotChart races={selectedRaces}/>
+        </div>
         <RaceTable
           races={races}
           selectedRaceIds={selectedRaceIds}
