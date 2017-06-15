@@ -33,7 +33,7 @@ class RaceTable extends Component {
 
 
 const toVdotActivity = race => ({
-  vdot: getVdot(race.distance / 1000, race.moving_time).toFixed(1),
+  vdot: getVdot(race.distance / 1000, race.moving_time),
   distance: race.distance / 1000,
   time: race.moving_time,
   name: race.name,
