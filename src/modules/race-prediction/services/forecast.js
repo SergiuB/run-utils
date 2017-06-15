@@ -35,8 +35,6 @@ const forecast = ({
     method = 'ARMaxEntropy', // 'ARLeastSquare',
     degree = 5,
 } = {}) => {
-    let result = {};
-    let prevResult = {};
     const all = process(data);
     const prediction = [];
     
@@ -57,23 +55,17 @@ const forecast = ({
         )(values, coeffs);
         
         const nextDate = nextDay(lastDate(t.data));
-        prevResult = result;
-        result = { date: nextDate, val: forecastVal };
 
         all.push([nextDate, forecastVal]);
-        prediction.push([nextDate, forecastVal])
+        prediction.push({ date: nextDate, val: forecastVal });
         
-        if (stopCond.call(null, result, prevResult)) {
+        if (stopCond.call(null, prediction[prediction.length - 1], prediction[prediction.length - 2])) {
             break;
         }
         i++;
     }
     const weekly = prediction
-        .filter(([ date ], idx) => date.getDay() === 0 || idx === prediction.length - 1)
-        .map(([ date, val]) => ({
-            date: moment(date).format('YYYY-MM-DD'),
-            val
-        }));
+        .filter(({ date }, idx) => date.getDay() === 0 || idx === prediction.length - 1);
     return weekly;
 }
 

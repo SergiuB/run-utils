@@ -17,7 +17,7 @@ describe('forecast service', () => {
 
     const { date, val } = R.last(weeklyPrediction);
 
-    expect(date).toEqual('2018-01-01');
+    expect(moment(date).format('YYYY-MM-DD')).toEqual('2018-01-01');
     expect(val).toEqual(51.87151581762892);
   });
 
@@ -28,7 +28,7 @@ describe('forecast service', () => {
       method: 'ARLeastSquare',
     });
     const { date, val } = R.last(weeklyPrediction);
-    expect(date).toEqual('2018-01-01');
+    expect(moment(date).format('YYYY-MM-DD')).toEqual('2018-01-01');
     expect(val).toEqual(56.68251594380877);
   });
 
@@ -37,7 +37,12 @@ describe('forecast service', () => {
     const weeklyPrediction = forecast({
       stopCond: ({ date, val }) => moment(date).isSame('2017-02-28'),
       data: convexData,
-    });
+    })
+      .map(({ date, val }) => ({
+        date: moment(date).format('YYYY-MM-DD'),
+        val
+      }));
+
     expect(weeklyPrediction).toEqual([
       { date: '2017-01-29', val: 44.999883656380284},
       { date: '2017-02-05', val: 45.22520288023854},
