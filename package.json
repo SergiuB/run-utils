@@ -23,6 +23,7 @@
     "d3": "^4.9.1",
     "d3-interpolate": "^1.1.5",
     "d3-scale": "^1.0.6",
+    "d3-time": "^1.0.7",
     "firebase": "^4.1.1",
     "jss-theme-reactor": "^0.10.0",
     "material-ui": "^0.17.3",
@@ -46,7 +47,8 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-localstorage": "^0.4.1",
     "redux-thunk": "^2.2.0",
-    "strava-v3": "^1.14.0"
+    "strava-v3": "^1.14.0",
+    "timeseries-analysis": "^1.0.12"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",
