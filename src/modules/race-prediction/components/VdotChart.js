@@ -13,44 +13,55 @@ const { secToTime } = core.services.conversion;
 import 'c3/c3.css';
 
 const pastSeries = 'Past';
-const futureSeries = 'Forecast';
+const futureSeriesME = 'Forecast (Max Entropy)';
+const futureSeriesLS = 'Forecast (Least Square)';
 
 class VdotChart extends Component {
   
   render() {
     const { races } = this.props;
     const raceArr = races.map(({ date, vdot }) => [date, vdot]);
-    const weeklyPredictions = forecast({
+
+    const weeklyPredictionsME = forecast({
       data: raceArr
-    })
+    });
+    
+    const weeklyPredictionsLS = forecast({
+      data: raceArr,
+      method: 'ARLeastSquare'
+    });
 
     // console.log(weeklyPredictions);
 
     const pastDates = races.map(R.prop('date'));
     const pastVdotValues = races.map(R.prop('vdot'));
 
-    const futureDates = weeklyPredictions.map(R.prop('date'));
-    const futureVdotValues = weeklyPredictions.map(R.prop('val'));
+    const futureDatesME = weeklyPredictionsME.map(R.prop('date'));
+    const futureVdotValuesME = weeklyPredictionsME.map(R.prop('val'));
+
+    const futureDatesLS = weeklyPredictionsLS.map(R.prop('date'));
+    const futureVdotValuesLS = weeklyPredictionsLS.map(R.prop('val'));
 
      const data = {
         xs: {
             [pastSeries]: 'x1',
-            [futureSeries]: 'x2',
+            [futureSeriesME]: 'x2',
+            [futureSeriesLS]: 'x3',
             // 'data2': 'x2',
         },
 //        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
         columns: [
             ['x1', ...pastDates],
-            ['x2', ...futureDates],
-//            ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
+            ['x2', ...futureDatesME],
+            ['x3', ...futureDatesLS],
             [pastSeries, ...pastVdotValues],
-            [futureSeries, ...futureVdotValues],
-            // ['forecasted', null, null, null, null, null, null, 47.85, 49, 55],
+            [futureSeriesME, ...futureVdotValuesME],
+            [futureSeriesLS, ...futureVdotValuesLS],
         ],
         types: {
             [pastSeries]: 'spline',
-            [futureSeries]: 'spline',
-            // 'forecasted': 'line'
+            [futureSeriesME]: 'line',
+            [futureSeriesLS]: 'line',
         },
         xFormat: '%Y-%m-%d',
     };
@@ -76,15 +87,7 @@ class VdotChart extends Component {
     const tooltip = {
       contents: (d, defaultTitleFormat, defaultValueFormat, color) => {
         const dataPoint = d[0];
-        if (dataPoint.id === futureSeries) {
-          const { x, value} = dataPoint
-          return `
-            <div>
-              <div>${moment(x).format('YYYY-MM-DD')}</div>
-              <div>${oneDecimal(value)} VDOT</div>
-            </div>
-          `;
-        } else {
+        if (dataPoint.id === pastSeries) {
           const { name, date, vdot, time, distance } = this.props.races[dataPoint.index];
           return `
             <div>
@@ -93,6 +96,16 @@ class VdotChart extends Component {
               <div>${distance.toFixed(2)} km</div>
               <div>${secToTime(time)}</div>
               <div>${oneDecimal(vdot)} VDOT</div>
+            </div>
+          `;
+        } else {
+          const [ forecastME, forecastLS ] = d;
+
+          return `
+            <div>
+              <div>${moment(forecastME.x).format('YYYY-MM-DD')}</div>
+              <div>${forecastME.id} ${oneDecimal(forecastME.value)} VDOT</div>
+              <div>${forecastLS.id} ${oneDecimal(forecastLS.value)} VDOT</div>
             </div>
           `;
         }
