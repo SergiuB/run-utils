@@ -1,12 +1,7 @@
-// import strava from 'strava-v3';
-import core from 'modules/core'
+import shortid from 'shortid';
+import core from 'modules/core';
 const { firebase } = core.services;
-
-// const getErrorOrResult = (errorOrResult, emptyResult = []) => {
-//   const error = errorOrResult.errors ? errorOrResult : null;
-//   const result = !error ? errorOrResult : emptyResult;
-//   return { error, result };
-// }
+const { kHalf } = core.constants;
 
 export const setRaces = (races) => {
   return {
@@ -29,20 +24,37 @@ export const deselectRace = (id) => {
   }
 }
 
-// export const fetchRaces = (accessToken) => dispatch => {
-//   if (!accessToken) {
-//     return;
-//   }
-//   strava.athlete.listActivities({
-//       access_token: accessToken,
-//       page: 1,
-//       per_page: 10,
-//     }, (_, errOrActivities, limits) => {
-//       const { error, result: activities } = getErrorOrResult(errOrActivities);
-//       error && dispatch(setRaces([]));
-//       !error && dispatch(setRaces(activities));
-//     });
-// }
+export const addGoalPerformance = (race = kHalf, time = 5400) => {
+  return {
+    type: 'ADD_GOAL_PERFORMANCE',
+    race,
+    time,
+    id: shortid.generate()
+  }
+}
+
+export const removeGoalPerformance = (id) => {
+  return {
+    type: 'REMOVE_GOAL_PERFORMANCE',
+    id
+  }
+}
+
+export const changeGoalPerformanceRace = (id, race) => {
+  return {
+    type: 'CHANGE_GOAL_PERFORMANCE_RACE',
+    id,
+    race,
+  }
+}
+
+export const changeGoalPerformanceTime = (id, time) => {
+  return {
+    type: 'CHANGE_GOAL_PERFORMANCE_TIME',
+    id,
+    time,
+  }
+}
 
 export const fetchRaces = (uid) => dispatch => {
   if (!uid) {

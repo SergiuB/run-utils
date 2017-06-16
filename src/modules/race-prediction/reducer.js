@@ -1,6 +1,8 @@
+
 const initialState = {
   races: [],
-  selectedRaceIds: []
+  selectedRaceIds: [],
+  goalPerformances: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -26,6 +28,43 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedRaceIds: state.selectedRaceIds.filter(id => id !== action.id)
       };
+
+    case 'ADD_GOAL_PERFORMANCE':
+      return {
+        ...state,
+        goalPerformances: [
+          ...state.goalPerformances, {
+          id: action.id,
+          race: action.race,
+          time: action.time
+        }]
+      }
+    
+    case 'REMOVE_GOAL_PERFORMANCE':
+      return {
+        ...state,
+        goalPerformances: state.goalPerformances.filter(({ id }) => id !== action.id)
+      }
+    
+    case 'CHANGE_GOAL_PERFORMANCE_RACE':
+      return {
+        ...state,
+        goalPerformances: state.goalPerformances.map(
+          p => p.id === action.id
+            ? { ...p, race: action.race }
+            : p
+        ) 
+      }
+    
+    case 'CHANGE_GOAL_PERFORMANCE_TIME':
+      return {
+        ...state,
+        goalPerformances: state.goalPerformances.map(
+          p => p.id === action.id
+            ? { ...p, time: action.time }
+            : p
+        ) 
+      }
 
     default:
       return state;
