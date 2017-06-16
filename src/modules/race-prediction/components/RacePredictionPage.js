@@ -10,6 +10,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
 import IconButton from 'material-ui/IconButton';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 import VdotChart from './VdotChart';
 
@@ -116,18 +117,24 @@ class RacePredictionPage extends Component {
           races={selectedRaces}
           goalPerformances={goalPerformances}
         />
-        <RaceTable
-          races={races}
-          selectedRaceIds={selectedRaceIds}
-          selectRace={selectRace}
-          deselectRace={deselectRace}
-        />
-        <GoalPerfomanceTable
-          goalPerformances={goalPerformances}
-          onAddGoalPerformance={addGoalPerformance}
-          onRemoveGoalPerformance={removeGoalPerformance}
-          onChangeGoalPerformanceRace={changeGoalPerformanceRace}
-        />
+        <Tabs>
+          <Tab label="Past Races" >
+            <RaceTable
+              races={races}
+              selectedRaceIds={selectedRaceIds}
+              selectRace={selectRace}
+              deselectRace={deselectRace}
+            />
+          </Tab>
+          <Tab label="Future Goals" >
+            <GoalPerfomanceTable
+              goalPerformances={goalPerformances}
+              onAddGoalPerformance={addGoalPerformance}
+              onRemoveGoalPerformance={removeGoalPerformance}
+              onChangeGoalPerformanceRace={changeGoalPerformanceRace}
+            />
+          </Tab>
+        </Tabs>
       </div>
     );
     // return <div>
