@@ -27,10 +27,8 @@ class VdotChart extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.goalPerformances.length != nextProps.goalPerformances.length) {
-      console.log('set state refresh chart true');
       this.setState({ refreshChart: true });
     } else {
-      console.log('set state refresh chart false');
       this.setState({ refreshChart: false })
     }
   }
@@ -41,8 +39,6 @@ class VdotChart extends Component {
     const { races, goalPerformances } = this.props;
     const { refreshChart } = this.state;
 
-    console.log(races.length, goalPerformances.length);
-    
     const raceArr = races.map(({ date, vdot }) => [date, vdot]);
 
     const weeklyPredictionsME = forecast({
@@ -152,15 +148,10 @@ class VdotChart extends Component {
       }
     };
 
-    const point =  {
-      show: true
-    };
-
     return (
       <C3Chart
         data={data}
         axis={axis}
-        point={point}
         tooltip={tooltip}
         grid={grid}
         padding={{
