@@ -54,8 +54,6 @@ const toVdotActivity = race => ({
 class RacePredictionPage extends Component {
 
   handleTabChange(tabName) {
-    console.log(tabName);
-    // debugger;
     this.props.history.push(`/racePrediction/${tabName}`);
   }
   
@@ -76,15 +74,9 @@ class RacePredictionPage extends Component {
       removeGoalPerformance,
       startAddingGoalPerformance,
       cancelAddingGoalPerformance,
-      location,
-      history,
     } = this.props;
     
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
-
-    // if (location.path === '/ra')
-
-    const comp = () => <div>hello</div>;
 
     const tabs = whichTab => () => (
       <Tabs
@@ -124,9 +116,6 @@ class RacePredictionPage extends Component {
         <Route path='/racePrediction/future' component={tabs('future')} />
       </div>
     );
-    // return <div>
-    //   {races.map(race => <div key={race.id}>{race.name} - {getVdot(race.distance / 1000, race.moving_time)} - {new Date(race.start_date_local).toString()}</div>)}
-    // </div>;
   }
 }
 
