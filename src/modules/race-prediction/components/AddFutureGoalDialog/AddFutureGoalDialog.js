@@ -25,16 +25,24 @@ class AddFutureGoalDialog extends Component {
       onCancel,
       onOk,
     } = this.props;
+
     const { race, time } = this.state;
+
     const mapValues = R.compose(
       R.values,
       R.map,
     );
+
+    const avgSec = raceLabel => (maxRaceEquivalents[raceLabel] + minRaceEquivalents[raceLabel]) / 2;
+
     return (
       <div>
         <SelectField
           value={race.label}
-          onChange={(ev, idx, raceLabel) => this.setState({ race: allRacesObj[raceLabel] })}
+          onChange={(ev, idx, raceLabel) => this.setState({
+            race: allRacesObj[raceLabel],
+            time: avgSec(raceLabel),
+          })}
           style={{ width: 100 }}
         >
           {mapValues(r => (
