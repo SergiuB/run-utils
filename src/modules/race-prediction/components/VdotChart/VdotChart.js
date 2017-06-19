@@ -15,9 +15,12 @@ import 'c3/c3.css';
 
 const pastSeries = 'Past';
 const futureSeriesME = 'Forecast (Max Entropy)';
-const futureSeriesLS = 'Forecast (Least Square)';
 const oneDecimal = number => Number.parseFloat(number.toFixed(1), 10);
 const max = R.reduce(R.max, 0);
+const is6MonthsFromNow = ({ date }) => moment(date).isAfter(moment().add(6, 'M'));
+const isOneYearFromNow = ({ date }) => moment(date).isAfter(moment().add(1, 'y'));
+const is2YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(2, 'y'));
+const is5YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(5, 'y'));
 
 class VdotChart extends Component {
 
@@ -41,15 +44,12 @@ class VdotChart extends Component {
 
     const raceArr = races.map(({ date, vdot }) => [date, vdot]);
 
-    const weeklyPredictionsME = forecast({
-      data: raceArr
-    });
-    
-    const weeklyPredictionsLS = forecast({
+    const forecastData = {
       data: raceArr,
-      method: 'ARLeastSquare'
-    });
+      stopCond: is5YearsFromNow,
+    };
 
+    const weeklyPredictionsME = forecast(forecastData);
 
     const pastDates = races.map(R.prop('date'));
     const pastVdotValues = races.map(R.prop('vdot'));
@@ -57,29 +57,20 @@ class VdotChart extends Component {
     const futureDatesME = weeklyPredictionsME.map(R.prop('date'));
     const futureVdotValuesME = weeklyPredictionsME.map(R.prop('val'));
 
-    const futureDatesLS = weeklyPredictionsLS.map(R.prop('date'));
-    const futureVdotValuesLS = weeklyPredictionsLS.map(R.prop('val'));
-
     const data = {
       xs: {
           [pastSeries]: 'x1',
           [futureSeriesME]: 'x2',
-          [futureSeriesLS]: 'x3',
-          // 'data2': 'x2',
       },
-//        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
       columns: [
           ['x1', ...pastDates],
           ['x2', ...futureDatesME],
-          ['x3', ...futureDatesLS],
           [pastSeries, ...pastVdotValues],
           [futureSeriesME, ...futureVdotValuesME],
-          [futureSeriesLS, ...futureVdotValuesLS],
       ],
       types: {
           [pastSeries]: 'line',
           [futureSeriesME]: 'line',
-          [futureSeriesLS]: 'line',
       },
       xFormat: '%Y-%m-%d',
     };
@@ -88,19 +79,13 @@ class VdotChart extends Component {
       return moment(date).format('YYYY-MM-DD');
     };
 
-    const toLine = ({ race, time }) => {
-      const vdot = oneDecimal(getVdot(race.distance, time));
-      return {
-        value: vdot,
-        text: `${race.label} - ${secToTime(time)} (VDOT ${vdot})`
-      };
-    };
+    const toLine = ({ race, time }) => ({
+      value: oneDecimal(getVdot(race.distance, time)),
+      text: `${race.label} - ${secToTime(time)}`,
+      position: 'start'
+    });
 
-    const toLines = R.compose(
-      R.addIndex(R.map)((line, idx) => ({ ...line, position: idx % 2 ? 'start' : 'middle'})),
-      R.sortBy(R.prop('value')),
-      R.map(toLine)
-    );
+    const toLines = R.map(toLine);
 
     const lines = toLines(goalPerformances);
 
@@ -121,7 +106,6 @@ class VdotChart extends Component {
           },
       },
       y: {
-        label: 'VDOT',
         max: lines.length ? maxVdot : undefined
       }
     };
@@ -141,13 +125,12 @@ class VdotChart extends Component {
             </div>
           `;
         } else {
-          const [ forecastME, forecastLS ] = d;
+          const [ forecastME ] = d;
 
           return `
             <div>
               <div>${moment(forecastME.x).format('YYYY-MM-DD')}</div>
               <div>${forecastME.id} ${oneDecimal(forecastME.value)} VDOT</div>
-              <div>${forecastLS.id} ${oneDecimal(forecastLS.value)} VDOT</div>
             </div>
           `;
         }
