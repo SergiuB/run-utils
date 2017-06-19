@@ -65,7 +65,7 @@ const forecast = ({
         i++;
     }
     const weekly = prediction
-        .filter(({ date }, idx) => date.getDay() === 0 || idx === prediction.length - 1);
+        .filter(({ date }, idx) => date.getDate() === 1 || idx === prediction.length - 1);
     return weekly;
 }
 
