@@ -24,7 +24,19 @@ export const deselectRace = (id) => {
   }
 }
 
-export const addGoalPerformance = (race = kHalf, time = 5400) => {
+export const startAddingGoalPerformance = () => {
+  return {
+    type: 'START_ADDING_GOAL_PERFORMANCE',
+  }
+}
+
+export const cancelAddingGoalPerformance = () => {
+  return {
+    type: 'CANCEL_ADDING_GOAL_PERFORMANCE',
+  }
+}
+
+export const addGoalPerformance = (race, time) => {
   return {
     type: 'ADD_GOAL_PERFORMANCE',
     race,

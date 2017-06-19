@@ -62,9 +62,10 @@ class RacePredictionPage extends Component {
       deselectRace,
       goalPerformances,
       addGoalPerformance,
+      addingGoalPerformance,
       removeGoalPerformance,
-      changeGoalPerformanceRace,
-      changeGoalPerformanceTime,
+      startAddingGoalPerformance,
+      cancelAddingGoalPerformance,
     } = this.props;
     
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
@@ -87,10 +88,11 @@ class RacePredictionPage extends Component {
           <Tab label="Future Goals" >
             <GoalPerfomanceTable
               goalPerformances={goalPerformances}
-              onAddGoalPerformance={addGoalPerformance}
-              onRemoveGoalPerformance={removeGoalPerformance}
-              onChangeGoalPerformanceRace={changeGoalPerformanceRace}
-              onChangeGoalPerformanceTime={changeGoalPerformanceTime}
+              addingGoalPerformance={addingGoalPerformance}
+              addGoalPerformance={addGoalPerformance}
+              removeGoalPerformance={removeGoalPerformance}
+              startAddingGoalPerformance={startAddingGoalPerformance}
+              cancelAddingGoalPerformance={cancelAddingGoalPerformance}
             />
           </Tab>
         </Tabs>

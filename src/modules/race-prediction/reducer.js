@@ -3,6 +3,7 @@ const initialState = {
   races: [],
   selectedRaceIds: [],
   goalPerformances: [],
+  addingGoalPerformance: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,6 +29,18 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedRaceIds: state.selectedRaceIds.filter(id => id !== action.id)
       };
+    
+    case 'START_ADDING_GOAL_PERFORMANCE': 
+      return {
+        ...state,
+        addingGoalPerformance: true,
+      };
+    
+    case 'CANCEL_ADDING_GOAL_PERFORMANCE': 
+      return {
+        ...state,
+        addingGoalPerformance: false,
+      };
 
     case 'ADD_GOAL_PERFORMANCE':
       return {
@@ -37,7 +50,8 @@ const reducer = (state = initialState, action) => {
           id: action.id,
           race: action.race,
           time: action.time
-        }]
+        }],
+        addingGoalPerformance: false,
       }
     
     case 'REMOVE_GOAL_PERFORMANCE':
