@@ -1,25 +1,48 @@
 import React, { Component } from 'react';
 // import R from 'ramda';
-import C3Chart from 'react-c3js';
 import moment from 'moment';
 import R from 'ramda';
 import { branch, renderNothing, onlyUpdateForKeys } from 'recompose';
 
 import core from 'modules/core';
 import { forecast } from '../../services';
+import C3Chart from './C3Chart';
 
 const { secToTime } = core.services.conversion;
+const { getVdot } = core.services.vdotCalculator;
 
 import 'c3/c3.css';
 
 const pastSeries = 'Past';
 const futureSeriesME = 'Forecast (Max Entropy)';
 const futureSeriesLS = 'Forecast (Least Square)';
+const oneDecimal = number => Number.parseFloat(number.toFixed(1), 10);
+const max = R.reduce(R.max, 0);
 
 class VdotChart extends Component {
+
+  state = {
+    refreshChart: false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.goalPerformances.length != nextProps.goalPerformances.length) {
+      console.log('set state refresh chart true');
+      this.setState({ refreshChart: true });
+    } else {
+      console.log('set state refresh chart false');
+      this.setState({ refreshChart: false })
+    }
+  }
+  
   
   render() {
-    const { races } = this.props;
+
+    const { races, goalPerformances } = this.props;
+    const { refreshChart } = this.state;
+
+    console.log(races.length, goalPerformances.length);
+    
     const raceArr = races.map(({ date, vdot }) => [date, vdot]);
 
     const weeklyPredictionsME = forecast({
@@ -41,34 +64,52 @@ class VdotChart extends Component {
     const futureDatesLS = weeklyPredictionsLS.map(R.prop('date'));
     const futureVdotValuesLS = weeklyPredictionsLS.map(R.prop('val'));
 
-     const data = {
-        xs: {
-            [pastSeries]: 'x1',
-            [futureSeriesME]: 'x2',
-            [futureSeriesLS]: 'x3',
-            // 'data2': 'x2',
-        },
+    const data = {
+      xs: {
+          [pastSeries]: 'x1',
+          [futureSeriesME]: 'x2',
+          [futureSeriesLS]: 'x3',
+          // 'data2': 'x2',
+      },
 //        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
-        columns: [
-            ['x1', ...pastDates],
-            ['x2', ...futureDatesME],
-            ['x3', ...futureDatesLS],
-            [pastSeries, ...pastVdotValues],
-            [futureSeriesME, ...futureVdotValuesME],
-            [futureSeriesLS, ...futureVdotValuesLS],
-        ],
-        types: {
-            [pastSeries]: 'line',
-            [futureSeriesME]: 'line',
-            [futureSeriesLS]: 'line',
-        },
-        xFormat: '%Y-%m-%d',
+      columns: [
+          ['x1', ...pastDates],
+          ['x2', ...futureDatesME],
+          ['x3', ...futureDatesLS],
+          [pastSeries, ...pastVdotValues],
+          [futureSeriesME, ...futureVdotValuesME],
+          [futureSeriesLS, ...futureVdotValuesLS],
+      ],
+      types: {
+          [pastSeries]: 'line',
+          [futureSeriesME]: 'line',
+          [futureSeriesLS]: 'line',
+      },
+      xFormat: '%Y-%m-%d',
     };
 
     const formatTicks = (date) => {
       return moment(date).format('YYYY-MM-DD');
     };
 
+    const goalPerfLines = goalPerformances.map(({ race, time }, idx) => {
+      const vdot = oneDecimal(getVdot(race.distance, time));
+      const position = idx % 2 ? 'middle' : 'start';
+      return {
+        value: vdot,
+        text: `${race.label} - ${secToTime(time)} (VDOT ${vdot})`,
+        position
+      };
+    });
+
+    const grid = {
+      y: {
+        // show: true,
+        lines: goalPerfLines
+      }
+    }
+
+    const maxVdot = max(goalPerfLines.map(R.prop('value')));
     const axis = {
       x: {
           type: 'timeseries',
@@ -78,11 +119,11 @@ class VdotChart extends Component {
           },
       },
       y: {
-        label: 'VDOT'
+        label: 'VDOT',
+        max: goalPerfLines.length ? maxVdot : undefined
       }
     };
 
-    const oneDecimal = number => Number.parseFloat(number.toFixed(1), 10);
     const tooltip = {
       contents: (d, defaultTitleFormat, defaultValueFormat, color) => {
         const dataPoint = d[0];
@@ -115,17 +156,6 @@ class VdotChart extends Component {
       show: true
     };
 
-    const grid = {
-      y: {
-        // show: true,
-        lines: [
-          {value: 20, text: 'Label on 2'},
-          {value: 50, text: 'Label on 5', class: 'label-5'},
-          {value: 60, text: 'Label on 6', position: 'start'}
-        ]
-      }
-    }
-
     return (
       <C3Chart
         data={data}
@@ -136,6 +166,7 @@ class VdotChart extends Component {
         padding={{
           right: 35
         }}
+        recreate={refreshChart}
       />
     );
   }
@@ -146,7 +177,7 @@ const hideIfNoRaces = branch(
   renderNothing
 )
 
-const optimize = onlyUpdateForKeys(['races']);
+const optimize = onlyUpdateForKeys(['races', 'goalPerformances']);
 
 const enhance = R.compose(
   hideIfNoRaces,
