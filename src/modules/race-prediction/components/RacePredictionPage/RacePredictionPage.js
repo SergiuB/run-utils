@@ -4,21 +4,15 @@ import { branch, renderNothing } from 'recompose';
 import R from 'ramda';
 
 import Toggle from 'material-ui/Toggle';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
-import IconButton from 'material-ui/IconButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 
-import VdotChart from './VdotChart';
+import VdotChart from '../VdotChart';
+import GoalPerfomanceTable from '../GoalPerformanceTable';
 
 import core from 'modules/core';
 const { getVdot } = core.services.vdotCalculator;
-const { allRacesObj } = core.constants;
 
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
 import './RacePredictionPage.css';
 
@@ -40,44 +34,7 @@ class RaceTable extends Component {
   }
 }
 
-class GoalPerfomanceTable extends Component {
-  render() {
-    const {
-      goalPerformances,
-      onAddGoalPerformance,
-      onRemoveGoalPerformance,
-      onChangeGoalPerformanceRace,
-    } = this.props;
-    const mapValues = R.compose(
-      R.values,
-      R.map,
-    );
-    return (
-        <div className='goal-performance-table'>
-          {goalPerformances.map(({ id, race, time }) => (
-              <div className='goal-performance' key={id}>
-                <SelectField
-                  value={race.label}
-                  onChange={(ev, idx, raceLabel) => onChangeGoalPerformanceRace(id, allRacesObj[raceLabel])}
-                >
-                  {mapValues(r => (
-                    <MenuItem key={r.label} value={r.label} primaryText={r.label} />
-                  ), allRacesObj)}
-                </SelectField>
-                <IconButton
-                    onTouchTap={() => onRemoveGoalPerformance(id)}
-                >
-                  <ContentRemove />
-                </IconButton>
-              </div>
-          ))}
-          <FloatingActionButton mini={true} onTouchTap={() => onAddGoalPerformance()}>
-            <ContentAdd />
-          </FloatingActionButton>
-        </div>
-      );
-  }
-}
+
 
 
 const toVdotActivity = race => ({
@@ -107,6 +64,7 @@ class RacePredictionPage extends Component {
       addGoalPerformance,
       removeGoalPerformance,
       changeGoalPerformanceRace,
+      changeGoalPerformanceTime,
     } = this.props;
     
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
@@ -132,6 +90,7 @@ class RacePredictionPage extends Component {
               onAddGoalPerformance={addGoalPerformance}
               onRemoveGoalPerformance={removeGoalPerformance}
               onChangeGoalPerformanceRace={changeGoalPerformanceRace}
+              onChangeGoalPerformanceTime={changeGoalPerformanceTime}
             />
           </Tab>
         </Tabs>

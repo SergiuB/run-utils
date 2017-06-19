@@ -6,7 +6,7 @@ import R from 'ramda';
 import { branch, renderNothing } from 'recompose';
 
 import core from 'modules/core';
-import { forecast } from '../services';
+import { forecast } from '../../services';
 
 const { secToTime } = core.services.conversion;
 
@@ -31,7 +31,6 @@ class VdotChart extends Component {
       method: 'ARLeastSquare'
     });
 
-    // console.log(weeklyPredictions);
 
     const pastDates = races.map(R.prop('date'));
     const pastVdotValues = races.map(R.prop('vdot'));
@@ -116,14 +115,26 @@ class VdotChart extends Component {
       show: true
     };
 
+    const grid = {
+      y: {
+        // show: true,
+        lines: [
+          {value: 20, text: 'Label on 2'},
+          {value: 50, text: 'Label on 5', class: 'label-5'},
+          {value: 60, text: 'Label on 6', position: 'start'}
+        ]
+      }
+    }
+
     return (
       <C3Chart
         data={data}
         axis={axis}
         point={point}
         tooltip={tooltip}
+        grid={grid}
         padding={{
-          right: 15
+          right: 35
         }}
       />
     );
