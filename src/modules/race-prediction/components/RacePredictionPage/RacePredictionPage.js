@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { branch, renderNothing } from 'recompose';
 import R from 'ramda';
+import {
+  Route,
+  Redirect
+} from 'react-router'
 
 import Toggle from 'material-ui/Toggle';
 import {Tabs, Tab} from 'material-ui/Tabs';
@@ -48,6 +52,12 @@ const toVdotActivity = race => ({
 
 
 class RacePredictionPage extends Component {
+
+  handleTabChange(tabName) {
+    console.log(tabName);
+    // debugger;
+    this.props.history.push(`/racePrediction/${tabName}`);
+  }
   
   componentWillMount() {
     const { userData, fetchRaces } = this.props;
@@ -66,9 +76,41 @@ class RacePredictionPage extends Component {
       removeGoalPerformance,
       startAddingGoalPerformance,
       cancelAddingGoalPerformance,
+      location,
+      history,
     } = this.props;
     
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
+
+    // if (location.path === '/ra')
+
+    const comp = () => <div>hello</div>;
+
+    const tabs = whichTab => () => (
+      <Tabs
+        value={whichTab}
+        onChange={tabName => this.handleTabChange(tabName)}
+      >
+        <Tab label="Past Races" value="past" >
+          <RaceTable
+            races={races}
+            selectedRaceIds={selectedRaceIds}
+            selectRace={selectRace}
+            deselectRace={deselectRace}
+          />
+        </Tab>
+        <Tab label="Future Goals" value="future" >
+          <GoalPerfomanceTable
+            goalPerformances={goalPerformances}
+            addingGoalPerformance={addingGoalPerformance}
+            addGoalPerformance={addGoalPerformance}
+            removeGoalPerformance={removeGoalPerformance}
+            startAddingGoalPerformance={startAddingGoalPerformance}
+            cancelAddingGoalPerformance={cancelAddingGoalPerformance}
+          />
+        </Tab>
+      </Tabs>
+    )
     
     return (
       <div className='race-prediction-page'>
@@ -76,26 +118,10 @@ class RacePredictionPage extends Component {
           races={selectedRaces}
           goalPerformances={goalPerformances}
         />
-        <Tabs>
-          <Tab label="Past Races" >
-            <RaceTable
-              races={races}
-              selectedRaceIds={selectedRaceIds}
-              selectRace={selectRace}
-              deselectRace={deselectRace}
-            />
-          </Tab>
-          <Tab label="Future Goals" >
-            <GoalPerfomanceTable
-              goalPerformances={goalPerformances}
-              addingGoalPerformance={addingGoalPerformance}
-              addGoalPerformance={addGoalPerformance}
-              removeGoalPerformance={removeGoalPerformance}
-              startAddingGoalPerformance={startAddingGoalPerformance}
-              cancelAddingGoalPerformance={cancelAddingGoalPerformance}
-            />
-          </Tab>
-        </Tabs>
+       
+        <Route path='/racePrediction' exact render={() => <Redirect to={'/racePrediction/past'} />}/>
+        <Route path='/racePrediction/past' component={tabs('past')} />
+        <Route path='/racePrediction/future' component={tabs('future')} />
       </div>
     );
     // return <div>

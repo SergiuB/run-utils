@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import C3Chart from 'react-c3js';
 import moment from 'moment';
 import R from 'ramda';
-import { branch, renderNothing } from 'recompose';
+import { branch, renderNothing, onlyUpdateForKeys } from 'recompose';
 
 import core from 'modules/core';
 import { forecast } from '../../services';
@@ -146,4 +146,11 @@ const hideIfNoRaces = branch(
   renderNothing
 )
 
-export default hideIfNoRaces(VdotChart);
+const optimize = onlyUpdateForKeys(['races']);
+
+const enhance = R.compose(
+  hideIfNoRaces,
+  optimize,
+)
+
+export default enhance(VdotChart);
