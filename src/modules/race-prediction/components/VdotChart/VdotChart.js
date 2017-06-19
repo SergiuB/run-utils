@@ -88,24 +88,30 @@ class VdotChart extends Component {
       return moment(date).format('YYYY-MM-DD');
     };
 
-    const goalPerfLines = goalPerformances.map(({ race, time }, idx) => {
+    const toLine = ({ race, time }) => {
       const vdot = oneDecimal(getVdot(race.distance, time));
-      const position = idx % 2 ? 'middle' : 'start';
       return {
         value: vdot,
-        text: `${race.label} - ${secToTime(time)} (VDOT ${vdot})`,
-        position
+        text: `${race.label} - ${secToTime(time)} (VDOT ${vdot})`
       };
-    });
+    };
+
+    const toLines = R.compose(
+      R.addIndex(R.map)((line, idx) => ({ ...line, position: idx % 2 ? 'start' : 'middle'})),
+      R.sortBy(R.prop('value')),
+      R.map(toLine)
+    );
+
+    const lines = toLines(goalPerformances);
 
     const grid = {
       y: {
         // show: true,
-        lines: goalPerfLines
+        lines: toLines(goalPerformances)
       }
     }
 
-    const maxVdot = max(goalPerfLines.map(R.prop('value')));
+    const maxVdot = max(lines.map(R.prop('value')));
     const axis = {
       x: {
           type: 'timeseries',
@@ -116,7 +122,7 @@ class VdotChart extends Component {
       },
       y: {
         label: 'VDOT',
-        max: goalPerfLines.length ? maxVdot : undefined
+        max: lines.length ? maxVdot : undefined
       }
     };
 
