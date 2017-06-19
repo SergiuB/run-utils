@@ -11,6 +11,7 @@ import IconButton from 'material-ui/IconButton';
 import TimePicker from 'rc-time-picker';
 
 import 'rc-time-picker/assets/index.css';
+import './GoalPerformanceTable.css';
 
 const format = 'h:mm:ss';
 
@@ -48,6 +49,7 @@ class GoalPerfomanceTable extends Component {
                 <SelectField
                   value={race.label}
                   onChange={(ev, idx, raceLabel) => onChangeGoalPerformanceRace(id, allRacesObj[raceLabel])}
+                  style={{ width: 100 }}
                 >
                   {mapValues(r => (
                     <MenuItem key={r.label} value={r.label} primaryText={r.label} />
@@ -57,6 +59,7 @@ class GoalPerfomanceTable extends Component {
                   value={secToMoment(time)}
                   format={format}
                   onChange={value => onChangeGoalPerformanceTime(id, momentToSec(value))}
+                  className='goal-time-picker'
                 />
                 <IconButton
                     onTouchTap={() => onRemoveGoalPerformance(id)}
