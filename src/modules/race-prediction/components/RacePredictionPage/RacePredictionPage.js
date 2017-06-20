@@ -124,7 +124,7 @@ class RacePredictionPage extends Component {
                 <MenuItem value={'5y'} primaryText="Five Years" />
               </SelectField>
             </div>)
-          : <div className='info mui--text-subhead'>
+          : <div className='info mui--text-subhead insufficient-races'>
               <p>
               {'At least two past performances are required to show the prediction chart. '}
               { userData

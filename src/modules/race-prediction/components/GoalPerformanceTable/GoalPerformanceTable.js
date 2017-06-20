@@ -92,15 +92,22 @@ class GoalPerfomanceTable extends Component {
 
     return (
         <div className='goal-performances'>
-          <div className='goal-performance-table'>
-            <div className='goal-performance headers'>
-              <TableHeader label='Event' />
-              <TableHeader label='Time' />
-              <TableHeader label='VDOT' />
-              <TableHeader label='When (est)' />
-            </div>
-            {goalPerformanceRows}
-          </div>
+          {goalPerformanceRows.length 
+            ? <div className='goal-performance-table'>
+                <div className='goal-performance headers'>
+                  <TableHeader label='Event' />
+                  <TableHeader label='Time' />
+                  <TableHeader label='VDOT' />
+                  <TableHeader label='When (est)' />
+                </div>
+                {goalPerformanceRows}
+              </div>
+            : (!addingGoalPerformance && <div className='info mui--text-subhead no-goals'>
+                <p>
+                {'No future goals added yet. Tell the genie your wishes.'}
+                </p>
+              </div>)
+          }
           {addingGoalPerformance
             ? (
               <AddFutureGoalDialog
