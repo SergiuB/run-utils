@@ -44,10 +44,11 @@ class GoalPerfomanceTable extends Component {
           }
           {goalPerformances.map(({ id, race, time }) => (
               <div className='goal-performance' key={id}>
-                <div>{race.label}</div>
-                <div>{secToTime(time)}</div>
+                <div className='column'>{race.label}</div>
+                <div className='column'>{secToTime(time)}</div>
                 <IconButton
-                    onTouchTap={() => removeGoalPerformance(id)}
+                  className='column'
+                  onTouchTap={() => removeGoalPerformance(id)}
                 >
                   <ContentRemove />
                 </IconButton>

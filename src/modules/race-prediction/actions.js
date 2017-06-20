@@ -68,6 +68,11 @@ export const changeGoalPerformanceTime = (id, time) => {
   }
 }
 
+export const selectTab = (tabId) => ({
+  type: 'SELECT_TAB',
+  tabId,
+})
+
 export const fetchRaces = (uid) => dispatch => {
   if (!uid) {
     return;

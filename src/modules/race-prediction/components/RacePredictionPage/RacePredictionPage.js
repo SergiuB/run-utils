@@ -74,35 +74,11 @@ class RacePredictionPage extends Component {
       removeGoalPerformance,
       startAddingGoalPerformance,
       cancelAddingGoalPerformance,
+      selectedTab,
+      selectTab,
     } = this.props;
-    
-    const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
 
-    const tabs = whichTab => () => (
-      <Tabs
-        value={whichTab}
-        onChange={tabName => this.handleTabChange(tabName)}
-      >
-        <Tab label="Past Races" value="past" >
-          <RaceTable
-            races={races}
-            selectedRaceIds={selectedRaceIds}
-            selectRace={selectRace}
-            deselectRace={deselectRace}
-          />
-        </Tab>
-        <Tab label="Future Goals" value="future" >
-          <GoalPerfomanceTable
-            goalPerformances={goalPerformances}
-            addingGoalPerformance={addingGoalPerformance}
-            addGoalPerformance={addGoalPerformance}
-            removeGoalPerformance={removeGoalPerformance}
-            startAddingGoalPerformance={startAddingGoalPerformance}
-            cancelAddingGoalPerformance={cancelAddingGoalPerformance}
-          />
-        </Tab>
-      </Tabs>
-    )
+    const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
     
     return (
       <div className='race-prediction-page'>
@@ -110,10 +86,31 @@ class RacePredictionPage extends Component {
           races={selectedRaces}
           goalPerformances={goalPerformances}
         />
-       
-        <Route path='/racePrediction' exact render={() => <Redirect to={'/racePrediction/past'} />}/>
-        <Route path='/racePrediction/past' component={tabs('past')} />
-        <Route path='/racePrediction/future' component={tabs('future')} />
+        
+
+        <Tabs
+          value={selectedTab}
+          onChange={selectTab}
+        >
+          <Tab label="Past Races" value="past" >
+            <RaceTable
+              races={races}
+              selectedRaceIds={selectedRaceIds}
+              selectRace={selectRace}
+              deselectRace={deselectRace}
+            />
+          </Tab>
+          <Tab label="Future Goals" value="future" >
+            <GoalPerfomanceTable
+              goalPerformances={goalPerformances}
+              addingGoalPerformance={addingGoalPerformance}
+              addGoalPerformance={addGoalPerformance}
+              removeGoalPerformance={removeGoalPerformance}
+              startAddingGoalPerformance={startAddingGoalPerformance}
+              cancelAddingGoalPerformance={cancelAddingGoalPerformance}
+            />
+          </Tab>
+        </Tabs>
       </div>
     );
   }

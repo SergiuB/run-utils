@@ -2,4 +2,12 @@
   .goal-time-picker {
     width: 80px;
   }
+  .goal-performance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .column {
+      width: 100px
+    }
+  }
 }

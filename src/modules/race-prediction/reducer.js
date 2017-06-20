@@ -4,6 +4,7 @@ const initialState = {
   selectedRaceIds: [],
   goalPerformances: [],
   addingGoalPerformance: false,
+  selectedTab: 'past',
 };
 
 const reducer = (state = initialState, action) => {
@@ -78,6 +79,12 @@ const reducer = (state = initialState, action) => {
             ? { ...p, time: action.time }
             : p
         ) 
+      }
+
+    case 'SELECT_TAB': 
+      return {
+        ...state,
+        selectedTab: action.tabId,
       }
 
     default:
