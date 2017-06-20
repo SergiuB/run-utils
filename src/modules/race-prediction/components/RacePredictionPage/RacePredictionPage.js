@@ -6,6 +6,8 @@ import moment from 'moment';
 
 import Toggle from 'material-ui/Toggle';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 import VdotChart from '../VdotChart';
 import GoalPerfomanceTable from '../GoalPerformanceTable';
@@ -53,6 +55,17 @@ const isOneYearFromNow = ({ date }) => moment(date).isAfter(moment().add(1, 'y')
 const is2YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(2, 'y'));
 const is5YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(5, 'y'));
 
+const getStopCond = forecastLimit => {
+  switch(forecastLimit) {
+    case '1y':
+      return isOneYearFromNow;
+    case '5y':
+      return is5YearsFromNow;
+    default:
+      return isOneYearFromNow;
+  }
+}
+
 class RacePredictionPage extends Component {
 
   handleTabChange(tabName) {
@@ -78,7 +91,9 @@ class RacePredictionPage extends Component {
       cancelAddingGoalPerformance,
       selectedTab,
       selectTab,
-      userData
+      userData,
+      forecastLimit,
+      setForecastLimit,
     } = this.props;
 
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
@@ -87,18 +102,28 @@ class RacePredictionPage extends Component {
     if (selectedRaces.length > 1){
       prediction = forecast({
         data: selectedRaces.map(({ date, vdot }) => [date, vdot]),
-        stopCond: is6MonthsFromNow,
+        stopCond: getStopCond(forecastLimit),
       });
     }
     
     return (
       <div className='race-prediction-page'>
         {selectedRaces.length > 1
-          ? (<VdotChart
-              races={selectedRaces}
-              goalPerformances={goalPerformances}
-              prediction={prediction}
-            />)
+          ? (<div>
+              <VdotChart
+                races={selectedRaces}
+                goalPerformances={goalPerformances}
+                prediction={prediction}
+              />
+              <SelectField
+                floatingLabelText="Forecast limit"
+                value={forecastLimit}
+                onChange={(evt, idx, val) => setForecastLimit(val)}
+              >
+                <MenuItem value={'1y'} primaryText="One Year" />
+                <MenuItem value={'5y'} primaryText="Five Years" />
+              </SelectField>
+            </div>)
           : <div className='info mui--text-subhead'>
               <p>
               {'At least two past performances are required to show the prediction chart. '}

@@ -5,6 +5,7 @@ const initialState = {
   goalPerformances: [],
   addingGoalPerformance: false,
   selectedTab: 'past',
+  forecastLimit: '1y',
 };
 
 const reducer = (state = initialState, action) => {
@@ -85,6 +86,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedTab: action.tabId,
+      }
+
+    case 'SET_FORECAST_LIMIT':
+      return {
+        ...state,
+        forecastLimit: action.limit,
       }
 
     default:

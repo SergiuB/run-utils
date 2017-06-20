@@ -72,6 +72,11 @@ export const selectTab = (tabId) => ({
   tabId,
 })
 
+export const setForecastLimit = (limit) => ({
+  type: 'SET_FORECAST_LIMIT',
+  limit,
+})
+
 export const fetchRaces = (uid) => dispatch => {
   if (!uid) {
     return;
