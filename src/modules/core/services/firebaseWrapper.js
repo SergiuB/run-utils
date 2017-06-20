@@ -35,8 +35,11 @@ const signInWithCustomToken = token => firebase.auth().signInWithCustomToken(tok
 const getRaces = uid => firebase.database().ref(`/runRaces/${uid}`).once('value')
   .then(snapshot => snapshot.val());
 
+const signOut = () => firebase.auth().signOut();
+
 export {
   init,
   signInWithCustomToken,
   getRaces,
+  signOut,
 }

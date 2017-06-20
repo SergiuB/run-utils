@@ -21,7 +21,7 @@ exports[`App (Snapshot) renders correctly with logged in Strava user 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
-              logIn={undefined}
+              login={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={
@@ -1039,7 +1039,7 @@ exports[`App (Snapshot) renders correctly with subapps 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
-              logIn={undefined}
+              login={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={null} />
@@ -2515,7 +2515,7 @@ exports[`App (Snapshot) renders correctly without subapps 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
-              logIn={undefined}
+              login={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={null} />

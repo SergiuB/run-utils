@@ -30,7 +30,7 @@ export const notAuth = () =>  ({
   type: 'NOT_AUTH',
 })
 
-export const logIn = () => dispatch => {
+export const login = () => dispatch => {
   let popup;
 
   const handleTokenMessage = ({ data, origin }) => {
@@ -49,4 +49,24 @@ export const logIn = () => dispatch => {
 
   window.addEventListener("message", handleTokenMessage, false);
   popup = window.open('https://us-central1-run-utils.cloudfunctions.net/api/authStrava', 'firebaseAuth', 'height=315,width=400');
+}
+
+export const requestLogout = () =>  ({
+  type: 'REQUEST_LOGOUT',
+});
+
+export const logoutSuccess = () =>  ({
+  type: 'LOGOUT_SUCCESS',
+});
+
+export const logoutFail = (error) =>  ({
+  type: 'LOGOUT_FAIL',
+  error,
+})
+
+export const logout = () => dispatch => {
+  dispatch(requestLogout());
+  firebase.signOut()
+    .then(() => dispatch(logoutSuccess()))
+    .catch(error => dispatch(logoutFail(error)))
 }

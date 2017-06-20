@@ -21,10 +21,13 @@ import * as appActions from '../actions';
 import './App.css';
 import 'muicss/dist/css/mui-noglobals.min.css';
 
-const AppBarMenu = ({ toggleMetric, metric, userData, logIn, isAuthenticating }) => (
+const AppBarMenu = ({ toggleMetric, metric, userData, login, logout, isAuthenticating, isLoggingOut }) => (
   <div className='app-bar-menu'>
     {!userData && !isAuthenticating &&
-      <FlatButton label="Login" style={{ color: white }} onClick={logIn}/>
+      <FlatButton label="Login" style={{ color: white }} onClick={login}/>
+    }
+    {userData && !isLoggingOut &&
+      <FlatButton label="Logout" style={{ color: white }} onClick={logout}/>
     }
     <IconMenu
       iconStyle={{ color: white }}
@@ -54,13 +57,28 @@ export class App extends Component {
   }
 
   render() {
-    const { metric, isMenuOpen, openMenu, setMetric, children, push, userData, logIn, location, isAuthenticating } = this.props;
+    const {
+      metric,
+      isMenuOpen,
+      openMenu,
+      setMetric,
+      children,
+      push,
+      userData,
+      login,
+      location,
+      isAuthenticating,
+      logout,
+      isLoggingOut,
+    } = this.props;
     const appBarMenuProps = {
       toggleMetric: () => setMetric(!metric),
       metric,
       userData,
-      logIn,
+      login,
       isAuthenticating,
+      logout,
+      isLoggingOut,
     };
     const childrenWithProps = React.Children.map(children,
      child => React.cloneElement(child, { metric })

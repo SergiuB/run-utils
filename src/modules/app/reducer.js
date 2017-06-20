@@ -3,7 +3,9 @@ const initialState = {
   isMenuOpen: false,
   userData: null,
   isAuthenticating: false,
+  isLoggingOut: false,
   authError: null,
+  logoutError: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -45,6 +47,26 @@ const reducer = (state = initialState, action) => {
         ...state,
         isAuthenticating: false,
         authError: action.error,
+      };
+
+    case 'REQUEST_LOGOUT':
+      return {
+        ...state,
+        isLoggingOut: true,
+      };
+    
+    case 'LOGOUT_SUCCESS':
+      return {
+        ...state,
+        isLoggingOut: false,
+        userData: null,
+      };
+    
+    case 'LOGOUT_FAIL': 
+      return {
+        ...state,
+        isLoggingOut: false,
+        logoutError: action.error,
       };
 
     default:
