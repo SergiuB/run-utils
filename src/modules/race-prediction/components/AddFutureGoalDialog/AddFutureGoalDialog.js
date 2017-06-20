@@ -4,6 +4,7 @@ import R from 'ramda';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
 
 
 import core from 'modules/core';
@@ -36,7 +37,7 @@ class AddFutureGoalDialog extends Component {
     const avgSec = raceLabel => (maxRaceEquivalents[raceLabel] + minRaceEquivalents[raceLabel]) / 2;
 
     return (
-      <div>
+      <Paper className='add-future-goal-dialog'>
         <SelectField
           value={race.label}
           onChange={(ev, idx, raceLabel) => this.setState({
@@ -60,7 +61,7 @@ class AddFutureGoalDialog extends Component {
         />
         <RaisedButton label="Ok" primary={true} onTouchTap={() => onOk(race, time)}/>
         <RaisedButton label="Cancel" onTouchTap={onCancel}/>
-      </div>
+      </Paper>
     );
   }
 }

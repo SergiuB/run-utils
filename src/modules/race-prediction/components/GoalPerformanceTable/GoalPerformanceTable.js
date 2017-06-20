@@ -26,7 +26,34 @@ class GoalPerfomanceTable extends Component {
       removeGoalPerformance,
     } = this.props;
     return (
-        <div className='goal-performance-table'>
+        <div className='goal-performances'>
+          <div className='goal-performance-table'>
+            <div className='goal-performance headers'>
+              <div className='column'>Event</div>
+              <div className='column'>Time</div>
+              <div className='column'>VDOT</div>
+              <div className='column'>When</div>
+            </div>
+            {goalPerformances.map(({ id, race, time }) => (
+                <div className='goal-performance' key={id}>
+                  <div className='column'>{race.label}</div>
+                  <div className='column'>{secToTime(time)}</div>
+                  <div className='column'>VDOT</div>
+                  <div className='column'>When</div>
+                  <div className='button-column'>
+                    <IconButton
+                      onTouchTap={() => removeGoalPerformance(id)}
+                      style={{
+                        width: 36,
+                        height: 36,
+                      }}
+                    >
+                      <ContentRemove />
+                    </IconButton>
+                  </div>
+                </div>
+            ))}
+          </div>
           {addingGoalPerformance
             ? (
               <AddFutureGoalDialog
@@ -40,18 +67,6 @@ class GoalPerfomanceTable extends Component {
               </FloatingActionButton>  
             )
           }
-          {goalPerformances.map(({ id, race, time }) => (
-              <div className='goal-performance' key={id}>
-                <div className='column'>{race.label}</div>
-                <div className='column'>{secToTime(time)}</div>
-                <IconButton
-                  className='column'
-                  onTouchTap={() => removeGoalPerformance(id)}
-                >
-                  <ContentRemove />
-                </IconButton>
-              </div>
-          ))}
         </div>
       );
   }

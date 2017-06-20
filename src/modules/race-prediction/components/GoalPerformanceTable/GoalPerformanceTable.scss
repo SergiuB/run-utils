@@ -1,13 +1,32 @@
-.goal-performance-table {
-  .goal-time-picker {
-    width: 80px;
+$col-height: 36px;
+
+.goal-performances {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .goal-performance-table {
+
+  }
+  .add-future-goal-dialog {
+    width: 356px;
+    background-color: yellow;
   }
   .goal-performance {
     display: flex;
     align-items: center;
-    justify-content: center;
     .column {
-      width: 100px
+      width: 80px;
+      height: $col-height;
+      display: flex;
+      align-items: center;
+    }
+    .button-column {
+      width: $col-height;
+      height: $col-height;
+      button {
+        padding: 0px !important;
+      }
     }
   }
 }
