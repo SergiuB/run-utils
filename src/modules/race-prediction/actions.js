@@ -1,7 +1,6 @@
 import shortid from 'shortid';
 import core from 'modules/core';
 const { firebase } = core.services;
-const { kHalf } = core.constants;
 
 export const setRaces = (races) => {
   return {

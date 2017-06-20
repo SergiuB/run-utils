@@ -6,7 +6,6 @@ import moment from 'moment';
 
 import Toggle from 'material-ui/Toggle';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Paper from 'material-ui/Paper';
 
 import VdotChart from '../VdotChart';
 import GoalPerfomanceTable from '../GoalPerformanceTable';
@@ -88,7 +87,7 @@ class RacePredictionPage extends Component {
     if (selectedRaces.length > 1){
       prediction = forecast({
         data: selectedRaces.map(({ date, vdot }) => [date, vdot]),
-        stopCond: is5YearsFromNow,
+        stopCond: is6MonthsFromNow,
       });
     }
     
@@ -127,6 +126,7 @@ class RacePredictionPage extends Component {
           <Tab label="Future Goals" value="future" >
             <GoalPerfomanceTable
               goalPerformances={goalPerformances}
+              prediction={prediction}
               addingGoalPerformance={addingGoalPerformance}
               addGoalPerformance={addGoalPerformance}
               removeGoalPerformance={removeGoalPerformance}

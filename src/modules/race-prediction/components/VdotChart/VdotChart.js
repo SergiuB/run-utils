@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import R from 'ramda';
 import moment from 'moment';
 import R from 'ramda';
 import { branch, renderNothing, onlyUpdateForKeys } from 'recompose';
@@ -24,7 +23,7 @@ class VdotChart extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.goalPerformances.length != nextProps.goalPerformances.length) {
+    if (this.props.goalPerformances.length !== nextProps.goalPerformances.length) {
       this.setState({ refreshChart: true });
     } else {
       this.setState({ refreshChart: false })
