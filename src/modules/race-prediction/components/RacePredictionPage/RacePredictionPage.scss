@@ -1,4 +1,14 @@
 .race-prediction-page {
   display: flex;
   flex-direction: column;
+  .info {
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+      max-width: 700px;
+      text-align: center;
+    }
+  }
 }

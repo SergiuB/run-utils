@@ -5,7 +5,6 @@ import R from 'ramda';
 import { branch, renderNothing, onlyUpdateForKeys } from 'recompose';
 
 import core from 'modules/core';
-import { forecast } from '../../services';
 import C3Chart from './C3Chart';
 
 const { secToTime } = core.services.conversion;
@@ -17,10 +16,6 @@ const pastSeries = 'Past';
 const futureSeriesME = 'Forecast (Max Entropy)';
 const oneDecimal = number => Number.parseFloat(number.toFixed(1), 10);
 const max = R.reduce(R.max, 0);
-const is6MonthsFromNow = ({ date }) => moment(date).isAfter(moment().add(6, 'M'));
-const isOneYearFromNow = ({ date }) => moment(date).isAfter(moment().add(1, 'y'));
-const is2YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(2, 'y'));
-const is5YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(5, 'y'));
 
 class VdotChart extends Component {
 
@@ -39,23 +34,14 @@ class VdotChart extends Component {
   
   render() {
 
-    const { races, goalPerformances } = this.props;
+    const { races, goalPerformances, prediction } = this.props;
     const { refreshChart } = this.state;
-
-    const raceArr = races.map(({ date, vdot }) => [date, vdot]);
-
-    const forecastData = {
-      data: raceArr,
-      stopCond: is5YearsFromNow,
-    };
-
-    const weeklyPredictionsME = forecast(forecastData);
 
     const pastDates = races.map(R.prop('date'));
     const pastVdotValues = races.map(R.prop('vdot'));
 
-    const futureDatesME = weeklyPredictionsME.map(R.prop('date'));
-    const futureVdotValuesME = weeklyPredictionsME.map(R.prop('val'));
+    const futureDatesME = prediction.map(R.prop('date'));
+    const futureVdotValuesME = prediction.map(R.prop('val'));
 
     const data = {
       xs: {

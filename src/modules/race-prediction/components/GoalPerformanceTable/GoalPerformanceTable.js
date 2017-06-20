@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import R from 'ramda';
 import moment from 'moment';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove-circle-outline';
 import IconButton from 'material-ui/IconButton';
-import TimePicker from 'rc-time-picker';
 
 import AddFutureGoalDialog from '../AddFutureGoalDialog';
 

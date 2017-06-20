@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { branch, renderNothing } from 'recompose';
 import R from 'ramda';
-import {
-  Route,
-  Redirect
-} from 'react-router'
+import moment from 'moment';
 
 import Toggle from 'material-ui/Toggle';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Paper from 'material-ui/Paper';
 
 import VdotChart from '../VdotChart';
 import GoalPerfomanceTable from '../GoalPerformanceTable';
@@ -17,6 +15,7 @@ import core from 'modules/core';
 const { getVdot } = core.services.vdotCalculator;
 
 import * as actions from '../../actions';
+import { forecast } from '../../services';
 
 import './RacePredictionPage.css';
 
@@ -25,7 +24,7 @@ class RaceTable extends Component {
     return this.props.selectedRaceIds.includes(raceId);
   }
   render() {
-    const { races, selectedRaceIds, selectRace, deselectRace } = this.props;
+    const { races, selectRace, deselectRace } = this.props;
     return (
         <div className='race-table'>
           {races.map(({ id, name }) => (
@@ -50,6 +49,10 @@ const toVdotActivity = race => ({
   date: new Date(race.start_date_local),
 });
 
+const is6MonthsFromNow = ({ date }) => moment(date).isAfter(moment().add(6, 'M'));
+const isOneYearFromNow = ({ date }) => moment(date).isAfter(moment().add(1, 'y'));
+const is2YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(2, 'y'));
+const is5YearsFromNow = ({ date }) => moment(date).isAfter(moment().add(5, 'y'));
 
 class RacePredictionPage extends Component {
 
@@ -76,23 +79,44 @@ class RacePredictionPage extends Component {
       cancelAddingGoalPerformance,
       selectedTab,
       selectTab,
+      userData
     } = this.props;
 
     const selectedRaces = races.filter(({ id }) => selectedRaceIds.includes(id));
+
+    let prediction;
+    if (selectedRaces.length > 1){
+      prediction = forecast({
+        data: selectedRaces.map(({ date, vdot }) => [date, vdot]),
+        stopCond: is5YearsFromNow,
+      });
+    }
     
     return (
       <div className='race-prediction-page'>
-        <VdotChart
-          races={selectedRaces}
-          goalPerformances={goalPerformances}
-        />
+        {selectedRaces.length > 1
+          ? (<VdotChart
+              races={selectedRaces}
+              goalPerformances={goalPerformances}
+              prediction={prediction}
+            />)
+          : <div className='info mui--text-subhead'>
+              <p>
+              {'At least two past performances are required to show the prediction chart. '}
+              { userData
+                ? 'Add more past activities with \'race\' type in Strava and refresh, or enable them if they are disabled.'
+                : 'Login with Strava to retrieve your past races.'
+              }
+              </p>
+            </div>
+        }
         
 
         <Tabs
           value={selectedTab}
           onChange={selectTab}
         >
-          <Tab label="Past Races" value="past" >
+          <Tab label="Past Performances" value="past" >
             <RaceTable
               races={races}
               selectedRaceIds={selectedRaceIds}

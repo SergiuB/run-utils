@@ -35,6 +35,9 @@ const forecast = ({
     method = 'ARMaxEntropy', // 'ARLeastSquare',
     degree = 5,
 } = {}) => {
+    if (data.length < 2) {
+        throw new Error('Forecasting requires at least 2 data points.')
+    }
     const all = process(data);
     const prediction = [];
     
