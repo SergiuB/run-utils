@@ -21,7 +21,9 @@ exports[`App (Snapshot) renders correctly with logged in Strava user 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
+              isLoggingOut={undefined}
               login={undefined}
+              logout={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={
@@ -269,6 +271,143 @@ exports[`App (Snapshot) renders correctly with logged in Strava user 1`] = `
                   }>
                   <div
                     className="app-bar-menu">
+                    <FlatButton
+                      disabled={false}
+                      fullWidth={false}
+                      label="Logout"
+                      labelPosition="after"
+                      labelStyle={Object {}}
+                      onKeyboardFocus={[Function]}
+                      onMouseEnter={[Function]}
+                      onMouseLeave={[Function]}
+                      onTouchStart={[Function]}
+                      primary={false}
+                      secondary={false}
+                      style={
+                        Object {
+                          "color": "#ffffff",
+                        }
+                      }>
+                      <EnhancedButton
+                        containerElement="button"
+                        disabled={false}
+                        focusRippleColor="#999999"
+                        focusRippleOpacity={0.3}
+                        onBlur={[Function]}
+                        onClick={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onKeyUp={[Function]}
+                        onKeyboardFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                        onTouchStart={[Function]}
+                        onTouchTap={[Function]}
+                        style={
+                          Object {
+                            "backgroundColor": "rgba(0, 0, 0, 0)",
+                            "borderRadius": 2,
+                            "color": "#ffffff",
+                            "height": 36,
+                            "lineHeight": "36px",
+                            "margin": 0,
+                            "minWidth": 88,
+                            "overflow": "hidden",
+                            "padding": 0,
+                            "textAlign": "center",
+                            "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
+                            "userSelect": "none",
+                          }
+                        }
+                        tabIndex={0}
+                        touchRippleColor="#999999"
+                        touchRippleOpacity={0.3}
+                        type="button">
+                        <button
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onFocus={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          onMouseEnter={[Function]}
+                          onMouseLeave={[Function]}
+                          onTouchStart={[Function]}
+                          onTouchTap={[Function]}
+                          style={
+                            Object {
+                              "WebkitTapHighlightColor": "rgba(0, 0, 0, 0)",
+                              "backgroundColor": "rgba(0, 0, 0, 0)",
+                              "border": 10,
+                              "borderRadius": 2,
+                              "boxSizing": "border-box",
+                              "color": "#ffffff",
+                              "cursor": "pointer",
+                              "display": "inline-block",
+                              "fontFamily": "Roboto, sans-serif",
+                              "fontSize": "inherit",
+                              "fontWeight": "inherit",
+                              "height": 36,
+                              "lineHeight": "36px",
+                              "margin": 0,
+                              "minWidth": 88,
+                              "muiPrepared": true,
+                              "outline": "none",
+                              "overflow": "hidden",
+                              "padding": 0,
+                              "position": "relative",
+                              "textAlign": "center",
+                              "textDecoration": "none",
+                              "transition": "all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms",
+                              "userSelect": "none",
+                              "verticalAlign": null,
+                              "zIndex": 1,
+                            }
+                          }
+                          tabIndex={0}
+                          type="button">
+                          <TouchRipple
+                            abortOnScroll={true}
+                            color="#999999"
+                            opacity={0.3}>
+                            <div
+                              onMouseDown={[Function]}
+                              onMouseLeave={[Function]}
+                              onMouseUp={[Function]}
+                              onTouchEnd={[Function]}
+                              onTouchStart={[Function]}>
+                              <FlatButtonLabel
+                                label="Logout"
+                                style={
+                                  Object {
+                                    "fontSize": 14,
+                                    "fontWeight": 500,
+                                    "letterSpacing": 0,
+                                    "textTransform": "uppercase",
+                                  }
+                                }>
+                                <span
+                                  style={
+                                    Object {
+                                      "fontSize": 14,
+                                      "fontWeight": 500,
+                                      "letterSpacing": 0,
+                                      "muiPrepared": true,
+                                      "paddingLeft": 16,
+                                      "paddingRight": 16,
+                                      "position": "relative",
+                                      "textTransform": "uppercase",
+                                      "verticalAlign": "middle",
+                                    }
+                                  }>
+                                  Logout
+                                </span>
+                              </FlatButtonLabel>
+                            </div>
+                          </TouchRipple>
+                        </button>
+                      </EnhancedButton>
+                    </FlatButton>
                     <IconMenu
                       anchorOrigin={
                         Object {
@@ -1039,7 +1178,9 @@ exports[`App (Snapshot) renders correctly with subapps 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
+              isLoggingOut={undefined}
               login={undefined}
+              logout={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={null} />
@@ -2515,7 +2656,9 @@ exports[`App (Snapshot) renders correctly without subapps 1`] = `
           iconElementRight={
             <AppBarMenu
               isAuthenticating={false}
+              isLoggingOut={undefined}
               login={undefined}
+              logout={undefined}
               metric={true}
               toggleMetric={[Function]}
               userData={null} />

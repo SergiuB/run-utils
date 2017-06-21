@@ -7,7 +7,8 @@ const someState = {
     { id: 1, race: 'a', time: 100 },
     { id: 2, race: 'b', time: 200 },
     { id: 3, race: 'c', time: 300 }
-  ]
+  ],
+  addingGoalPerformance: false, 
 };
 
 describe('race prediction reducer', () => {
@@ -15,7 +16,10 @@ describe('race prediction reducer', () => {
     expect(reducer(undefined, {})).toEqual({
       races: [],
       selectedRaceIds: [],
-      goalPerformances: [],
+      goalPerformances: [],                                                                                                     
+      addingGoalPerformance: false,                                                                                                     
+      forecastLimit: "1y",                                                                                                                
+      selectedTab: "past",       
     })
   });
 
