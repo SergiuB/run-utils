@@ -114,6 +114,7 @@ function sendToken(token) {
   return `
     <script>
       window.opener.postMessage({ stravaAuthToken: '${token}' }, '${fbcfg.frontendurl}');
+      window.opener.postMessage({ stravaAuthToken: '${token}' }, 'http://localhost:3000/');
     </script>
   `;
 }
