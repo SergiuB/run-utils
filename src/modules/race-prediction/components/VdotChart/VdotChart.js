@@ -7,9 +7,10 @@ import core from 'modules/core';
 import C3Chart from './C3Chart';
 
 const { secToTime } = core.services.conversion;
-const { getVdot } = core.services.vdotCalculator;
+const { getVdot, getRaceEquivalents } = core.services.vdotCalculator;
 
 import 'c3/c3.css';
+import './VdotChart.css';
 
 const pastSeries = 'Past';
 const futureSeriesME = 'Forecast (Max Entropy)';
@@ -95,27 +96,54 @@ class VdotChart extends Component {
       }
     };
 
+    const goalRaceLabels = goalPerformances.map(({ race }) => race.label);
+
+    const equivPerformances = vdot => {
+      const raceEquivalents = getRaceEquivalents(vdot);
+      return goalRaceLabels.map(label => ({
+        label,
+        time: raceEquivalents[label]
+      }));
+    };
+
+    const equivPerformancesHtml = vdot => equivPerformances(vdot).map(({ label, time }) => `
+      <div class='multiple-values'>
+        <div>${label}</div>
+        <div>${secToTime(time)}</div>
+      </div>
+    `).join('');
+
     const tooltip = {
       contents: (d, defaultTitleFormat, defaultValueFormat, color) => {
         const dataPoint = d[0];
         if (dataPoint.id === pastSeries) {
           const { name, date, vdot, time, distance } = this.props.races[dataPoint.index];
           return `
-            <div>
-              <div>${moment(date).format('YYYY-MM-DD')}</div>
+            <div class='tooltip'>
+              <div class='multiple-values'>
+                <div>${moment(date).format('YYYY-MM-DD')}</div>
+                <div>${oneDecimal(vdot)}</div>
+              </div>
               <div>${name}</div>
-              <div>${distance.toFixed(2)} km</div>
-              <div>${secToTime(time)}</div>
-              <div>${oneDecimal(vdot)} VDOT</div>
+              <div class='multiple-values'>
+                <div>${distance.toFixed(2)} km</div>
+                <div>${secToTime(time)}</div>
+              </div>
+              <div>Equivalent performances</div>
+              ${equivPerformancesHtml(vdot)}
             </div>
           `;
         } else {
           const [ forecastME ] = d;
 
           return `
-            <div>
-              <div>${moment(forecastME.x).format('YYYY-MM-DD')}</div>
-              <div>${forecastME.id} ${oneDecimal(forecastME.value)} VDOT</div>
+            <div class='tooltip'>
+              <div class='multiple-values'>
+                <div>${moment(forecastME.x).format('YYYY-MM-DD')}</div>
+                <div>${oneDecimal(forecastME.value)}</div>
+              </div>
+              <div>Equivalent performances</div>
+              ${equivPerformancesHtml(forecastME.value)}
             </div>
           `;
         }
