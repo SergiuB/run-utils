@@ -82,7 +82,12 @@ class VdotChart extends Component {
       }
     }
 
-    const maxVdot = max(lines.map(R.prop('value')));
+    const maxGoalVdot = max(lines.map(R.prop('value')));
+    const maxPredictedVdot = R.compose(
+      max,
+      R.map(R.prop('val'))
+    )(prediction);
+
     const axis = {
       x: {
           type: 'timeseries',
@@ -92,7 +97,7 @@ class VdotChart extends Component {
           },
       },
       y: {
-        max: lines.length ? maxVdot : undefined
+        max: Math.max(maxGoalVdot, maxPredictedVdot)
       }
     };
 
