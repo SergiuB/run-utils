@@ -9,19 +9,10 @@ export const setRaces = (races) => {
   }
 }
 
-export const selectRace = (id) => {
-  return {
-    type: 'SELECT_RACE',
-    id,
-  }
-}
-
-export const deselectRace = (id) => {
-  return {
-    type: 'DESELECT_RACE',
-    id,
-  }
-}
+export const setSelectedRaces = (ids) => ({
+  type: 'SET_SELECTED_RACES',
+  ids
+})
 
 export const startAddingGoalPerformance = () => {
   return {

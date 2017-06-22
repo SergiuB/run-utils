@@ -26,6 +26,7 @@
     "d3-time": "^1.0.7",
     "firebase": "^4.1.1",
     "jss-theme-reactor": "^0.10.0",
+    "lodash.debounce": "^4.0.8",
     "material-ui": "^0.17.3",
     "muicss": "^0.9.15",
     "prop-types": "^15.5.10",

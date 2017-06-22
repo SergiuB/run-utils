@@ -9,6 +9,8 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+import debounce from 'lodash.debounce';
+
 import VdotChart from '../VdotChart';
 import GoalPerfomanceTable from '../GoalPerformanceTable';
 
@@ -20,26 +22,61 @@ import { forecast } from '../../services';
 
 import './RacePredictionPage.css';
 
+const DEBOUNCE_INTERVAL = 800;
+
 class RaceTable extends Component {
-  isSelected(raceId) {
-    return this.props.selectedRaceIds.includes(raceId);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedRaceIds: [],
+    }
+
+    this.debouncedSetSelectedRaces = debounce(this.setSelectedRaces, DEBOUNCE_INTERVAL);
   }
+
+  isSelected(raceId) {
+    return this.state.selectedRaceIds.includes(raceId);
+  }
+
+  componentWillReceiveProps({ selectedRaceIds }) {
+    this.setState({ selectedRaceIds });
+  }
+
+  setSelectedRaces() {
+    this.props.setSelectedRaces(this.state.selectedRaceIds);
+  }
+
+  selectRace(raceId) {
+    this.setState({
+      selectedRaceIds: [
+        ...this.state.selectedRaceIds,
+        raceId
+      ]
+    }, () => this.debouncedSetSelectedRaces());
+  }
+
+  deselectRace(raceId) {
+    this.setState({
+      selectedRaceIds: this.state.selectedRaceIds.filter(id => id !== raceId)
+    }, () => this.debouncedSetSelectedRaces());
+  }
+
+
+  
   render() {
-    const { races, selectRace, deselectRace } = this.props;
+    const { races } = this.props;
     return (
         <div className='race-table'>
           {races.map(({ id, name }) => (
               <Toggle key={id} label={name} toggled={this.isSelected(id)}
-                onToggle={(event, tState) => tState ? selectRace(id): deselectRace(id)}
+                onToggle={(event, tState) => tState ? this.selectRace(id): this.deselectRace(id)}
               />
           ))}
         </div>
       );
   }
 }
-
-
-
 
 const toVdotActivity = race => ({
   vdot: getVdot(race.distance / 1000, race.moving_time),
@@ -81,8 +118,7 @@ class RacePredictionPage extends Component {
     const {
       races,
       selectedRaceIds,
-      selectRace,
-      deselectRace,
+      setSelectedRaces,
       goalPerformances,
       addGoalPerformance,
       addingGoalPerformance,
@@ -144,8 +180,7 @@ class RacePredictionPage extends Component {
             <RaceTable
               races={races}
               selectedRaceIds={selectedRaceIds}
-              selectRace={selectRace}
-              deselectRace={deselectRace}
+              setSelectedRaces={setSelectedRaces}
             />
           </Tab>
           <Tab label="Future Goals" value="future" >

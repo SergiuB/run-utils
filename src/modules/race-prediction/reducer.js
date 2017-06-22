@@ -31,6 +31,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedRaceIds: state.selectedRaceIds.filter(id => id !== action.id)
       };
+
+    case 'SET_SELECTED_RACES': 
+      return {
+        ...state,
+        selectedRaceIds: action.ids
+      };
     
     case 'START_ADDING_GOAL_PERFORMANCE': 
       return {
