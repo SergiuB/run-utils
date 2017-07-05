@@ -1,6 +1,12 @@
 
 $accent-color:         #FF4081;
 .program-page{
+  .cycle {
+    margin: 10px 5px;
+    .title {
+      text-align: center;
+    }
+  }
   .workout {
     display: flex;
     justify-content: space-between;
@@ -17,6 +23,7 @@ $accent-color:         #FF4081;
   }
   .pace-distribution {
     display: flex;
+    height: 20px;
     .zone-E {
       background-color: lighten(adjust-hue( $accent-color, 80% ), 20%)
     }

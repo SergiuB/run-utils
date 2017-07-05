@@ -81,6 +81,10 @@ function minMileToMinKm(minMile) {
   return minMile / MILE;
 }
 
+function oneDecimal(number) {
+  return Number.parseFloat(number.toFixed(1), 10);
+}
+
 export {
   kphToMinKm,
   minKmToKph,
@@ -90,4 +94,5 @@ export {
   secToTime,
   minKmToMinMile,
   minMileToMinKm,
+  oneDecimal
 }

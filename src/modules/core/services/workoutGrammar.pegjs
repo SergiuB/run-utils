@@ -26,7 +26,7 @@ BasicSegment = num:Number unit:(TimeUnit / LengthUnit) { return {num, unit}; }
 
 SegmentType = "E" / "M" / "T" / "I" / "R"
 
-Number = [1-9][0-9]* { return parseInt(text(), 10); }
+Number = [0-9][0-9]* { return parseInt(text(), 10); }
 
 TimeUnit = "\'" / "\""
 LengthUnit = "km" / "mi" / "m"

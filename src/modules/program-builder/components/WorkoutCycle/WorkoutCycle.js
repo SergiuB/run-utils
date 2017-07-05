@@ -1,0 +1,126 @@
+import React from 'react';
+import R from 'ramda';
+
+import core from 'modules/core';
+
+const {
+  calculate,
+  mergeWorkoutData,
+  pointTable
+} = core.services.workoutCalculator;
+const { 
+  getTrainingPaces,
+} = core.services.vdotCalculator;
+const { minToTime, oneDecimal } = core.services.conversion;
+
+// Add warmup and cooldown to quality workouts represented as strings
+const addWuCd = ({ wu = '2kmE', cd = '2kmE'} = {}) => workout => {
+  const hasWu = w => (/^[0-9]+('|km|mi|m)E/i.test(w));
+  const hasCd = w => (/^.*E$/i.test(w));
+  let workoutWithWuCd = workout;
+  if (!hasWu(workoutWithWuCd)) {
+    workoutWithWuCd = wu + '+' + workoutWithWuCd;
+  }
+  if (!hasCd(workoutWithWuCd)) {
+    workoutWithWuCd = workoutWithWuCd + '+' + cd;
+  }
+  return workoutWithWuCd;
+};
+
+
+const formatPercentage = perc => perc * 100
+
+const processCycleTotals = ({ distance, time, points, zones }) => {
+  return ({
+  distance,
+  time: minToTime(time),
+  points,
+  zones: R.map(zone => ({
+    ...zone,
+    pDistance: formatPercentage(zone.distance / distance),
+    pTime: formatPercentage(zone.time / time),
+    pPoints: formatPercentage(zone.points / points),
+  }))(zones)
+})};
+
+const addPaces = vdot => {
+  const paces = getTrainingPaces(vdot);
+  return workout => workout
+    // .replace(/E/g, `@${minToTime(paces.E)}`)
+    // .replace(/M/g, `@${minToTime(paces.M)}`)
+    // .replace(/T/g, `@${minToTime(paces.T)}`)
+    // .replace(/I/g, `@${minToTime(paces.I)}`)
+    // .replace(/R/g, `@${minToTime(paces.R)}`);
+}
+
+
+const WorkoutCycle = ({ cycle, index, vdot }) => {
+    const calc = calculate(vdot);
+    const formatWorkout = addPaces(vdot);
+
+  // extract the workout strings
+  let workouts = R.compose(
+    R.map(addWuCd()),
+    R.prop('workouts')
+  )(cycle);
+
+  let wData = R.zip(workouts.map(formatWorkout), workouts.map(w => calc(w)));
+  const totals = R.compose(
+    processCycleTotals,
+    R.reduce(mergeWorkoutData, {}),
+    R.map(R.prop(1))
+  )(wData);
+
+  return (
+    <div className='cycle mui--text-caption' key={index}>
+      <div className='title mui--text-subhead'>Cycle {index+1}</div>
+      {wData.map(([name, data], wi) => {
+        return (
+          <div className='workout' key={wi}>
+            <div>{name}</div>
+            <div className='workout-numbers'>
+              <div className='workout-col'>
+                <div>{data.distance.toFixed(1)}</div>
+              </div>
+              <div className='workout-col'>
+                <div>{minToTime(data.time)}</div>
+              </div>
+              <div className='workout-col'>
+                <div>{data.points.toFixed(1)}</div>
+              </div>
+            </div>
+          </div>
+        )}
+      )}
+      <div className='cycle-totals mui--text-menu'>
+        <div className='workout'>
+          <div></div>
+          <div className='workout-numbers'>
+            <div className='workout-col'>
+              <div>{totals.distance.toFixed(1)}</div>
+            </div>
+            <div className='workout-col'>
+              <div>{totals.time}</div>
+            </div>
+            <div className='workout-col '>
+              <div>{totals.points.toFixed(1)}</div>
+            </div>
+          </div>
+        </div>
+        <div className='pace-distribution'>
+        {R.compose(
+          R.map(([zone, data]) => (
+            <div className={`zone-${zone}`} style={{ flexGrow: Math.min(data.pDistance, 50)}} key={zone}>
+              {oneDecimal(data.pDistance)}%
+            </div>
+          )),
+          R.sortBy(([zone, data]) => pointTable[zone]),
+          R.toPairs,
+        )(totals.zones)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WorkoutCycle;

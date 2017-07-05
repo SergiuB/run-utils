@@ -41,15 +41,15 @@ const getDistanceAndTime = ({pace, num, unit}) => {
       break;
   }
 
-  if (!distance && !time) {
+  if (R.isNil(distance) && R.isNil(time)) {
     throw new Error('No time nor distance could not be determined');
   }
 
-  if (time) {
+  if (!R.isNil(time)) {
     distance = time / pace;
   }
 
-  if (distance) {
+  if (!R.isNil(distance)) {
     time = distance * pace;
   }
 
