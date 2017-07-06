@@ -30,7 +30,7 @@ const addWuCd = ({ wu = '2kmE', cd = '2kmE'} = {}) => workout => {
 
 const formatPercentage = perc => perc * 100
 
-const processCycleTotals = ({ distance, time, points, zones }) => {
+const computeTotals = ({ distance, time, points, zones }) => {
   return ({
   distance,
   time: minToTime(time),
@@ -46,6 +46,7 @@ const processCycleTotals = ({ distance, time, points, zones }) => {
 const addPaces = vdot => {
   const paces = getTrainingPaces(vdot);
   return workout => workout
+    .replace(/0kmE/g, `off`)
     // .replace(/E/g, `@${minToTime(paces.E)}`)
     // .replace(/M/g, `@${minToTime(paces.M)}`)
     // .replace(/T/g, `@${minToTime(paces.T)}`)
@@ -54,39 +55,43 @@ const addPaces = vdot => {
 }
 
 
-const WorkoutCycle = ({ cycle, index, vdot }) => {
-    const calc = calculate(vdot);
-    const formatWorkout = addPaces(vdot);
+const WorkoutCycle = ({ cycle, dates, index, vdot }) => {
+  const calc = calculate(vdot);
+  const formatWorkout = addPaces(vdot);
 
-  // extract the workout strings
   let workouts = R.compose(
-    R.map(addWuCd()),
-    R.prop('workouts')
+    R.map(([ text, info, date ]) => ({ text, info, date })), // make it an object
+    R.zipWith(R.append, dates), // associate dates
+    R.converge(R.zip, [R.map(formatWorkout), R.map(calc)]), // format and compute workout info
+    R.map(addWuCd()), // add wu/cd where necessary
+    R.prop('workouts') // take the workouts
   )(cycle);
 
-  let wData = R.zip(workouts.map(formatWorkout), workouts.map(w => calc(w)));
   const totals = R.compose(
-    processCycleTotals,
+    computeTotals,
     R.reduce(mergeWorkoutData, {}),
-    R.map(R.prop(1))
-  )(wData);
+    R.map(R.prop('info'))
+  )(workouts);
+
+  const tapLog = R.tap(console.log);
 
   return (
     <div className='cycle mui--text-caption' key={index}>
       <div className='title mui--text-subhead'>Cycle {index+1}</div>
-      {wData.map(([name, data], wi) => {
+      {workouts.map(({ text, info, date } , wi) => {
         return (
           <div className='workout' key={wi}>
-            <div>{name}</div>
+            <div className='date'>{date.format('ddd, DD MMM')}</div>
+            <div className='text'>{text}</div>
             <div className='workout-numbers'>
               <div className='workout-col'>
-                <div>{data.distance.toFixed(1)}</div>
+                <div>{info.distance.toFixed(1)}</div>
               </div>
               <div className='workout-col'>
-                <div>{minToTime(data.time)}</div>
+                <div>{minToTime(info.time)}</div>
               </div>
               <div className='workout-col'>
-                <div>{data.points.toFixed(1)}</div>
+                <div>{info.points.toFixed(1)}</div>
               </div>
             </div>
           </div>

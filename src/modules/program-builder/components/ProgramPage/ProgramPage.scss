@@ -10,6 +10,18 @@ $accent-color:         #FF4081;
   .workout {
     display: flex;
     justify-content: space-between;
+    .date {
+      text-align: right;
+      min-width: 70px;
+    }
+    .text {
+      // width: 130px;
+      margin-left: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 2;
+    }
   }
   .workout-numbers {
     width: 40%;
